@@ -15,7 +15,7 @@ import lombok.Setter;
 public class RoleEntity extends AuditingEntity {
 
 	@Id
-	private Integer id;
+	private Long id;
 
 	private String name;
 

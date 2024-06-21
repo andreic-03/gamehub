@@ -10,7 +10,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class UserResponseModel {
-    private Integer id;
+    private Long id;
     private String username;
     private String email;
     private UserStatus status;

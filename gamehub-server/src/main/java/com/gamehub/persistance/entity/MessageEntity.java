@@ -13,7 +13,7 @@ import lombok.Setter;
 public class MessageEntity extends AuditingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer messageId;
+    private Long messageId;
 
     @ManyToOne
     @JoinColumn(name = "game_post_id", nullable = false)

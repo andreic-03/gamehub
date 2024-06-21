@@ -16,7 +16,7 @@ public class ParticipantsEntity extends AuditingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer participantId;
+    private Long participantId;
 
     @ManyToOne
     @JoinColumn(name = "game_post_id", nullable = false)

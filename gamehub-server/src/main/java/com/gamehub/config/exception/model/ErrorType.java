@@ -10,6 +10,8 @@ import lombok.ToString;
 public enum ErrorType {
     //User
     USER_NOT_FOUND("E2001", "No user found"),
+    ROLE_NOT_FOUND("E2002", "Role not found"),
+    OLD_PASSWORD_DID_NOT_MATCH("E2003", "Old password did not match"),
 
     //General
     INTERNAL_SERVER_ERROR("E9000", "Something unexpected happened"),

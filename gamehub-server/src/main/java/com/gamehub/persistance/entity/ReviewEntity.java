@@ -13,7 +13,7 @@ import lombok.Setter;
 public class ReviewEntity extends AuditingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer reviewId;
+    private Long reviewId;
 
     @ManyToOne
     @JoinColumn(name = "reviewer_user_id", nullable = false)

@@ -13,7 +13,7 @@ import lombok.Setter;
 public class GamesEntity extends AuditingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer gameId;
+    private Long gameId;
 
     @Column(nullable = false)
     private String gameName;

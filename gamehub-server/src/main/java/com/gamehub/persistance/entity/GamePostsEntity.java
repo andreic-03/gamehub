@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class GamePostsEntity extends AuditingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer postId;
+    private Long postId;
 
     @ManyToOne
     @JoinColumn(name = "host_user_id", nullable = false)

@@ -38,7 +38,7 @@ security:
         uris:
           - /auth/login
 #          - /user
-#          - /user/registration/**
+          - /user/registration/**
       - method: GET
         uris:
           - /swagger-ui/**
