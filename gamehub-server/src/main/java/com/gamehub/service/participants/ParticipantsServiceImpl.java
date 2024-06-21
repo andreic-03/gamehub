@@ -13,6 +13,7 @@ import com.gamehub.service.date.DateTimeServiceWrapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +29,7 @@ public class ParticipantsServiceImpl implements ParticipantsService {
     private final ParticipantsMapper participantsMapper;
     private final DateTimeServiceWrapper dateTimeServiceWrapper;
 
+    @Transactional
     @Override
     public List<ParticipantsResponseModel> getAll() {
         return participantsRepository.findAll().stream()
@@ -35,6 +37,7 @@ public class ParticipantsServiceImpl implements ParticipantsService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public ParticipantsResponseModel createParticipant(Long userId, ParticipantsRequestModel participantModel) {
         ParticipantsEntity participantsEntity = participantsMapper.toParticipantsEntity(participantModel);
@@ -52,6 +55,7 @@ public class ParticipantsServiceImpl implements ParticipantsService {
         return participantsMapper.toParticipantsModel(participantsRepository.save(participantsEntity));
     }
 
+    @Transactional
     @Override
     public ParticipantsResponseModel updateParticipant(Long participantId, ParticipantsRequestModel participantModel) {
         ParticipantsEntity existingParticipant = getParticipantsById(participantId);
@@ -61,6 +65,7 @@ public class ParticipantsServiceImpl implements ParticipantsService {
         return participantsMapper.toParticipantsModel(participantsRepository.save(existingParticipant));
     }
 
+    @Transactional
     @Override
     public void delete(Long id) {
 
