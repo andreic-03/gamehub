@@ -18,7 +18,7 @@ import static com.gamehub.api.model.general.Constants.*;
 @AllArgsConstructor
 public class GamePostsController {
 
-    private GamePostsService gamePostsService;
+    private final GamePostsService gamePostsService;
 
     @PostMapping
     @RolesAllowed({ROLE_ADMIN, ROLE_USER})

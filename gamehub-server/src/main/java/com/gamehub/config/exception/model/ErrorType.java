@@ -19,6 +19,9 @@ public enum ErrorType {
     //GamePosts
     GAME_POST_NOT_FOUND("E2200", "Game post not found"),
 
+    //Participants
+    PARTICIPANT_NOT_FOUND("E2300", "Participant not found"),
+
     //General
     INTERNAL_SERVER_ERROR("E9000", "Something unexpected happened"),
     BAD_REQUEST("E9100", "Bad request"),

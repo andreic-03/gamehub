@@ -14,11 +14,11 @@ import java.util.List;
 import static com.gamehub.api.model.general.Constants.*;
 
 @RestController
-@RequestMapping(API_GAME)
+@RequestMapping(API_GAMES)
 @AllArgsConstructor
 public class GameController {
 
-    private GamesService gamesService;
+    private final GamesService gamesService;
 
     @GetMapping
     public List<GamesResponseModel> getAll() {
