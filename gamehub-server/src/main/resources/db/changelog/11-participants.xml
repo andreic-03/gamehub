@@ -1,0 +1,60 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-table-participants" author="Andrei">
+        <createTable tableName="participants">
+            <column name="participant_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_participants"/>
+            </column>
+            <column name="game_post_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="joined_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="int">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_on" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_by" type="int">
+                <constraints nullable="true"/>
+            </column>
+            <column name="updated_on" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="version" type="int" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="fk_participants_game_post"
+                                 baseTableName="participants" baseColumnNames="game_post_id"
+                                 referencedTableName="game_posts" referencedColumnNames="post_id"
+                                 deleteCascade="false"/>
+        <addForeignKeyConstraint constraintName="fk_participants_user"
+                                 baseTableName="participants" baseColumnNames="user_id"
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 deleteCascade="false"/>
+
+        <addForeignKeyConstraint constraintName="fk_participants_created_by_user"
+                                 baseTableName="participants" baseColumnNames="created_by"
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 deleteCascade="false"/>
+        <addForeignKeyConstraint constraintName="fk_participants_updated_by_user"
+                                 baseTableName="participants" baseColumnNames="updated_by"
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 deleteCascade="false"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,95 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-table-users-and-user_status" author="Andrei">
+        <createTable tableName="users">
+            <column name="id" type="int" autoIncrement="true" generationType="ALWAYS">
+                <constraints primaryKey="true" primaryKeyName="pk_users"/>
+            </column>
+            <column name="username" type="varchar(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(320)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="full_name" type="varchar(320)">
+                <constraints/>
+            </column>
+            <column name="status" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bio" type="TEXT">
+                <constraints/>
+            </column>
+            <column name="profile_picture_url" type="varchar(2048)">
+                <constraints/>
+            </column>
+            <column name="last_login" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="int">
+                <constraints />
+            </column>
+            <column name="created_on" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_by" type="int">
+                <constraints />
+            </column>
+            <column name="updated_on" type="timestamp"/>
+            <column name="version" type="int" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="fk_user_created_by_user"
+                                 baseTableName="users" baseColumnNames="created_by"
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 deleteCascade="false"/>
+
+        <addForeignKeyConstraint constraintName="fk_user_updated_by_user"
+                                 baseTableName="users" baseColumnNames="updated_by"
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 deleteCascade="false"/>
+
+        <createTable tableName="user_status">
+            <column name="status" type="varchar(100)">
+                <constraints primaryKey="true" primaryKeyName="pk_user_status"/>
+            </column>
+            <column name="description" type="varchar(500)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="fk_user_status"
+                                 baseTableName="users" baseColumnNames="status"
+                                 referencedTableName="user_status" referencedColumnNames="status"
+                                 deleteCascade="false"/>
+    </changeSet>
+
+    <changeSet id="insert-default-user-statuses" author="Andrei">
+        <insert tableName="user_status">
+            <column name="status" value="ACTIVE"/>
+            <column name="description" value="Active user, can login and use the application."/>
+        </insert>
+        <insert tableName="user_status">
+            <column name="status" value="LOCKED"/>
+            <column name="description" value="Locked user, prevent login until unlocked."/>
+        </insert>
+        <insert tableName="user_status">
+            <column name="status" value="CREDENTIALS_EXPIRED"/>
+            <column name="description" value="User credentials expired, must perform a password reset."/>
+        </insert>
+        <insert tableName="user_status">
+            <column name="status" value="WAITING_CONFIRMATION"/>
+            <column name="description" value="User waiting for confirmation, must continue account creation."/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

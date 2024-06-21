@@ -1,0 +1,67 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-table-reviews" author="Andrei">
+        <createTable tableName="reviews">
+            <column name="review_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_reviews"/>
+            </column>
+            <column name="reviewer_user_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reviewed_user_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="game_post_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rating" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="review_text" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_by" type="int">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_on" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_by" type="int">
+                <constraints nullable="true"/>
+            </column>
+            <column name="updated_on" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="version" type="int" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="fk_reviews_reviewer_user"
+                                 baseTableName="reviews" baseColumnNames="reviewer_user_id"
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 deleteCascade="false"/>
+        <addForeignKeyConstraint constraintName="fk_reviews_reviewed_user"
+                                 baseTableName="reviews" baseColumnNames="reviewed_user_id"
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 deleteCascade="false"/>
+        <addForeignKeyConstraint constraintName="fk_reviews_game_post"
+                                 baseTableName="reviews" baseColumnNames="game_post_id"
+                                 referencedTableName="game_posts" referencedColumnNames="post_id"
+                                 deleteCascade="false"/>
+
+        <addForeignKeyConstraint constraintName="fk_reviews_created_by_user"
+                                 baseTableName="reviews" baseColumnNames="created_by"
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 deleteCascade="false"/>
+        <addForeignKeyConstraint constraintName="fk_reviews_updated_by_user"
+                                 baseTableName="reviews" baseColumnNames="updated_by"
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 deleteCascade="false"/>
+    </changeSet>
+
+</databaseChangeLog>

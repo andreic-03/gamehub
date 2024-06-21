@@ -1,4 +1,66 @@
+server:
+  servlet:
+    context-path: /api
+  error:
+    include-stacktrace: never
 
 spring:
   application:
     name: gamehub
+  datasource:
+    url: CHANGE_ME
+    username: CHANGE_ME
+    password: CHANGE_ME
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      max-lifetime: 300000
+  jpa:
+    properties:
+      hibernate:
+        default_schema: public
+  liquibase:
+    change-log: classpath:db/db.changelog-master.xml
+
+# Documentation
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+module-name: "gamehub-server"
+api-version: "1.0"
+
+# Security Configuration
+security:
+  apis:
+    public-endpoints:
+      - method: POST
+        uris:
+          - /auth/login
+#          - /user
+#          - /user/registration/**
+      - method: GET
+        uris:
+          - /swagger-ui/**
+          - /v3/api-docs/**
+          - /error/**
+          - /management/**
+  cors:
+    config:
+      allowed-origins:
+        - "*"
+      allowed-methods:
+        - POST
+        - GET
+        - PUT
+        - DELETE
+      allowed-headers:
+        - Content-Type
+        - Authorization
+        - Accept
+      exposed-headers:
+        - Location
+
+app:
+  jwt:
+    secret: CHANGE_ME
