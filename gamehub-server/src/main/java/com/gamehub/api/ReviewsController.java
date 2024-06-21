@@ -30,6 +30,7 @@ public class ReviewsController {
     }
 
     @GetMapping("/average-rating/{userId}")
+    @RolesAllowed({ROLE_ADMIN, ROLE_USER})
     public AverageRatingResponseModel getAverageRatingForUser(@PathVariable Long userId) {
         return reviewsService.getAverageRatingForUser(userId);
     }
