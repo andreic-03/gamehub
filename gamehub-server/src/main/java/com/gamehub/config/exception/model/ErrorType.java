@@ -13,6 +13,12 @@ public enum ErrorType {
     ROLE_NOT_FOUND("E2002", "Role not found"),
     OLD_PASSWORD_DID_NOT_MATCH("E2003", "Old password did not match"),
 
+    //Games
+    GAME_NOT_FOUND("E2100", "Game not found"),
+
+    //GamePosts
+    GAME_POST_NOT_FOUND("E2200", "Game post not found"),
+
     //General
     INTERNAL_SERVER_ERROR("E9000", "Something unexpected happened"),
     BAD_REQUEST("E9100", "Bad request"),
