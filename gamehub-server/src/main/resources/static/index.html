@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Chat WebSocket</title>
+
+	<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+	<script type="text/javascript">
+		var stompClient = null;
+		var authToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjoiQURNSU4iLCJpYXQiOjE3MTkyMTUyNzMsImV4cCI6MTcxOTMwMTY3M30.Zj0MhV8JZCkrg0vXLbl8FR4nmdk4px27qQiRvKSfpIUrVQ36mHOGMMvNw0D1t01dt8BwBfg4amU6gEQysFMEcg';
+
+		function setConnected(connected) {
+			document.getElementById('connect').disabled = connected;
+			document.getElementById('disconnect').disabled = !connected;
+			document.getElementById('conversationDiv').style.visibility = connected ? 'visible' : 'hidden';
+			document.getElementById('response').innerHTML = '';
+		}
+
+		function connect() {
+			var socket = new SockJS('/api/chat.sendMessage?token=' + authToken);
+			stompClient = Stomp.over(socket);
+
+			stompClient.connect({}, function(frame) {
+				setConnected(true);
+				console.log('Connected: ' + frame);
+				stompClient.subscribe('/topic', function(messagesModel) {
+					showMessageOutput(JSON.parse(messagesModel.body));
+				});
+			});
+		}
+
+		function disconnect() {
+			if(stompClient != null) {
+				stompClient.disconnect();
+			}
+			setConnected(false);
+			console.log("Disconnected");
+		}
+
+		function sendMessage() {
+			var from = document.getElementById('from').value;
+			var postId = document.getElementById('postId').value;
+			var messageContent = document.getElementById('text').value;
+			stompClient.send("/app/chat.sendMessage", {}, JSON.stringify({'senderUsername':from, 'gamePostId':postId, 'messageContent':messageContent}));
+		}
+
+		function showMessageOutput(messagesModel) {
+			var response = document.getElementById('response');
+			var p = document.createElement('p');
+			p.style.wordWrap = 'break-word';
+			p.appendChild(document.createTextNode(messagesModel.senderUsername + ": " + messagesModel.messageContent + " (" + messagesModel.sentAt + ")"));
+			response.appendChild(p);
+		}
+	</script>
+
+</head>
+
+<body onload="disconnect()">
+<div>
+	<div>
+		<input type="text" id="from" placeholder="Choose a nickname"/>
+	</div>
+	<div>
+		<input type="text" id="postId" placeholder="Choose a postID"/>
+	</div>
+	<br />
+	<div>
+		<button id="connect" onclick="connect();">Connect</button>
+		<button id="disconnect" disabled="disabled" onclick="disconnect();">Disconnect</button>
+	</div>
+	<br />
+	<div id="conversationDiv" style="visibility: hidden;">
+		<input type="text" id="text" placeholder="Write a message..."/>
+		<button id="sendMessage" onclick="sendMessage();">Send</button>
+		<p id="response"></p>
+	</div>
+</div>
+</body>
+</html>

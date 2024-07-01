@@ -41,6 +41,8 @@ security:
           - /user/registration/**
       - method: GET
         uris:
+          - /chat.sendMessage/**
+          - /index.html
           - /swagger-ui/**
           - /v3/api-docs/**
           - /error/**

@@ -5,12 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Timestamp;
+
 @Entity
 @Table(name = "messages")
 @Getter
 @Setter
 @NoArgsConstructor
-public class MessageEntity extends AuditingEntity {
+public class MessagesEntity extends AuditingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long messageId;
@@ -25,4 +27,7 @@ public class MessageEntity extends AuditingEntity {
 
     @Column(nullable = false)
     private String messageContent;
+
+    @Column(nullable = false, updatable = false)
+    private Timestamp sentAt;
 }
