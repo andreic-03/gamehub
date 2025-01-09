@@ -1,9 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/http.dart';
-
-import '../models/auth_request_model.dart';
-import '../models/auth_response_model.dart';
+import '../../models/auth/auth_request_model.dart';
+import '../../models/auth/auth_response_model.dart';
 
 part 'auth_service.g.dart';
 

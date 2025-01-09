@@ -24,6 +24,10 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
           label: 'Home',
         ),
         BottomNavigationBarItem(
+          icon: Icon(Icons.map),
+          label: 'Map',
+        ),
+        BottomNavigationBarItem(
           icon: Icon(Icons.person),
           label: 'Profile',
         ),

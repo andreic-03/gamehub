@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import '../../config/injection.dart';
 import '../home/home_screen.dart';
@@ -72,6 +73,14 @@ class LoginScreen extends StatelessWidget {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    } else if (viewModel.errorMessage != null) {
+      Fluttertoast.showToast(
+        msg: viewModel.errorMessage!,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Color(0xFFCCCCCC),
+        textColor: Colors.black,
       );
     }
   }

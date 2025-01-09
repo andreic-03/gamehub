@@ -1,17 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:gamehub/providers/auth_provider.dart';
+import 'package:gamehub/services/user/user_service.dart';
 import 'package:injectable/injectable.dart';
-import '../../models/auth/auth_request_model.dart';
 import '../../models/error/error_response.dart';
-import '../../services/auth/auth_service.dart';
+import '../../models/user/user_response_model.dart';
 
 @injectable
-class LoginViewModel extends ChangeNotifier {
-  final AuthService _authService;
-  final AuthProvider _authProvider;
+class ProfileViewModel extends ChangeNotifier {
+  final UserService _userService;
 
-  LoginViewModel(this._authService, this._authProvider);
+  ProfileViewModel(this._userService);
 
   bool _isLoading = false;
   String? _errorMessage;
@@ -20,23 +18,17 @@ class LoginViewModel extends ChangeNotifier {
 
   String? get errorMessage => _errorMessage;
 
-  Future<bool> login(String username, String password) async {
+  Future<UserResponseModel?> getCurrentUser() async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      final authRequest = AuthRequestModel(
-        identifier: username,
-        password: password,
-      );
-
-      final authResponse = await _authService.login(authRequest);
-
-      _authProvider.setToken(authResponse.accessToken);
+      final userResponse = await _userService.getCurrentUser();
       _isLoading = false;
       notifyListeners();
-      return true;
+      return userResponse;
+
     } on DioException catch (e) {
       _isLoading = false;
       if (e.response != null && e.response!.data != null) {
@@ -46,12 +38,13 @@ class LoginViewModel extends ChangeNotifier {
         _errorMessage = 'An error occurred. Please try again.';
       }
       notifyListeners();
-      return false;
+      return null;
+
     } catch (e) {
       _isLoading = false;
       _errorMessage = 'An unexpected error occurred. Please try again.';
       notifyListeners();
-      return false;
+      return null;
     }
   }
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gamehub/providers/auth_provider.dart';
+import 'package:gamehub/screens/profile/profile_avatar.dart';
 import 'package:injectable/injectable.dart';
-import '../services/auth_service.dart';
+import '../services/auth/auth_service.dart';
 
 typedef ScreenSelectionCallback = void Function(int);
 
@@ -17,7 +18,7 @@ class AppDrawer extends StatelessWidget {
     required this.onSelectScreen,
     required AuthService authService,
     required AuthProvider authProvider,
-  }) : _authService = authService,
+  })  : _authService = authService,
         _authProvider = authProvider,
         super(key: key);
 
@@ -38,12 +39,36 @@ class AppDrawer extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.blue,
             ),
-            child: Text(
-              'Menu',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-              ),
+            child: Row(
+              children: [
+                ProfileAvatar(
+                    imageUrl: null,
+                    firstName: "John",
+                    radius: 40,
+                ),
+                SizedBox(width: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Welcome back,',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      'John Doe',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
           ListTile(

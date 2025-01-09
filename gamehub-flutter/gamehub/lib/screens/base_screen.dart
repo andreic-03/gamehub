@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gamehub/providers/auth_provider.dart';
+import 'package:gamehub/screens/map_screen/map_content.dart';
 import 'package:gamehub/screens/profile/profile_content.dart';
 import '../navigation/app_bottom_navigation_bar.dart';
 import '../navigation/app_drawer.dart';
 import '../config/injection.dart';
-import '../services/auth_service.dart';
+import '../services/auth/auth_service.dart';
 import 'home/home_content.dart';
 
 class BaseScreen extends StatefulWidget {
@@ -17,6 +18,7 @@ class _BaseScreenState extends State<BaseScreen> {
 
   final List<Widget> _screens = [
     HomeContent(),
+    MapContent(),
     ProfileContent(),
     // SettingsContent(),
     // InfoContent(),
@@ -24,6 +26,7 @@ class _BaseScreenState extends State<BaseScreen> {
 
   final List<String> _titles = [
     'GameHub - Home',
+    'GameHub - Map',
     'GameHub - Profile',
     // 'GameHub - Settings',
     // 'GameHub - Info',
