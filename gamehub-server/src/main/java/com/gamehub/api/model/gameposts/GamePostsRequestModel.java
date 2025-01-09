@@ -13,16 +13,14 @@ import java.time.LocalDateTime;
 public class GamePostsRequestModel {
     @NotNull
     private Long gameId;
-
     @NotBlank
     private String location;
-
+    private Double latitude;
+    private Double longitude;
     @NotNull
     @Future
     private LocalDateTime scheduledDate;
-
     @NotNull
     private Integer maxParticipants;
-
     private String description;
 }

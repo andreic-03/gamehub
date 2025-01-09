@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static com.gamehub.api.model.general.Constants.*;
 
 @RestController
@@ -40,5 +42,15 @@ public class GamePostsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") final Long id) {
         gamePostsService.delete(id);
+    }
+
+    @RolesAllowed({ROLE_ADMIN, ROLE_USER})
+    @GetMapping("/nearby")
+    public List<GamePostsResponseModel> getNearbyGamePosts(
+            @RequestParam double latitude,
+            @RequestParam double longitude,
+            @RequestParam double rangeInKm
+    ) {
+        return gamePostsService.findGamePostsNearby(latitude, longitude, rangeInKm);
     }
 }

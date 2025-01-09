@@ -13,6 +13,8 @@ public class GamePostsResponseModel {
     private Long hostUserId;
     private Long gameId;
     private String location;
+    private Double latitude;
+    private Double longitude;
     private LocalDateTime scheduledDate;
     private Integer maxParticipants;
     private String description;

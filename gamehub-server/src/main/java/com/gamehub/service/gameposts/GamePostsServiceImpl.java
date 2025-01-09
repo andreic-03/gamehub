@@ -15,6 +15,9 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 @AllArgsConstructor
@@ -61,6 +64,14 @@ public class GamePostsServiceImpl implements GamePostsService {
             log.error("Game post not found with id: {}", id);
             throw new GamehubNotFoundException(ErrorType.GAME_POST_NOT_FOUND);
         }
+    }
+
+    @Transactional
+    @Override
+    public List<GamePostsResponseModel> findGamePostsNearby(Double latitude, Double longitude, Double rangeInKm) {
+        return gamePostsRepository.findNearbyGamePosts(latitude, longitude, rangeInKm).stream()
+                .map(gamePostsMapper::toGamePostsModel)
+                .collect(Collectors.toList());
     }
 
     private GamePostsEntity getGamePostById(Long id) {

@@ -39,6 +39,7 @@ security:
           - /auth/login
 #          - /user
           - /user/registration/**
+          - /chat.sendMessage/**
       - method: GET
         uris:
           - /chat.sendMessage/**
