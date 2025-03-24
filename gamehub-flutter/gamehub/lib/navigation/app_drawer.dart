@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gamehub/providers/auth_provider.dart';
+import 'package:gamehub/core/viewmodels/auth_view_model.dart';
 import 'package:gamehub/screens/profile/profile_avatar.dart';
 import 'package:injectable/injectable.dart';
 import '../services/auth/auth_service.dart';
@@ -10,23 +10,24 @@ typedef ScreenSelectionCallback = void Function(int);
 class AppDrawer extends StatelessWidget {
   final ScreenSelectionCallback onSelectScreen;
   final AuthService _authService;
-  final AuthProvider _authProvider;
+  final AuthViewModel _authViewModel;
 
   @factoryMethod
   AppDrawer({
     Key? key,
     required this.onSelectScreen,
     required AuthService authService,
-    required AuthProvider authProvider,
+    required AuthViewModel authViewModel,
   })  : _authService = authService,
-        _authProvider = authProvider,
+        _authViewModel = authViewModel,
         super(key: key);
 
   void _handleLogout(BuildContext context) async {
-    await _authService.logout();
-    _authProvider.clearToken();
-    Navigator.pop(context);
-    Navigator.of(context).pushReplacementNamed('/login');
+    final success = await _authViewModel.logout();
+    if (success) {
+      Navigator.pop(context);
+      Navigator.of(context).pushReplacementNamed('/login');
+    }
   }
 
   @override

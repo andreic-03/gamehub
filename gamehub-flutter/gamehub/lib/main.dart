@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gamehub/providers/auth_provider.dart';
+import 'package:gamehub/core/viewmodels/auth_view_model.dart';
 import 'package:gamehub/screens/home/home_screen.dart';
 import 'package:gamehub/screens/login/login_screen.dart';
 import 'package:gamehub/screens/profile/profile_screen.dart';
@@ -18,16 +18,16 @@ class GameHubApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = GetIt.I<AuthProvider>();
+    final authViewModel = GetIt.I<AuthViewModel>();
     return ListenableBuilder(
-      listenable: authProvider,
+      listenable: authViewModel,
       builder: (context, _) {
         return MaterialApp(
           title: 'GameHub',
           theme: ThemeData.light(),
           darkTheme: ThemeData.dark(),
           themeMode: ThemeMode.system,
-          home: authProvider.isAuthenticated ? HomeScreen() : LoginScreen(),
+          home: authViewModel.isAuthenticated ? HomeScreen() : LoginScreen(),
           routes: {
             '/login': (context) => LoginScreen(),
             '/home': (context) => HomeScreen(),

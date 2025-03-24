@@ -1,15 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
-import '../providers/auth_provider.dart';
+import '../core/viewmodels/auth_view_model.dart';
 
 class AuthInterceptor extends Interceptor {
-  final AuthProvider _authProvider = GetIt.I<AuthProvider>();
+  // Defer getting the AuthViewModel until it's needed to avoid circular dependencies
+  AuthViewModel get _authViewModel => GetIt.instance<AuthViewModel>();
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     if (!options.path.contains('/auth/login')) {
-      final token = _authProvider.token;
+      final token = _authViewModel.token;
       if (token != null && token.isNotEmpty) {
         options.headers['Authorization'] = 'Bearer $token';
       }

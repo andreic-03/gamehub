@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gamehub/providers/auth_provider.dart';
+import 'package:gamehub/core/viewmodels/auth_view_model.dart';
 import 'package:gamehub/screens/map_screen/map_content.dart';
 import 'package:gamehub/screens/profile/profile_content.dart';
 import '../navigation/app_bottom_navigation_bar.dart';
@@ -40,14 +40,18 @@ class _BaseScreenState extends State<BaseScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Get the required services directly
+    final authService = getIt<AuthService>();
+    final authViewModel = getIt<AuthViewModel>();
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(_titles[_selectedIndex]),
       ),
       drawer: AppDrawer(
           onSelectScreen: _onItemTapped,
-          authService: getIt<AuthService>(),
-          authProvider: getIt<AuthProvider>(),
+          authService: authService,
+          authViewModel: authViewModel,
       ),
       body: _screens[_selectedIndex],
       bottomNavigationBar: AppBottomNavigationBar(

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import '../../config/injection.dart';
+import '../../core/viewmodels/auth_view_model.dart';
 import '../home/home_screen.dart';
-import 'login_view_model.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -14,8 +14,8 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => getIt<LoginViewModel>(),
-      child: Consumer<LoginViewModel>(
+      create: (_) => getIt<AuthViewModel>(),
+      child: Consumer<AuthViewModel>(
         builder: (context, viewModel, child) {
           return Scaffold(
             appBar: AppBar(title: Text("GameHub")),
@@ -49,7 +49,7 @@ class LoginScreen extends StatelessWidget {
                       onPressed: () => _login(context, viewModel),
                       child: Text('Login'),
                     ),
-                  if (viewModel.errorMessage != null)
+                  if (viewModel.hasError)
                     Text(
                       viewModel.errorMessage!,
                       style: TextStyle(color: Colors.red),
@@ -63,7 +63,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  void _login(BuildContext context, LoginViewModel viewModel) async {
+  void _login(BuildContext context, AuthViewModel viewModel) async {
     final success = await viewModel.login(
       _usernameController.text,
       _passwordController.text,
@@ -74,7 +74,7 @@ class LoginScreen extends StatelessWidget {
         context,
         MaterialPageRoute(builder: (context) => HomeScreen()),
       );
-    } else if (viewModel.errorMessage != null) {
+    } else if (viewModel.hasError) {
       Fluttertoast.showToast(
         msg: viewModel.errorMessage!,
         toastLength: Toast.LENGTH_LONG,

@@ -19,7 +19,7 @@ class _UserService implements UserService {
   String? baseUrl;
 
   @override
-  Future<UserResponseModel> create(
+  Future<UserResponseModel> register(
       UserRegistrationRequestModel requestModel) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
