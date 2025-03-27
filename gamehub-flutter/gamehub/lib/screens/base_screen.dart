@@ -9,6 +9,13 @@ import '../services/auth/auth_service.dart';
 import 'home/home_content.dart';
 
 class BaseScreen extends StatefulWidget {
+  final Widget? floatingActionButton;
+
+  const BaseScreen({
+    Key? key,
+    this.floatingActionButton,
+  }) : super(key: key);
+
   @override
   _BaseScreenState createState() => _BaseScreenState();
 }
@@ -58,6 +65,7 @@ class _BaseScreenState extends State<BaseScreen> {
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
       ),
+      floatingActionButton: _selectedIndex == 0 ? widget.floatingActionButton : null,
     );
   }
 }
