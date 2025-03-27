@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gamehub/models/game_post/game_post_response_model.dart';
 import '../../config/injection.dart';
 import '../../core/viewmodels/home_view_model.dart';
+import '../game_post/game_post_details_screen.dart';
 
 class HomeContent extends StatefulWidget {
   const HomeContent({super.key});
@@ -108,7 +109,14 @@ class _HomeContentState extends State<HomeContent> {
                         'Scheduled: ${gamePost.scheduledDate}\nMax Participants: ${gamePost.maxParticipants}'),
                     trailing: Text('Host: ${gamePost.hostUserId}'),
                     onTap: () {
-                      // Handle tap, possibly navigate to details
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => GamePostDetailsScreen(
+                            gamePost: gamePost,
+                          ),
+                        ),
+                      );
                     },
                   ),
                 );

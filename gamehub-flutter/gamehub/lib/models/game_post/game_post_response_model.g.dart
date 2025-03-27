@@ -17,7 +17,7 @@ GamePostResponseModel _$GamePostResponseModelFromJson(
       longitude: (json['longitude'] as num).toDouble(),
       scheduledDate: json['scheduledDate'] as String,
       maxParticipants: (json['maxParticipants'] as num).toInt(),
-      description: json['description'] as String,
+      description: json['description'] as String?,
     );
 
 Map<String, dynamic> _$GamePostResponseModelToJson(

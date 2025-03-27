@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import '../../../services/auth/auth_service.dart';
 import '../../../models/auth/auth_request_model.dart';
 import '../../../models/error/error_response.dart';
+import '../errors/api_error.dart';
 import 'base_view_model.dart';
 
 /// ViewModel that handles authentication-related business logic
@@ -47,12 +48,24 @@ class AuthViewModel extends BaseViewModel {
         return true;
       } on DioException catch (e) {
         if (e.response != null && e.response!.data != null) {
-          final errorResponse = ErrorResponse.fromJson(e.response!.data);
-          throw errorResponse.message ?? 'An error occurred. Please try again.';
+          try {
+            final errorResponse = ErrorResponse.fromJson(e.response!.data);
+            final errorMessage = errorResponse.details.isNotEmpty 
+                ? errorResponse.details.join('\n') 
+                : errorResponse.message;
+            throw errorMessage;
+          } catch (parseError) {
+            // If we can't parse the error response, try to use the ApiError
+            final apiError = ApiError.fromDioError(e);
+            throw apiError.userFriendlyMessage;
+          }
         } else {
-          throw 'An error occurred. Please try again.';
+          throw 'Connection error. Please check your internet connection and try again.';
         }
       } catch (e) {
+        if (e is String) {
+          throw e;
+        }
         throw 'An unexpected error occurred. Please try again.';
       }
     }) ?? false;
@@ -67,13 +80,25 @@ class AuthViewModel extends BaseViewModel {
         return true;
       } on DioException catch (e) {
         if (e.response != null && e.response!.data != null) {
-          final errorResponse = ErrorResponse.fromJson(e.response!.data);
-          throw errorResponse.message ?? 'An error occurred during logout.';
+          try {
+            final errorResponse = ErrorResponse.fromJson(e.response!.data);
+            final errorMessage = errorResponse.details.isNotEmpty 
+                ? errorResponse.details.join('\n') 
+                : errorResponse.message;
+            throw errorMessage;
+          } catch (parseError) {
+            // If we can't parse the error response, try to use the ApiError
+            final apiError = ApiError.fromDioError(e);
+            throw apiError.userFriendlyMessage;
+          }
         } else {
-          throw 'An error occurred during logout.';
+          throw 'Connection error. Please check your internet connection and try again.';
         }
       } catch (e) {
-        throw e.toString();
+        if (e is String) {
+          throw e;
+        }
+        throw 'An unexpected error occurred during logout. Please try again.';
       }
     }) ?? false;
   }

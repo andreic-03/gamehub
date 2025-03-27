@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:gamehub/models/game_post/game_post_request_model.dart';
 import 'package:gamehub/models/game_post/game_post_response_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/http.dart';
@@ -17,4 +18,7 @@ abstract class GamePostService {
       @Query("longitude") double longitude,
       @Query("rangeInKm") double rangeInKm,
       );
+
+  @POST("/game-posts")
+  Future<GamePostResponseModel> createGamePost(@Body() GamePostRequestModel request);
 }

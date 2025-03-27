@@ -12,8 +12,7 @@ class GamePostResponseModel {
   final double longitude;
   final String scheduledDate;
   final int maxParticipants;
-  @JsonKey(required: false)
-  final String description;
+  final String? description;
 
   GamePostResponseModel({
     required this.postId,
@@ -24,7 +23,7 @@ class GamePostResponseModel {
     required this.longitude,
     required this.scheduledDate,
     required this.maxParticipants,
-    required this.description,
+    this.description,
   });
 
   factory GamePostResponseModel.fromJson(Map<String, dynamic> json) =>
