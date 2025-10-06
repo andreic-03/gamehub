@@ -45,4 +45,10 @@ public class GameController {
     public void delete(@PathVariable("id") final Long id) {
         gamesService.delete(id);
     }
+
+    @RolesAllowed({ROLE_ADMIN, ROLE_USER})
+    @GetMapping("/search")
+    public List<GamesResponseModel> getGameByName(@RequestParam("name") final String gameName) {
+        return gamesService.getGameByName(gameName);
+    }
 }

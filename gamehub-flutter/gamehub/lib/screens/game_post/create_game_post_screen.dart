@@ -145,7 +145,7 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
                     TextFormField(
                       controller: _gameIdController,
                       decoration: const InputDecoration(
-                        labelText: 'Game ID',
+                        labelText: 'Game Name',
                         border: OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.number,

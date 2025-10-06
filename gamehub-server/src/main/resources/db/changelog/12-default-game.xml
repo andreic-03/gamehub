@@ -1,0 +1,20 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="insert-default-game" author="Andrei">
+        <insert tableName="games">
+            <column name="game_name" value="Football"/>
+            <column name="game_description" value="Football game"/>
+            <column name="game_category" value="Sports"/>
+        </insert>
+        <insert tableName="games">
+            <column name="game_name" value="Tennis"/>
+            <column name="game_description" value="Tennis game"/>
+            <column name="game_category" value="Sports"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

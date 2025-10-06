@@ -61,6 +61,15 @@ public class GamesServiceImpl implements GamesService {
         }
     }
 
+    @Transactional
+    @Override
+    public List<GamesResponseModel> getGameByName(String gameName) {
+        List<GamesEntity> games = gamesRepository.findByGameNameContainingIgnoreCase(gameName);
+        return games.stream()
+                .map(gamesMapper::toGamesModel)
+                .collect(Collectors.toList());
+    }
+
     private GamesEntity getGamePostById(Long id) {
         return gamesRepository.findById(id)
                 .orElseThrow(() -> new GamehubNotFoundException(ErrorType.GAME_NOT_FOUND));

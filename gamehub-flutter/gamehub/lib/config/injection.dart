@@ -12,6 +12,7 @@ import '../network/network_constants.dart';
 import '../services/auth/auth_service.dart';
 import '../services/game_post/game_post_service.dart';
 import '../services/user/user_service.dart';
+import '../services/game/game_service.dart';
 import '../screens/profile/profile_view_model.dart';
 
 final GetIt getIt = GetIt.instance;
@@ -88,6 +89,11 @@ void configureDependencies() {
   ));
   
   getIt.registerLazySingleton<UserService>(() => UserService(
+    getIt<Dio>(),
+    baseUrl: NetworkConstants.baseURL,
+  ));
+
+  getIt.registerLazySingleton<GameService>(() => GameService(
     getIt<Dio>(),
     baseUrl: NetworkConstants.baseURL,
   ));

@@ -11,4 +11,5 @@ public interface GamesService {
     GamesResponseModel createGame(GamesRequestModel gamesModel);
     GamesResponseModel updateGame(Long gameId, GamesRequestModel gamesModel);
     void delete(Long id);
+    List<GamesResponseModel> getGameByName(String gameName);
 }

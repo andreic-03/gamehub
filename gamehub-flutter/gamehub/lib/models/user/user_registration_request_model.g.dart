@@ -7,7 +7,8 @@ part of 'user_registration_request_model.dart';
 // **************************************************************************
 
 UserRegistrationRequestModel _$UserRegistrationRequestModelFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   $checkKeys(
     json,
     requiredKeys: const ['username', 'password', 'email', 'fullName'],
@@ -21,10 +22,10 @@ UserRegistrationRequestModel _$UserRegistrationRequestModelFromJson(
 }
 
 Map<String, dynamic> _$UserRegistrationRequestModelToJson(
-        UserRegistrationRequestModel instance) =>
-    <String, dynamic>{
-      'username': instance.username,
-      'password': instance.password,
-      'email': instance.email,
-      'fullName': instance.fullName,
-    };
+  UserRegistrationRequestModel instance,
+) => <String, dynamic>{
+  'username': instance.username,
+  'password': instance.password,
+  'email': instance.email,
+  'fullName': instance.fullName,
+};
