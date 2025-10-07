@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'dart:async';
+import '../../models/game/games_response_model.dart';
+import '../../services/game/game_service.dart';
 import '../../core/utils/error_util.dart';
 import '../../models/game_post/game_post_request_model.dart';
 import '../../services/game_post/game_post_service.dart';
+import 'create_game_post_view_model.dart';
 
 class CreateGamePostScreen extends StatefulWidget {
   const CreateGamePostScreen({Key? key}) : super(key: key);
@@ -14,10 +18,12 @@ class CreateGamePostScreen extends StatefulWidget {
 class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
   final _formKey = GlobalKey<FormState>();
   final _gamePostService = GetIt.instance<GamePostService>();
+  final _viewModel = GetIt.instance<CreateGamePostViewModel>();
   bool _isLoading = false;
 
   // Form fields
   final _gameIdController = TextEditingController();
+  final _gameNameController = TextEditingController();
   final _locationController = TextEditingController();
   final _latitudeController = TextEditingController();
   final _longitudeController = TextEditingController();
@@ -26,31 +32,21 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
   DateTime _selectedDate = DateTime.now().add(const Duration(days: 1));
   TimeOfDay _selectedTime = TimeOfDay.now();
 
+  // Realtime search state
+  List<GamesResponseModel> _gameSuggestions = [];
+  bool _isSearchingGames = false;
+
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate,
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(const Duration(days: 365)),
-    );
+    final picked = await _viewModel.selectDate(context, _selectedDate, _selectedTime);
     if (picked != null && picked != _selectedDate) {
       setState(() {
-        _selectedDate = DateTime(
-          picked.year, 
-          picked.month, 
-          picked.day,
-          _selectedTime.hour,
-          _selectedTime.minute,
-        );
+        _selectedDate = picked;
       });
     }
   }
 
   Future<void> _selectTime(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: _selectedTime,
-    );
+    final picked = await _viewModel.selectTime(context, _selectedTime);
     if (picked != null && picked != _selectedTime) {
       setState(() {
         _selectedTime = picked;
@@ -68,57 +64,33 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
   Future<void> _createGamePost() async {
     if (!_formKey.currentState!.validate()) return;
 
-    // Ensure date is in the future
-    final now = DateTime.now();
-    if (_selectedDate.isBefore(now)) {
-      ErrorUtil.showErrorDialog(
-        context,
-        {
-          'code': 'VALIDATION_ERROR',
-          'message': 'Invalid Date',
-          'details': ['Selected date must be in the future'],
-          'errorType': 'VALIDATION_ERROR'
-        },
-      );
-      return;
-    }
-
     setState(() {
       _isLoading = true;
     });
 
-    try {
-      final request = GamePostRequestModel(
-        gameId: int.parse(_gameIdController.text),
-        location: _locationController.text,
-        latitude: double.parse(_latitudeController.text),
-        longitude: double.parse(_longitudeController.text),
-        scheduledDate: _selectedDate,
-        maxParticipants: int.parse(_maxParticipantsController.text),
-        description: _descriptionController.text.isEmpty ? null : _descriptionController.text,
-      );
+    await _viewModel.createGamePost(
+      context: context,
+      gameIdController: _gameIdController,
+      locationController: _locationController,
+      latitudeController: _latitudeController,
+      longitudeController: _longitudeController,
+      scheduledDate: _selectedDate,
+      maxParticipantsController: _maxParticipantsController,
+      descriptionController: _descriptionController,
+    );
 
-      await _gamePostService.createGamePost(request);
-      
-      if (mounted) {
-        Navigator.pop(context);
-      }
-    } catch (e) {
-      if (mounted) {
-        ErrorUtil.showErrorDialog(context, e);
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
+    if (!mounted) return;
+    setState(() {
+      _isLoading = false;
+    });
+    if (!mounted) return;
+    Navigator.pop(context);
   }
 
   @override
   void dispose() {
     _gameIdController.dispose();
+    _gameNameController.dispose();
     _locationController.dispose();
     _latitudeController.dispose();
     _longitudeController.dispose();
@@ -142,22 +114,68 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    TextFormField(
-                      controller: _gameIdController,
-                      decoration: const InputDecoration(
-                        labelText: 'Game Name',
-                        border: OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a game ID';
-                        }
-                        if (int.tryParse(value) == null) {
-                          return 'Please enter a valid number';
-                        }
-                        return null;
-                      },
+                    // Game Name search field with realtime suggestions
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        TextFormField(
+                          controller: _gameNameController,
+                          decoration: const InputDecoration(
+                            labelText: 'Game Name',
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (q) => _viewModel.onGameNameChanged(
+                            q,
+                            setSearching: (v) => setState(() { _isSearchingGames = v; }),
+                            setSuggestions: (s) => setState(() { _gameSuggestions = s; }),
+                            clearSelection: () => _gameIdController.clear(),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Please enter a game name';
+                            }
+                            if (_gameIdController.text.isEmpty) {
+                              return 'Please select a game from the suggestions';
+                            }
+                            return null;
+                          },
+                        ),
+                        if (_isSearchingGames)
+                          const Padding(
+                            padding: EdgeInsets.only(top: 8.0),
+                            child: LinearProgressIndicator(minHeight: 2),
+                          ),
+                        if (_gameSuggestions.isNotEmpty)
+                          Container(
+                            margin: const EdgeInsets.only(top: 8),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              border: Border.all(color: Theme.of(context).dividerColor),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                final game = _gameSuggestions[index];
+                                return ListTile(
+                                  title: Text(game.gameName),
+                                  subtitle: Text(game.gameCategory),
+                                  onTap: () => setState(() {
+                                    _viewModel.selectGame(
+                                      game,
+                                      gameNameController: _gameNameController,
+                                      gameIdController: _gameIdController,
+                                      setSuggestions: (s) { _gameSuggestions = s; },
+                                    );
+                                  }),
+                                );
+                              },
+                              separatorBuilder: (_, __) => const Divider(height: 1),
+                              itemCount: _gameSuggestions.length,
+                            ),
+                          ),
+                      ],
                     ),
                     const SizedBox(height: 16),
                     TextFormField(

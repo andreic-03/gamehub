@@ -13,6 +13,7 @@ import '../services/auth/auth_service.dart';
 import '../services/game_post/game_post_service.dart';
 import '../services/user/user_service.dart';
 import '../services/game/game_service.dart';
+import '../screens/game_post/create_game_post_view_model.dart';
 import '../screens/profile/profile_view_model.dart';
 
 final GetIt getIt = GetIt.instance;
@@ -102,6 +103,10 @@ void configureDependencies() {
   getIt.registerLazySingleton<AuthViewModel>(() => AuthViewModel(getIt<AuthService>()));
   getIt.registerFactory<HomeViewModel>(() => HomeViewModel(getIt<GamePostService>()));
   getIt.registerFactory<ProfileViewModel>(() => ProfileViewModel(getIt<UserService>()));
+  getIt.registerFactory<CreateGamePostViewModel>(() => CreateGamePostViewModel(
+        getIt<GamePostService>(),
+        getIt<GameService>(),
+      ));
 
   // 5. Finally, register and setup interceptors (after all dependencies are ready)
   final authInterceptor = AuthInterceptor();
