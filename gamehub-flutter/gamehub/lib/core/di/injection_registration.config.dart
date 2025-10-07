@@ -17,6 +17,7 @@ import 'package:injectable/injectable.dart' as _i526;
 import '../../interceptors/auth_interceptor.dart' as _i1059;
 import '../../navigation/app_drawer.dart' as _i175;
 import '../../network/network_module.dart' as _i786;
+import '../../screens/game_post/create_game_post_view_model.dart' as _i953;
 import '../../screens/profile/profile_view_model.dart' as _i970;
 import '../../services/auth/auth_service.dart' as _i756;
 import '../../services/game/game_service.dart' as _i890;
@@ -63,6 +64,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i928.AuthViewModel>(
       () => _i928.AuthViewModel(gh<_i756.AuthService>()),
+    );
+    gh.factory<_i953.CreateGamePostViewModel>(
+      () => _i953.CreateGamePostViewModel(
+        gh<_i624.GamePostService>(),
+        gh<_i890.GameService>(),
+      ),
     );
     gh.factory<_i175.AppDrawer>(
       () => _i175.AppDrawer(

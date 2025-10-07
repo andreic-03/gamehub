@@ -48,7 +48,7 @@ class _HomeContentState extends State<HomeContent> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('No game posts found nearby.'),
+            Text('No games found nearby.'),
             ElevatedButton(
               onPressed: _loadData,
               child: Text('Refresh'),
@@ -72,52 +72,115 @@ class _HomeContentState extends State<HomeContent> {
       final gamePosts = _viewModel.gamePosts;
       return Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Slider(
-                    value: _viewModel.searchRangeInKm,
-                    min: 1.0,
-                    max: 50.0,
-                    divisions: 49,
-                    label: '${_viewModel.searchRangeInKm.round()} km',
-                    onChanged: (double value) async {
-                      await _viewModel.setSearchRange(value);
-                      setState(() {});
-                    },
-                  ),
-                ),
-                Text('${_viewModel.searchRangeInKm.round()} km'),
-                IconButton(
-                  icon: Icon(Icons.refresh),
-                  onPressed: _loadData,
-                ),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: Row(
+          //     children: [
+          //       Expanded(
+          //         child: Slider(
+          //           value: _viewModel.searchRangeInKm,
+          //           min: 1.0,
+          //           max: 50.0,
+          //           divisions: 49,
+          //           label: '${_viewModel.searchRangeInKm.round()} km',
+          //           onChanged: (double value) async {
+          //             await _viewModel.setSearchRange(value);
+          //             setState(() {});
+          //           },
+          //         ),
+          //       ),
+          //       Text('${_viewModel.searchRangeInKm.round()} km'),
+          //       IconButton(
+          //         icon: Icon(Icons.refresh),
+          //         onPressed: _loadData,
+          //       ),
+          //     ],
+          //   ),
+          // ),
           Expanded(
-            child: ListView.builder(
+            child: PageView.builder(
+              scrollDirection: Axis.vertical,
               itemCount: gamePosts.length,
               itemBuilder: (context, index) {
                 final gamePost = gamePosts[index];
-                return Card(
-                  child: ListTile(
-                    title: Text('Location: ${gamePost.location}'),
-                    subtitle: Text(
-                        'Scheduled: ${gamePost.scheduledDate}\nMax Participants: ${gamePost.maxParticipants}'),
-                    trailing: Text('Host: ${gamePost.hostUserId}'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => GamePostDetailsScreen(
-                            gamePost: gamePost,
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GamePostDetailsScreen(
+                          gamePost: gamePost,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(gamePost.gamePictureUrl),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Stack(
+                      children: [
+                        // Semi-transparent overlay for text readability
+                        Container(
+                          color: Colors.black.withOpacity(0.4),
+                        ),
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  gamePost.location,
+                                  style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  'Game: ${gamePost.gameName}',
+                                  style: const TextStyle(color: Colors.white70, fontSize: 16),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Scheduled: ${gamePost.scheduledDate}',
+                                  style: const TextStyle(color: Colors.white70, fontSize: 16),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Participants: ${gamePost.maxParticipants}',
+                                  style: const TextStyle(color: Colors.white70, fontSize: 16),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Host: ${gamePost.hostUserId}',
+                                  style: const TextStyle(color: Colors.white70, fontSize: 16),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      );
-                    },
+                        // Simple page indicator (bottom-right)
+                        Positioned(
+                          right: 12,
+                          bottom: 12,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: Colors.white24,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Text(
+                              '${index + 1}/${gamePosts.length}',
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },

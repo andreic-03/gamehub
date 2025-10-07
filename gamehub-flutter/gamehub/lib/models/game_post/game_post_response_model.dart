@@ -7,6 +7,8 @@ class GamePostResponseModel {
   final int postId;
   final int hostUserId;
   final int gameId;
+  final String gameName;
+  final String gamePictureUrl;
   final String location;
   final double latitude;
   final double longitude;
@@ -18,6 +20,8 @@ class GamePostResponseModel {
     required this.postId,
     required this.hostUserId,
     required this.gameId,
+    required this.gameName,
+    required this.gamePictureUrl,
     required this.location,
     required this.latitude,
     required this.longitude,
