@@ -12,9 +12,11 @@ import org.mapstruct.MappingTarget;
 public interface GamePostsMapper {
 
     @Mapping(source = "hostUser.id", target = "hostUserId")
+    @Mapping(source = "hostUser.fullName", target = "hostName")
     @Mapping(source = "game.gameId", target = "gameId")
+    @Mapping(source = "game.gameName", target = "gameName")
+    @Mapping(source = "game.gamePictureUrl", target = "gamePictureUrl")
     GamePostsResponseModel toGamePostsModel(GamePostsEntity gamePosts);
-
 
     @Mapping(target = "postId", ignore = true)
     @Mapping(target = "createdOn", ignore = true)

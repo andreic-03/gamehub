@@ -17,19 +17,14 @@ class BaseScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _BaseScreenState createState() => _BaseScreenState();
+  BaseScreenState createState() => BaseScreenState();
 }
 
-class _BaseScreenState extends State<BaseScreen> {
+class BaseScreenState extends State<BaseScreen> {
   int _selectedIndex = 0;
+  final GlobalKey<HomeContentState> _homeContentKey = GlobalKey<HomeContentState>();
 
-  final List<Widget> _screens = [
-    HomeContent(),
-    MapContent(),
-    ProfileContent(),
-    // SettingsContent(),
-    // InfoContent(),
-  ];
+  late final List<Widget> _screens;
 
   final List<String> _titles = [
     'GameHub - Home',
@@ -39,10 +34,29 @@ class _BaseScreenState extends State<BaseScreen> {
     // 'GameHub - Info',
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _screens = [
+      HomeContent(key: _homeContentKey),
+      MapContent(),
+      ProfileContent(),
+      // SettingsContent(),
+      // InfoContent(),
+    ];
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  // Method to refresh home content
+  Future<void> refreshHomeContent() async {
+    if (_homeContentKey.currentState != null) {
+      await _homeContentKey.currentState!.refreshData();
+    }
   }
 
   @override

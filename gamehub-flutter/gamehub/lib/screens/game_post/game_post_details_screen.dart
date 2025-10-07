@@ -28,7 +28,7 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Game Post Details'),
+        title: const Text('Game Post'),
         elevation: 0,
       ),
       body: SingleChildScrollView(

@@ -84,7 +84,9 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
       _isLoading = false;
     });
     if (!mounted) return;
-    Navigator.pop(context);
+    
+    // Return true to indicate successful creation
+    Navigator.pop(context, true);
   }
 
   @override

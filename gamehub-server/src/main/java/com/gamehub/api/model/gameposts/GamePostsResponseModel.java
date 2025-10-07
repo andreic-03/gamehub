@@ -11,7 +11,10 @@ import java.time.LocalDateTime;
 public class GamePostsResponseModel {
     private Long postId;
     private Long hostUserId;
+    private String hostName;
     private Long gameId;
+    private String gameName;
+    private String gamePictureUrl;
     private String location;
     private Double latitude;
     private Double longitude;

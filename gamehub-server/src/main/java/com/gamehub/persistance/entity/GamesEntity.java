@@ -23,4 +23,7 @@ public class GamesEntity extends AuditingEntity {
 
     @Column
     private String gameCategory;
+
+    @Column
+    private String gamePictureUrl;
 }

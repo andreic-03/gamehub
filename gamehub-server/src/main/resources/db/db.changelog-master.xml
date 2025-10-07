@@ -15,6 +15,5 @@
     <include file="changelog/09-reviews.xml" relativeToChangelogFile="true" />
     <include file="changelog/10-messages.xml" relativeToChangelogFile="true" />
     <include file="changelog/11-participants.xml" relativeToChangelogFile="true" />
-    <include file="changelog/12-default-game.xml" relativeToChangelogFile="true" />
 
 </databaseChangeLog>

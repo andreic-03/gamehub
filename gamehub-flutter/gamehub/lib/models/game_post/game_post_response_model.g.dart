@@ -10,7 +10,7 @@ GamePostResponseModel _$GamePostResponseModelFromJson(
   Map<String, dynamic> json,
 ) => GamePostResponseModel(
   postId: (json['postId'] as num).toInt(),
-  hostUserId: (json['hostUserId'] as num).toInt(),
+  hostName: json['hostName'] as String,
   gameId: (json['gameId'] as num).toInt(),
   gameName: json['gameName'] as String,
   gamePictureUrl: json['gamePictureUrl'] as String,
@@ -26,7 +26,7 @@ Map<String, dynamic> _$GamePostResponseModelToJson(
   GamePostResponseModel instance,
 ) => <String, dynamic>{
   'postId': instance.postId,
-  'hostUserId': instance.hostUserId,
+  'hostName': instance.hostName,
   'gameId': instance.gameId,
   'gameName': instance.gameName,
   'gamePictureUrl': instance.gamePictureUrl,

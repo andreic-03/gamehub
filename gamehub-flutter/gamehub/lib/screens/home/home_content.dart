@@ -8,10 +8,10 @@ class HomeContent extends StatefulWidget {
   const HomeContent({super.key});
 
   @override
-  _HomeContentState createState() => _HomeContentState();
+  HomeContentState createState() => HomeContentState();
 }
 
-class _HomeContentState extends State<HomeContent> {
+class HomeContentState extends State<HomeContent> {
   late final HomeViewModel _viewModel;
 
   @override
@@ -19,6 +19,11 @@ class _HomeContentState extends State<HomeContent> {
     super.initState();
     _viewModel = getIt<HomeViewModel>();
     _loadData();
+  }
+
+  // Method to refresh data that can be called externally
+  Future<void> refreshData() async {
+    await _loadData();
   }
 
   Future<void> _loadData() async {
@@ -129,11 +134,12 @@ class _HomeContentState extends State<HomeContent> {
                         Container(
                           color: Colors.black.withOpacity(0.4),
                         ),
-                        Center(
+                        Positioned(
+                          left: 30,
+                          bottom: 24,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            padding: const EdgeInsets.only(right: 16.0),
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
@@ -156,7 +162,7 @@ class _HomeContentState extends State<HomeContent> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  'Host: ${gamePost.hostUserId}',
+                                  'Host name: ${gamePost.hostName}',
                                   style: const TextStyle(color: Colors.white70, fontSize: 16),
                                 ),
                               ],
@@ -164,21 +170,21 @@ class _HomeContentState extends State<HomeContent> {
                           ),
                         ),
                         // Simple page indicator (bottom-right)
-                        Positioned(
-                          right: 12,
-                          bottom: 12,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: Colors.white24,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Text(
-                              '${index + 1}/${gamePosts.length}',
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
+                        // Positioned(
+                        //   right: 12,
+                        //   bottom: 12,
+                        //   child: Container(
+                        //     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        //     decoration: BoxDecoration(
+                        //       color: Colors.white24,
+                        //       borderRadius: BorderRadius.circular(16),
+                        //     ),
+                        //     child: Text(
+                        //       '${index + 1}/${gamePosts.length}',
+                        //       style: const TextStyle(color: Colors.white),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),

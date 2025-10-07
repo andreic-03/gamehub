@@ -18,6 +18,9 @@
             <column name="game_category" type="varchar(255)">
                 <constraints nullable="true"/>
             </column>
+            <column name="game_picture_url" type="varchar(500)">
+                <constraints nullable="true"/>
+            </column>
             <column name="created_by" type="int">
                 <constraints nullable="true"/>
             </column>
@@ -43,6 +46,21 @@
                                  baseTableName="games" baseColumnNames="updated_by"
                                  referencedTableName="users" referencedColumnNames="id"
                                  deleteCascade="false"/>
+    </changeSet>
+
+    <changeSet id="insert-default-game" author="Andrei">
+        <insert tableName="games">
+            <column name="game_name" value="Football"/>
+            <column name="game_description" value="Football game"/>
+            <column name="game_category" value="Sports"/>
+            <column name="game_picture_url" value="https://i.pinimg.com/474x/a5/97/36/a59736fdb4f01bbf0d3ed5bd4b77c54f.jpg"/>
+        </insert>
+        <insert tableName="games">
+            <column name="game_name" value="Tennis"/>
+            <column name="game_description" value="Tennis game"/>
+            <column name="game_category" value="Sports"/>
+            <column name="game_picture_url" value="https://img.freepik.com/free-photo/high-angle-paddle-tennis-white-line_23-2149459020.jpg"/>
+        </insert>
     </changeSet>
 
 </databaseChangeLog>

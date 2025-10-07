@@ -5,7 +5,7 @@ part 'game_post_response_model.g.dart';
 @JsonSerializable()
 class GamePostResponseModel {
   final int postId;
-  final int hostUserId;
+  final String hostName;
   final int gameId;
   final String gameName;
   final String gamePictureUrl;
@@ -18,7 +18,7 @@ class GamePostResponseModel {
 
   GamePostResponseModel({
     required this.postId,
-    required this.hostUserId,
+    required this.hostName,
     required this.gameId,
     required this.gameName,
     required this.gamePictureUrl,
