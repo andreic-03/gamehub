@@ -120,9 +120,26 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
                       children: [
                         TextFormField(
                           controller: _gameNameController,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             labelText: 'Game Name',
-                            border: OutlineInputBorder(),
+                            border: const OutlineInputBorder(),
+                            suffixIcon: _gameNameController.text.isEmpty
+                                ? null
+                                : IconButton(
+                                    icon: const Icon(Icons.clear),
+                                    tooltip: 'Clear',
+                                    onPressed: () {
+                                      setState(() {
+                                        _gameNameController.clear();
+                                        _gameIdController.clear();
+                                        _gameSuggestions = [];
+                                      });
+                                    },
+                                  ),
+                          ),
+                          onTap: () => _viewModel.onGameFieldFocused(
+                            setSearching: (v) => setState(() { _isSearchingGames = v; }),
+                            setSuggestions: (s) => setState(() { _gameSuggestions = s; }),
                           ),
                           onChanged: (q) => _viewModel.onGameNameChanged(
                             q,

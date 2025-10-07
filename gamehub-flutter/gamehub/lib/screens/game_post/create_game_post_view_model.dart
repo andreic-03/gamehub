@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
+import '../../config/injection.dart';
 import '../../core/utils/error_util.dart';
 import '../../core/viewmodels/base_view_model.dart';
 import '../../models/game/games_response_model.dart';
@@ -106,6 +108,36 @@ class CreateGamePostViewModel extends BaseViewModel {
         setSearching(false);
       }
     });
+  }
+
+  Future<void> onGameFieldFocused({
+    required void Function(bool) setSearching,
+    required void Function(List<GamesResponseModel>) setSuggestions,
+  }) async {
+    setSearching(true);
+    try {
+      // Try using search endpoint with empty query; if server returns all or ignores, it'll work
+      List<GamesResponseModel> results = [];
+      try {
+        results = await _gameService.getGameByName('');
+      } catch (_) {}
+
+      if (results.isEmpty) {
+        // Fallback: raw GET to /games
+        final dio = getIt<Dio>();
+        final response = await dio.get('/games');
+        final data = (response.data as List)
+            .map((e) => GamesResponseModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        results = data;
+      }
+
+      setSuggestions(results);
+    } catch (_) {
+      setSuggestions([]);
+    } finally {
+      setSearching(false);
+    }
   }
 
   void selectGame(
