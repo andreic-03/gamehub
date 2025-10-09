@@ -6,6 +6,8 @@ import '../navigation/app_bottom_navigation_bar.dart';
 import '../navigation/app_drawer.dart';
 import '../config/injection.dart';
 import '../services/auth/auth_service.dart';
+import '../localization/localized_text.dart';
+import '../localization/localization_service.dart';
 import 'home/home_content.dart';
 
 class BaseScreen extends StatefulWidget {
@@ -26,10 +28,10 @@ class BaseScreenState extends State<BaseScreen> {
 
   late final List<Widget> _screens;
 
-  final List<String> _titles = [
-    'GameHub - Home',
-    'GameHub - Map',
-    'GameHub - Profile',
+  final List<String> _titleKeys = [
+    'base_screen.home_title',
+    'base_screen.map_title',
+    'base_screen.profile_title',
     // 'GameHub - Settings',
     // 'GameHub - Info',
   ];
@@ -67,7 +69,12 @@ class BaseScreenState extends State<BaseScreen> {
     
     return Scaffold(
       appBar: AppBar(
-        title: Text(_titles[_selectedIndex]),
+        title: ListenableBuilder(
+          listenable: LocalizationService.instance,
+          builder: (context, child) {
+            return Text(_titleKeys[_selectedIndex].localized);
+          },
+        ),
       ),
       drawer: AppDrawer(
           onSelectScreen: _onItemTapped,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gamehub/core/viewmodels/auth_view_model.dart';
 import 'package:gamehub/screens/profile/profile_avatar.dart';
 import 'package:gamehub/screens/settings/settings_screen.dart';
+import 'package:gamehub/localization/localized_text.dart';
 import 'package:injectable/injectable.dart';
 import '../services/auth/auth_service.dart';
 
@@ -53,8 +54,8 @@ class AppDrawer extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Welcome back,',
+                    LocalizedText(
+                      'app.welcome',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -91,7 +92,7 @@ class AppDrawer extends StatelessWidget {
           // ),
           ListTile(
             leading: Icon(Icons.settings),
-            title: Text('Settings'),
+            title: LocalizedText('navigation.settings'),
             onTap: () {
               Navigator.pop(context); // Close the drawer
               Navigator.push(
@@ -104,7 +105,7 @@ class AppDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.logout),
-            title: Text('Logout'),
+            title: LocalizedText('navigation.logout'),
             onTap: () => _handleLogout(context),
           ),
         ],

@@ -1,0 +1,125 @@
+{
+  "app": {
+    "title": "GameHub",
+    "welcome": "Bine ai venit înapoi,",
+    "loading": "Se încarcă...",
+    "error": "Eroare",
+    "retry": "Încearcă din nou",
+    "ok": "OK",
+    "cancel": "Anulează",
+    "save": "Salvează",
+    "edit": "Editează",
+    "delete": "Șterge",
+    "confirm": "Confirmă"
+  },
+  "navigation": {
+    "home": "Acasă",
+    "map": "Hartă",
+    "profile": "Profil",
+    "settings": "Setări",
+    "logout": "Deconectare"
+  },
+  "home": {
+    "title": "GameHub - Acasă",
+    "loading_games": "Se încarcă jocurile din apropiere...",
+    "no_games": "Nu s-au găsit jocuri în apropiere.",
+    "refresh": "Actualizează",
+    "retry": "Încearcă din nou",
+    "search_range": "Raza de căutare",
+    "km": "km"
+  },
+  "map": {
+    "title": "GameHub - Hartă",
+    "scheduled": "Programat",
+    "max_participants": "Participanți max"
+  },
+  "profile": {
+    "title": "GameHub - Profil",
+    "edit_profile": "Editează profilul",
+    "level": "Nivel"
+  },
+  "settings": {
+    "title": "Setări",
+    "language": "Limbă",
+    "more_settings": "Mai multe setări",
+    "more_settings_description": "Setări suplimentare vor fi adăugate aici în actualizările viitoare.",
+    "select_language": "Selectează limba"
+  },
+  "game_post": {
+    "game": "Joc",
+    "scheduled": "Programat",
+    "participants": "Participanți",
+    "host_name": "Numele gazdei",
+    "location": "Locația",
+    "description": "Descriere",
+    "date_time": "Data și ora",
+    "max_participants": "Participanți max"
+  },
+  "auth": {
+    "login": "Autentificare",
+    "username": "Nume de utilizator",
+    "password": "Parolă",
+    "login_button": "Autentificare",
+    "login_error": "Autentificarea a eșuat. Te rugăm să încerci din nou."
+  },
+  "create_game_post": {
+    "title": "Creează Postare Joc",
+    "game_name": "Numele jocului",
+    "location": "Locația",
+    "latitude": "Latitudine",
+    "longitude": "Longitudine",
+    "scheduled_date_time": "Data și ora programată",
+    "date": "Data",
+    "time": "Ora",
+    "max_participants": "Participanți max",
+    "description_optional": "Descriere (Opțional)",
+    "create_button": "Creează Postarea Jocului",
+    "clear": "Șterge",
+    "please_enter_game_name": "Te rugăm să introduci numele jocului",
+    "please_select_game": "Te rugăm să selectezi un joc din sugestii",
+    "please_enter_location": "Te rugăm să introduci locația",
+    "required": "Necesar",
+    "invalid": "Invalid",
+    "please_enter_max_participants": "Te rugăm să introduci numărul maxim de participanți",
+    "please_enter_valid_number": "Te rugăm să introduci un număr valid"
+  },
+  "game_post_details": {
+    "title": "Postarea Jocului",
+    "location": "Locația",
+    "date_time": "Data și ora",
+    "participants": "Participanți",
+    "description": "Descriere",
+    "max_participants_text": "Max {count} participanți",
+    "join_game": "Alătură-te jocului"
+  },
+  "base_screen": {
+    "home_title": "GameHub - Acasă",
+    "map_title": "GameHub - Hartă",
+    "profile_title": "GameHub - Profil"
+  },
+  "login": {
+    "title": "GameHub",
+    "login_header": "Autentificare",
+    "username": "Nume de utilizator",
+    "password": "Parolă",
+    "login_button": "Autentificare",
+    "please_enter_credentials": "Te rugăm să introduci numele de utilizator și parola"
+  },
+  "bottom_navigation": {
+    "home": "Acasă",
+    "map": "Hartă",
+    "profile": "Profil"
+  },
+  "error": {
+    "dismiss": "Închide",
+    "ok": "OK",
+    "error_initializing_map": "Eroare la inițializarea hărții",
+    "error_fetching_games": "Eroare la încărcarea jocurilor",
+    "location_services_disabled": "Serviciile de localizare sunt dezactivate",
+    "location_permissions_denied": "Permisiunile de localizare sunt refuzate",
+    "location_permissions_permanently_denied": "Permisiunile de localizare sunt refuzate permanent, nu putem solicita permisiuni"
+  },
+  "map": {
+    "refresh_tooltip": "Actualizează jocurile din apropiere"
+  }
+}

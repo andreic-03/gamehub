@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import '../../models/game_post/game_post_response_model.dart';
 import '../../core/utils/date_util.dart';
+import '../../localization/localized_text.dart';
+import '../../localization/localization_service.dart';
 import 'game_post_details_view_model.dart';
 
 class GamePostDetailsScreen extends StatefulWidget {
@@ -29,7 +31,7 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Game Post'),
+        title: const LocalizedText('game_post_details.title'),
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -45,8 +47,8 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Location',
+                      const LocalizedText(
+                        'game_post_details.location',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -78,8 +80,8 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Date & Time',
+                      const LocalizedText(
+                        'game_post_details.date_time',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -111,8 +113,8 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Participants',
+                      const LocalizedText(
+                        'game_post_details.participants',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -123,9 +125,14 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
                         children: [
                           const Icon(Icons.people, color: Colors.green),
                           const SizedBox(width: 8),
-                          Text(
-                            'Max ${widget.gamePost.maxParticipants} participants',
-                            style: const TextStyle(fontSize: 16),
+                          ListenableBuilder(
+                            listenable: LocalizationService.instance,
+                            builder: (context, child) {
+                              return Text(
+                                'game_post_details.max_participants_text'.localized.replaceAll('{count}', widget.gamePost.maxParticipants.toString()),
+                                style: const TextStyle(fontSize: 16),
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -143,8 +150,8 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Description',
+                        const LocalizedText(
+                          'game_post_details.description',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -172,9 +179,14 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text(
-                    'Join Game',
-                    style: TextStyle(fontSize: 18),
+                  child: ListenableBuilder(
+                    listenable: LocalizationService.instance,
+                    builder: (context, child) {
+                      return Text(
+                        'game_post_details.join_game'.localized,
+                        style: const TextStyle(fontSize: 18),
+                      );
+                    },
                   ),
                 ),
               ),

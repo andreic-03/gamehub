@@ -1,0 +1,125 @@
+{
+  "app": {
+    "title": "GameHub",
+    "welcome": "Bon retour,",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "retry": "Réessayer",
+    "ok": "OK",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "confirm": "Confirmer"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "map": "Carte",
+    "profile": "Profil",
+    "settings": "Paramètres",
+    "logout": "Déconnexion"
+  },
+  "home": {
+    "title": "GameHub - Accueil",
+    "loading_games": "Chargement des jeux à proximité...",
+    "no_games": "Aucun jeu trouvé à proximité.",
+    "refresh": "Actualiser",
+    "retry": "Réessayer",
+    "search_range": "Rayon de recherche",
+    "km": "km"
+  },
+  "map": {
+    "title": "GameHub - Carte",
+    "scheduled": "Programmé",
+    "max_participants": "Participants max"
+  },
+  "profile": {
+    "title": "GameHub - Profil",
+    "edit_profile": "Modifier le profil",
+    "level": "Niveau"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "language": "Langue",
+    "more_settings": "Plus de paramètres",
+    "more_settings_description": "Des paramètres supplémentaires seront ajoutés ici dans les futures mises à jour.",
+    "select_language": "Sélectionner la langue"
+  },
+  "game_post": {
+    "game": "Jeu",
+    "scheduled": "Programmé",
+    "participants": "Participants",
+    "host_name": "Nom de l'hôte",
+    "location": "Lieu",
+    "description": "Description",
+    "date_time": "Date et heure",
+    "max_participants": "Participants max"
+  },
+  "auth": {
+    "login": "Connexion",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "login_button": "Se connecter",
+    "login_error": "Échec de la connexion. Veuillez réessayer."
+  },
+  "create_game_post": {
+    "title": "Créer une Publication de Jeu",
+    "game_name": "Nom du jeu",
+    "location": "Lieu",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "scheduled_date_time": "Date et heure programmées",
+    "date": "Date",
+    "time": "Heure",
+    "max_participants": "Participants max",
+    "description_optional": "Description (Optionnel)",
+    "create_button": "Créer la Publication de Jeu",
+    "clear": "Effacer",
+    "please_enter_game_name": "Veuillez entrer le nom du jeu",
+    "please_select_game": "Veuillez sélectionner un jeu dans les suggestions",
+    "please_enter_location": "Veuillez entrer le lieu",
+    "required": "Requis",
+    "invalid": "Invalide",
+    "please_enter_max_participants": "Veuillez entrer le nombre max de participants",
+    "please_enter_valid_number": "Veuillez entrer un nombre valide"
+  },
+  "game_post_details": {
+    "title": "Publication de Jeu",
+    "location": "Lieu",
+    "date_time": "Date et heure",
+    "participants": "Participants",
+    "description": "Description",
+    "max_participants_text": "Max {count} participants",
+    "join_game": "Rejoindre le jeu"
+  },
+  "base_screen": {
+    "home_title": "GameHub - Accueil",
+    "map_title": "GameHub - Carte",
+    "profile_title": "GameHub - Profil"
+  },
+  "login": {
+    "title": "GameHub",
+    "login_header": "Connexion",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "login_button": "Se connecter",
+    "please_enter_credentials": "Veuillez entrer le nom d'utilisateur et le mot de passe"
+  },
+  "bottom_navigation": {
+    "home": "Accueil",
+    "map": "Carte",
+    "profile": "Profil"
+  },
+  "error": {
+    "dismiss": "Fermer",
+    "ok": "OK",
+    "error_initializing_map": "Erreur lors de l'initialisation de la carte",
+    "error_fetching_games": "Erreur lors du chargement des jeux",
+    "location_services_disabled": "Les services de localisation sont désactivés",
+    "location_permissions_denied": "Les permissions de localisation sont refusées",
+    "location_permissions_permanently_denied": "Les permissions de localisation sont refusées de façon permanente, nous ne pouvons pas demander d'autorisations"
+  },
+  "map": {
+    "refresh_tooltip": "Actualiser les jeux à proximité"
+  }
+}

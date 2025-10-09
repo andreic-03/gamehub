@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import '../../config/injection.dart';
+import '../../localization/localized_text.dart';
+import '../../localization/localization_service.dart';
 import 'settings_view_model.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -12,11 +14,13 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   late final SettingsViewModel _viewModel;
+  late final LocalizationService _localizationService;
 
   @override
   void initState() {
     super.initState();
     _viewModel = getIt<SettingsViewModel>();
+    _localizationService = LocalizationService.instance;
     _viewModel.initialize();
   }
 
@@ -24,10 +28,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: const LocalizedText('settings.title'),
         elevation: 0,
       ),
-      body: ListView(
+      body: ListenableBuilder(
+        listenable: _viewModel,
+        builder: (context, child) {
+          return ListView(
               padding: const EdgeInsets.all(16.0),
               children: [
                 // Language Section
@@ -37,8 +44,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Language',
+                        const LocalizedText(
+                          'settings.language',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -84,16 +91,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'More Settings',
+                        const LocalizedText(
+                          'settings.more_settings',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(height: 12),
-                        const Text(
-                          'Additional settings will be added here in future updates.',
+                        const LocalizedText(
+                          'settings.more_settings_description',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey,
@@ -104,7 +111,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
               ],
-            ),
+            );
+        },
+      ),
     );
   }
 
@@ -113,21 +122,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Select Language'),
+          title: const LocalizedText('settings.select_language'),
           content: SizedBox(
             width: double.minPositive,
             child: ListView.builder(
               shrinkWrap: true,
               itemCount: _viewModel.availableLanguages.length,
               itemBuilder: (context, index) {
-                final language = _viewModel.availableLanguages[index];
+                final languageCode = _viewModel.availableLanguages.keys.elementAt(index);
+                final languageName = _viewModel.availableLanguages[languageCode]!;
                 return ListTile(
-                  title: Text(language),
-                  trailing: _viewModel.selectedLanguage == language
+                  title: Text(languageName),
+                  trailing: _viewModel.selectedLanguageCode == languageCode
                       ? const Icon(Icons.check, color: Colors.blue)
                       : null,
-                  onTap: () {
-                    _viewModel.setLanguage(language);
+                  onTap: () async {
+                    await _viewModel.setLanguage(languageCode);
                     Navigator.of(context).pop();
                   },
                 );

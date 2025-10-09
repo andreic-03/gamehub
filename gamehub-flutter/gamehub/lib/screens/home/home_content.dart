@@ -3,6 +3,8 @@ import 'package:gamehub/models/game_post/game_post_response_model.dart';
 import '../../config/injection.dart';
 import '../../core/viewmodels/home_view_model.dart';
 import '../../core/utils/date_util.dart';
+import '../../localization/localized_text.dart';
+import '../../localization/localization_service.dart';
 import '../game_post/game_post_details_screen.dart';
 
 class HomeContent extends StatefulWidget {
@@ -41,7 +43,7 @@ class HomeContentState extends State<HomeContent> {
           children: const [
             CircularProgressIndicator(),
             SizedBox(height: 12),
-            Text('Loading nearby games...'),
+            LocalizedText('home.loading_games'),
           ],
         ),
       );
@@ -53,7 +55,12 @@ class HomeContentState extends State<HomeContent> {
             Text('Error: ${_viewModel.errorMessage}'),
             ElevatedButton(
               onPressed: _loadData,
-              child: Text('Retry'),
+              child: ListenableBuilder(
+                listenable: LocalizationService.instance,
+                builder: (context, child) {
+                  return Text('home.retry'.localized);
+                },
+              ),
             ),
           ],
         ),
@@ -63,10 +70,10 @@ class HomeContentState extends State<HomeContent> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('No games found nearby.'),
+            LocalizedText('home.no_games'),
             ElevatedButton(
               onPressed: _loadData,
-              child: Text('Refresh'),
+              child: LocalizedText('home.refresh'),
             ),
             Slider(
               value: _viewModel.searchRangeInKm,
@@ -79,7 +86,12 @@ class HomeContentState extends State<HomeContent> {
                 setState(() {});
               },
             ),
-            Text('Search Range: ${_viewModel.searchRangeInKm.round()} km'),
+            ListenableBuilder(
+              listenable: LocalizationService.instance,
+              builder: (context, child) {
+                return Text('${'home.search_range'.localized}: ${_viewModel.searchRangeInKm.round()} ${'home.km'.localized}');
+              },
+            ),
           ],
         ),
       );
@@ -156,24 +168,44 @@ class HomeContentState extends State<HomeContent> {
                                   gamePost.location,
                                   style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
                                 ),
-                                Text(
-                                  'Game: ${gamePost.gameName}',
-                                  style: const TextStyle(color: Colors.white70, fontSize: 16),
+                                ListenableBuilder(
+                                  listenable: LocalizationService.instance,
+                                  builder: (context, child) {
+                                    return Text(
+                                      '${'game_post.game'.localized}: ${gamePost.gameName}',
+                                      style: const TextStyle(color: Colors.white70, fontSize: 16),
+                                    );
+                                  },
                                 ),
                                 const SizedBox(height: 8),
-                                Text(
-                                  'Scheduled: ${DateUtil.formatScheduledDate(gamePost.scheduledDate)}',
-                                  style: const TextStyle(color: Colors.white70, fontSize: 16),
+                                ListenableBuilder(
+                                  listenable: LocalizationService.instance,
+                                  builder: (context, child) {
+                                    return Text(
+                                      '${'game_post.scheduled'.localized}: ${DateUtil.formatScheduledDate(gamePost.scheduledDate)}',
+                                      style: const TextStyle(color: Colors.white70, fontSize: 16),
+                                    );
+                                  },
                                 ),
                                 const SizedBox(height: 8),
-                                Text(
-                                  'Participants: ${gamePost.maxParticipants}',
-                                  style: const TextStyle(color: Colors.white70, fontSize: 16),
+                                ListenableBuilder(
+                                  listenable: LocalizationService.instance,
+                                  builder: (context, child) {
+                                    return Text(
+                                      '${'game_post.participants'.localized}: ${gamePost.maxParticipants}',
+                                      style: const TextStyle(color: Colors.white70, fontSize: 16),
+                                    );
+                                  },
                                 ),
                                 const SizedBox(height: 8),
-                                Text(
-                                  'Host name: ${gamePost.hostName}',
-                                  style: const TextStyle(color: Colors.white70, fontSize: 16),
+                                ListenableBuilder(
+                                  listenable: LocalizationService.instance,
+                                  builder: (context, child) {
+                                    return Text(
+                                      '${'game_post.host_name'.localized}: ${gamePost.hostName}',
+                                      style: const TextStyle(color: Colors.white70, fontSize: 16),
+                                    );
+                                  },
                                 ),
                               ],
                             ),

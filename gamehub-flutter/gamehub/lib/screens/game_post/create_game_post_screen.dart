@@ -6,6 +6,8 @@ import '../../services/game/game_service.dart';
 import '../../core/utils/error_util.dart';
 import '../../models/game_post/game_post_request_model.dart';
 import '../../services/game_post/game_post_service.dart';
+import '../../localization/localized_text.dart';
+import '../../localization/localization_service.dart';
 import 'create_game_post_view_model.dart';
 
 class CreateGamePostScreen extends StatefulWidget {
@@ -105,7 +107,7 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Game Post'),
+        title: const LocalizedText('create_game_post.title'),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -123,13 +125,13 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
                         TextFormField(
                           controller: _gameNameController,
                           decoration: InputDecoration(
-                            labelText: 'Game Name',
+                            labelText: 'create_game_post.game_name'.localized,
                             border: const OutlineInputBorder(),
                             suffixIcon: _gameNameController.text.isEmpty
                                 ? null
                                 : IconButton(
                                     icon: const Icon(Icons.clear),
-                                    tooltip: 'Clear',
+                                    tooltip: 'create_game_post.clear'.localized,
                                     onPressed: () {
                                       setState(() {
                                         _gameNameController.clear();
@@ -151,10 +153,10 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
                           ),
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
-                              return 'Please enter a game name';
+                              return 'create_game_post.please_enter_game_name'.localized;
                             }
                             if (_gameIdController.text.isEmpty) {
-                              return 'Please select a game from the suggestions';
+                              return 'create_game_post.please_select_game'.localized;
                             }
                             return null;
                           },
@@ -199,13 +201,13 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _locationController,
-                      decoration: const InputDecoration(
-                        labelText: 'Location',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: 'create_game_post.location'.localized,
+                        border: const OutlineInputBorder(),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter a location';
+                          return 'create_game_post.please_enter_location'.localized;
                         }
                         return null;
                       },
@@ -216,17 +218,17 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
                         Expanded(
                           child: TextFormField(
                             controller: _latitudeController,
-                            decoration: const InputDecoration(
-                              labelText: 'Latitude',
-                              border: OutlineInputBorder(),
+                            decoration: InputDecoration(
+                              labelText: 'create_game_post.latitude'.localized,
+                              border: const OutlineInputBorder(),
                             ),
                             keyboardType: const TextInputType.numberWithOptions(decimal: true),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Required';
+                                return 'create_game_post.required'.localized;
                               }
                               if (double.tryParse(value) == null) {
-                                return 'Invalid';
+                                return 'create_game_post.invalid'.localized;
                               }
                               return null;
                             },
@@ -236,17 +238,17 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
                         Expanded(
                           child: TextFormField(
                             controller: _longitudeController,
-                            decoration: const InputDecoration(
-                              labelText: 'Longitude',
-                              border: OutlineInputBorder(),
+                            decoration: InputDecoration(
+                              labelText: 'create_game_post.longitude'.localized,
+                              border: const OutlineInputBorder(),
                             ),
                             keyboardType: const TextInputType.numberWithOptions(decimal: true),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Required';
+                                return 'create_game_post.required'.localized;
                               }
                               if (double.tryParse(value) == null) {
-                                return 'Invalid';
+                                return 'create_game_post.invalid'.localized;
                               }
                               return null;
                             },
@@ -255,9 +257,14 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    const Text(
-                      'Scheduled Date & Time',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    ListenableBuilder(
+                      listenable: LocalizationService.instance,
+                      builder: (context, child) {
+                        return Text(
+                          'create_game_post.scheduled_date_time'.localized,
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                        );
+                      },
                     ),
                     const SizedBox(height: 8),
                     Row(
@@ -266,10 +273,10 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
                           child: InkWell(
                             onTap: () => _selectDate(context),
                             child: InputDecorator(
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                labelText: 'Date',
+                              decoration: InputDecoration(
+                                border: const OutlineInputBorder(),
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                labelText: 'create_game_post.date'.localized,
                               ),
                               child: Text(
                                 "${_selectedDate.year}-${_selectedDate.month.toString().padLeft(2, '0')}-${_selectedDate.day.toString().padLeft(2, '0')}",
@@ -282,10 +289,10 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
                           child: InkWell(
                             onTap: () => _selectTime(context),
                             child: InputDecorator(
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                labelText: 'Time',
+                              decoration: InputDecoration(
+                                border: const OutlineInputBorder(),
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                labelText: 'create_game_post.time'.localized,
                               ),
                               child: Text(
                                 "${_selectedTime.hour.toString().padLeft(2, '0')}:${_selectedTime.minute.toString().padLeft(2, '0')}",
@@ -298,17 +305,17 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _maxParticipantsController,
-                      decoration: const InputDecoration(
-                        labelText: 'Max Participants',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: 'create_game_post.max_participants'.localized,
+                        border: const OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter max participants';
+                          return 'create_game_post.please_enter_max_participants'.localized;
                         }
                         if (int.tryParse(value) == null) {
-                          return 'Please enter a valid number';
+                          return 'create_game_post.please_enter_valid_number'.localized;
                         }
                         return null;
                       },
@@ -316,9 +323,9 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _descriptionController,
-                      decoration: const InputDecoration(
-                        labelText: 'Description (Optional)',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: 'create_game_post.description_optional'.localized,
+                        border: const OutlineInputBorder(),
                       ),
                       maxLines: 3,
                     ),
@@ -328,7 +335,12 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
-                      child: const Text('Create Game Post'),
+                      child: ListenableBuilder(
+                        listenable: LocalizationService.instance,
+                        builder: (context, child) {
+                          return Text('create_game_post.create_button'.localized);
+                        },
+                      ),
                     ),
                   ],
                 ),

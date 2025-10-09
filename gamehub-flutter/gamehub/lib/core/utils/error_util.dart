@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:gamehub/localization/localized_text.dart';
 import '../errors/api_error.dart';
+import '../../localization/localization_service.dart';
 
 class ErrorUtil {
   /// Displays an error dialog with the formatted error message
@@ -52,7 +54,12 @@ class ErrorUtil {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
+            child: ListenableBuilder(
+              listenable: LocalizationService.instance,
+              builder: (context, child) {
+                return Text('error.ok'.localized);
+              },
+            ),
           ),
         ],
       ),
@@ -83,7 +90,7 @@ class ErrorUtil {
         content: Text(apiError.userFriendlyMessage),
         duration: const Duration(seconds: 4),
         action: SnackBarAction(
-          label: 'Dismiss',
+          label: 'error.dismiss'.localized,
           onPressed: () {
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
           },

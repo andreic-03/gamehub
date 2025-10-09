@@ -1,0 +1,125 @@
+{
+  "app": {
+    "title": "GameHub",
+    "welcome": "Welcome back,",
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "ok": "OK",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm"
+  },
+  "navigation": {
+    "home": "Home",
+    "map": "Map",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "home": {
+    "title": "GameHub - Home",
+    "loading_games": "Loading nearby games...",
+    "no_games": "No games found nearby.",
+    "refresh": "Refresh",
+    "retry": "Retry",
+    "search_range": "Search Range",
+    "km": "km"
+  },
+  "map": {
+    "title": "GameHub - Map",
+    "scheduled": "Scheduled",
+    "max_participants": "Max Participants"
+  },
+  "profile": {
+    "title": "GameHub - Profile",
+    "edit_profile": "Edit Profile",
+    "level": "Level"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "more_settings": "More Settings",
+    "more_settings_description": "Additional settings will be added here in future updates.",
+    "select_language": "Select Language"
+  },
+  "game_post": {
+    "game": "Game",
+    "scheduled": "Scheduled",
+    "participants": "Participants",
+    "host_name": "Host name",
+    "location": "Location",
+    "description": "Description",
+    "date_time": "Date & Time",
+    "max_participants": "Max Participants"
+  },
+  "auth": {
+    "login": "Login",
+    "username": "Username",
+    "password": "Password",
+    "login_button": "Login",
+    "login_error": "Login failed. Please try again."
+  },
+  "create_game_post": {
+    "title": "Create Game Post",
+    "game_name": "Game Name",
+    "location": "Location",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "scheduled_date_time": "Scheduled Date & Time",
+    "date": "Date",
+    "time": "Time",
+    "max_participants": "Max Participants",
+    "description_optional": "Description (Optional)",
+    "create_button": "Create Game Post",
+    "clear": "Clear",
+    "please_enter_game_name": "Please enter a game name",
+    "please_select_game": "Please select a game from the suggestions",
+    "please_enter_location": "Please enter a location",
+    "required": "Required",
+    "invalid": "Invalid",
+    "please_enter_max_participants": "Please enter max participants",
+    "please_enter_valid_number": "Please enter a valid number"
+  },
+  "game_post_details": {
+    "title": "Game Post",
+    "location": "Location",
+    "date_time": "Date & Time",
+    "participants": "Participants",
+    "description": "Description",
+    "max_participants_text": "Max {count} participants",
+    "join_game": "Join Game"
+  },
+  "base_screen": {
+    "home_title": "GameHub - Home",
+    "map_title": "GameHub - Map",
+    "profile_title": "GameHub - Profile"
+  },
+  "login": {
+    "title": "GameHub",
+    "login_header": "Login",
+    "username": "Username",
+    "password": "Password",
+    "login_button": "Login",
+    "please_enter_credentials": "Please enter both username and password"
+  },
+  "bottom_navigation": {
+    "home": "Home",
+    "map": "Map",
+    "profile": "Profile"
+  },
+  "error": {
+    "dismiss": "Dismiss",
+    "ok": "OK",
+    "error_initializing_map": "Error initializing map",
+    "error_fetching_games": "Error fetching game posts",
+    "location_services_disabled": "Location services are disabled",
+    "location_permissions_denied": "Location permissions are denied",
+    "location_permissions_permanently_denied": "Location permissions are permanently denied, we cannot request permissions"
+  },
+  "map": {
+    "refresh_tooltip": "Refresh nearby games"
+  }
+}

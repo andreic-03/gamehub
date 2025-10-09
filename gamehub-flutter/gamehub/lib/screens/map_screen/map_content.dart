@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:gamehub/localization/localized_text.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../services/game_post/game_post_service.dart';
 import '../../config/injection.dart';
 import '../../core/utils/date_util.dart';
+import '../../localization/localization_service.dart';
 
 class MapContent extends StatefulWidget {
   @override
@@ -36,7 +38,7 @@ class _MapContentState extends State<MapContent> {
     } catch (error) {
       // Handle initialization errors
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error initializing map: $error')),
+        SnackBar(content: Text('${'error.error_initializing_map'.localized}: $error')),
       );
     }
   }
@@ -64,7 +66,7 @@ class _MapContentState extends State<MapContent> {
     } catch (error) {
       // Handle errors, e.g., show a snackbar or dialog
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error fetching game posts: $error')),
+        SnackBar(content: Text('${'error.error_fetching_games'.localized}: $error')),
       );
     }
   }
@@ -76,7 +78,7 @@ class _MapContentState extends State<MapContent> {
     // Check if location services are enabled
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      throw Exception('Location services are disabled.');
+      throw Exception('error.location_services_disabled'.localized);
     }
 
     // Check location permissions
@@ -84,13 +86,12 @@ class _MapContentState extends State<MapContent> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        throw Exception('Location permissions are denied.');
+        throw Exception('error.location_permissions_denied'.localized);
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      throw Exception(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      throw Exception('error.location_permissions_permanently_denied'.localized);
     }
 
     // Get current position
@@ -118,7 +119,7 @@ class _MapContentState extends State<MapContent> {
             await _fetchAndSetMarkers(_initialPosition!.latitude, _initialPosition!.longitude);
           }
         },
-        tooltip: 'Refresh nearby games',
+        tooltip: 'map.refresh_tooltip'.localized,
         child: Icon(Icons.refresh),
       ),
     );

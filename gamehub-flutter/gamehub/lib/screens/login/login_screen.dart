@@ -3,6 +3,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import '../../config/injection.dart';
 import '../../core/viewmodels/auth_view_model.dart';
+import '../../localization/localized_text.dart';
+import '../../localization/localization_service.dart';
 import '../home/home_screen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -19,7 +21,7 @@ class LoginScreen extends StatelessWidget {
         builder: (context, viewModel, child) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text("GameHub"),
+              title: const LocalizedText("login.title"),
               elevation: 0,
             ),
             body: SafeArea(
@@ -37,8 +39,8 @@ class LoginScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        const Text(
-                          "Login",
+                        const LocalizedText(
+                          "login.login_header",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 30,
@@ -48,20 +50,20 @@ class LoginScreen extends StatelessWidget {
                         const SizedBox(height: 32),
                         TextField(
                           controller: _usernameController,
-                          decoration: const InputDecoration(
-                            labelText: 'Username',
-                            border: OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.person),
+                          decoration: InputDecoration(
+                            labelText: 'login.username'.localized,
+                            border: const OutlineInputBorder(),
+                            prefixIcon: const Icon(Icons.person),
                           ),
                           textInputAction: TextInputAction.next,
                         ),
                         const SizedBox(height: 16),
                         TextField(
                           controller: _passwordController,
-                          decoration: const InputDecoration(
-                            labelText: 'Password',
-                            border: OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.lock),
+                          decoration: InputDecoration(
+                            labelText: 'login.password'.localized,
+                            border: const OutlineInputBorder(),
+                            prefixIcon: const Icon(Icons.lock),
                           ),
                           obscureText: true,
                           textInputAction: TextInputAction.done,
@@ -79,9 +81,14 @@ class LoginScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            child: const Text(
-                              'Login',
-                              style: TextStyle(fontSize: 16),
+                            child: ListenableBuilder(
+                              listenable: LocalizationService.instance,
+                              builder: (context, child) {
+                                return Text(
+                                  'login.login_button'.localized,
+                                  style: const TextStyle(fontSize: 16),
+                                );
+                              },
                             ),
                           ),
                         if (viewModel.hasError) ...[
@@ -110,7 +117,7 @@ class LoginScreen extends StatelessWidget {
   void _login(BuildContext context, AuthViewModel viewModel) async {
     if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
       Fluttertoast.showToast(
-        msg: 'Please enter both username and password',
+        msg: 'login.please_enter_credentials'.localized,
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.grey[800],
