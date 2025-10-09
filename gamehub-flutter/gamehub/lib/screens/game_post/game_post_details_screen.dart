@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import '../../models/game_post/game_post_response_model.dart';
+import '../../core/utils/date_util.dart';
 import 'game_post_details_view_model.dart';
 
 class GamePostDetailsScreen extends StatefulWidget {
@@ -91,7 +92,7 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              widget.gamePost.scheduledDate,
+                              DateUtil.formatScheduledDate(widget.gamePost.scheduledDate),
                               style: const TextStyle(fontSize: 16),
                             ),
                           ),

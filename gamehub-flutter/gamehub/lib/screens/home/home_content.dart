@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gamehub/models/game_post/game_post_response_model.dart';
 import '../../config/injection.dart';
 import '../../core/viewmodels/home_view_model.dart';
+import '../../core/utils/date_util.dart';
 import '../game_post/game_post_details_screen.dart';
 
 class HomeContent extends StatefulWidget {
@@ -34,7 +35,16 @@ class HomeContentState extends State<HomeContent> {
   @override
   Widget build(BuildContext context) {
     if (_viewModel.isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            CircularProgressIndicator(),
+            SizedBox(height: 12),
+            Text('Loading nearby games...'),
+          ],
+        ),
+      );
     } else if (_viewModel.hasError) {
       return Center(
         child: Column(
@@ -152,7 +162,7 @@ class HomeContentState extends State<HomeContent> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  'Scheduled: ${gamePost.scheduledDate}',
+                                  'Scheduled: ${DateUtil.formatScheduledDate(gamePost.scheduledDate)}',
                                   style: const TextStyle(color: Colors.white70, fontSize: 16),
                                 ),
                                 const SizedBox(height: 8),

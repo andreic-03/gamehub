@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../services/game_post/game_post_service.dart';
 import '../../config/injection.dart';
+import '../../core/utils/date_util.dart';
 
 class MapContent extends StatefulWidget {
   @override
@@ -55,7 +56,7 @@ class _MapContentState extends State<MapContent> {
             infoWindow: InfoWindow(
               title: gamePost.location,
               snippet:
-              '${gamePost.description}\nScheduled: ${gamePost.scheduledDate}\nMax Participants: ${gamePost.maxParticipants}',
+              '${gamePost.description}\nScheduled: ${DateUtil.formatScheduledDate(gamePost.scheduledDate)}\nMax Participants: ${gamePost.maxParticipants}',
             ),
           );
         }).toSet();
@@ -110,12 +111,14 @@ class _MapContentState extends State<MapContent> {
         ),
         markers: _markers,
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           if (_initialPosition != null) {
             await _fetchAndSetMarkers(_initialPosition!.latitude, _initialPosition!.longitude);
           }
         },
+        tooltip: 'Refresh nearby games',
         child: Icon(Icons.refresh),
       ),
     );
