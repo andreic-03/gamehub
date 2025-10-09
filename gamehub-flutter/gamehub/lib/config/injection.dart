@@ -20,7 +20,7 @@ import '../localization/localization_service.dart';
 
 final GetIt getIt = GetIt.instance;
 
-void configureDependencies() {
+Future<void> configureDependencies() async {
   // Clear any existing registrations to avoid conflicts
   if (getIt.isRegistered<AuthViewModel>()) {
     getIt.unregister<AuthViewModel>();
@@ -112,7 +112,7 @@ void configureDependencies() {
   getIt.registerFactory<SettingsViewModel>(() => SettingsViewModel());
 
   // 5. Initialize localization service
-  LocalizationService.instance.initialize();
+  await LocalizationService.instance.initialize();
 
   // 6. Finally, register and setup interceptors (after all dependencies are ready)
   final authInterceptor = AuthInterceptor();

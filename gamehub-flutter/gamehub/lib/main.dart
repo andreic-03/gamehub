@@ -8,9 +8,9 @@ import 'package:gamehub/config/injection.dart';
 import 'package:get_it/get_it.dart';
 
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  configureDependencies();
+  await configureDependencies();
   runApp(const GameHubApp());
 }
 
@@ -41,3 +41,4 @@ class GameHubApp extends StatelessWidget {
     );
   }
 }
+

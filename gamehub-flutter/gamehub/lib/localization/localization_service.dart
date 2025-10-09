@@ -28,6 +28,8 @@ class LocalizationService extends ChangeNotifier {
   Future<void> initialize() async {
     await _loadLanguage();
     await _loadLocalizedStrings();
+    // Notify listeners that initialization is complete
+    notifyListeners();
   }
   
   /// Load saved language from SharedPreferences
