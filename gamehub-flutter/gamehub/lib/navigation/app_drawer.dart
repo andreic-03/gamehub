@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gamehub/core/viewmodels/auth_view_model.dart';
 import 'package:gamehub/screens/profile/profile_avatar.dart';
+import 'package:gamehub/screens/settings/settings_screen.dart';
 import 'package:injectable/injectable.dart';
 import '../services/auth/auth_service.dart';
 
@@ -72,28 +73,33 @@ class AppDrawer extends StatelessWidget {
               ],
             ),
           ),
-          ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Home'),
-            onTap: () {
-              onSelectScreen(0);
-              Navigator.pop(context); // Close the drawer
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.person),
-            title: Text('Profile'),
-            onTap: () {
-              onSelectScreen(1);
-              Navigator.pop(context); // Close the drawer
-            },
-          ),
+          // ListTile(
+          //   leading: Icon(Icons.home),
+          //   title: Text('Home'),
+          //   onTap: () {
+          //     onSelectScreen(0);
+          //     Navigator.pop(context); // Close the drawer
+          //   },
+          // ),
+          // ListTile(
+          //   leading: Icon(Icons.person),
+          //   title: Text('Profile'),
+          //   onTap: () {
+          //     onSelectScreen(1);
+          //     Navigator.pop(context); // Close the drawer
+          //   },
+          // ),
           ListTile(
             leading: Icon(Icons.settings),
             title: Text('Settings'),
             onTap: () {
-              onSelectScreen(2);
               Navigator.pop(context); // Close the drawer
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SettingsScreen(),
+                ),
+              );
             },
           ),
           ListTile(

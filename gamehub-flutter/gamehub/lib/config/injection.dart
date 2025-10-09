@@ -15,6 +15,7 @@ import '../services/user/user_service.dart';
 import '../services/game/game_service.dart';
 import '../screens/game_post/create_game_post_view_model.dart';
 import '../screens/profile/profile_view_model.dart';
+import '../screens/settings/settings_view_model.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -107,6 +108,7 @@ void configureDependencies() {
         getIt<GamePostService>(),
         getIt<GameService>(),
       ));
+  getIt.registerFactory<SettingsViewModel>(() => SettingsViewModel());
 
   // 5. Finally, register and setup interceptors (after all dependencies are ready)
   final authInterceptor = AuthInterceptor();
