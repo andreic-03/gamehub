@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:gamehub/core/viewmodels/auth_view_model.dart';
 import 'package:gamehub/screens/map_screen/map_content.dart';
 import 'package:gamehub/screens/profile/profile_content.dart';
@@ -65,7 +66,7 @@ class BaseScreenState extends State<BaseScreen> {
   Widget build(BuildContext context) {
     // Get the required services directly
     final authService = getIt<AuthService>();
-    final authViewModel = getIt<AuthViewModel>();
+    final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
     
     return Scaffold(
       appBar: AppBar(

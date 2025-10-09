@@ -38,6 +38,7 @@ security:
         uris:
           - /auth/login
 #          - /user
+          - /auth/logout
           - /user/registration/**
           - /chat.sendMessage/**
       - method: GET

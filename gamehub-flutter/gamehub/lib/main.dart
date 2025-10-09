@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:gamehub/core/viewmodels/auth_view_model.dart';
 import 'package:gamehub/screens/home/home_screen.dart';
 import 'package:gamehub/screens/login/login_screen.dart';
@@ -19,22 +20,24 @@ class GameHubApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authViewModel = GetIt.I<AuthViewModel>();
-    return ListenableBuilder(
-      listenable: authViewModel,
-      builder: (context, _) {
-        return MaterialApp(
-          title: 'GameHub',
-          theme: ThemeData.light(),
-          darkTheme: ThemeData.dark(),
-          themeMode: ThemeMode.system,
-          home: authViewModel.isAuthenticated ? HomeScreen() : LoginScreen(),
-          routes: {
-            '/login': (context) => LoginScreen(),
-            '/home': (context) => HomeScreen(),
-            '/profile': (context) => ProfileScreen(),
-          },
-        );
-      },
+    return ChangeNotifierProvider<AuthViewModel>(
+      create: (_) => authViewModel,
+      child: Consumer<AuthViewModel>(
+        builder: (context, authViewModel, child) {
+          return MaterialApp(
+            title: 'GameHub',
+            theme: ThemeData.light(),
+            darkTheme: ThemeData.dark(),
+            themeMode: ThemeMode.system,
+            home: authViewModel.isAuthenticated ? HomeScreen() : LoginScreen(),
+            routes: {
+              '/login': (context) => LoginScreen(),
+              '/home': (context) => HomeScreen(),
+              '/profile': (context) => ProfileScreen(),
+            },
+          );
+        },
+      ),
     );
   }
 }

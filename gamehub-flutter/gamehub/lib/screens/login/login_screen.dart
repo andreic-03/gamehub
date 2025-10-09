@@ -15,10 +15,10 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => getIt<AuthViewModel>(),
-      child: Consumer<AuthViewModel>(
-        builder: (context, viewModel, child) {
+    // Get the AuthViewModel from the DI container
+    final viewModel = getIt<AuthViewModel>();
+    return Consumer<AuthViewModel>(
+      builder: (context, authViewModel, child) {
           return Scaffold(
             appBar: AppBar(
               title: const LocalizedText("login.title"),
@@ -67,14 +67,14 @@ class LoginScreen extends StatelessWidget {
                           ),
                           obscureText: true,
                           textInputAction: TextInputAction.done,
-                          onSubmitted: (value) => _login(context, viewModel),
+                          onSubmitted: (value) => _login(context, authViewModel),
                         ),
                         const SizedBox(height: 24),
-                        if (viewModel.isLoading)
+                        if (authViewModel.isLoading)
                           const Center(child: CircularProgressIndicator())
                         else
                           ElevatedButton(
-                            onPressed: () => _login(context, viewModel),
+                            onPressed: () => _login(context, authViewModel),
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 16),
                               shape: RoundedRectangleBorder(
@@ -91,10 +91,10 @@ class LoginScreen extends StatelessWidget {
                               },
                             ),
                           ),
-                        if (viewModel.hasError) ...[
+                        if (authViewModel.hasError) ...[
                           const SizedBox(height: 16),
                           Text(
-                            viewModel.errorMessage!,
+                            authViewModel.errorMessage!,
                             style: const TextStyle(
                               color: Colors.red,
                               fontSize: 14,
@@ -109,8 +109,7 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
           );
-        },
-      ),
+      },
     );
   }
 
