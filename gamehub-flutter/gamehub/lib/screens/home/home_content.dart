@@ -31,7 +31,15 @@ class HomeContentState extends State<HomeContent> {
 
   Future<void> _loadData() async {
     await _viewModel.fetchGamePosts();
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void dispose() {
+    // Clean up any resources if needed
+    super.dispose();
   }
 
   @override
@@ -83,7 +91,9 @@ class HomeContentState extends State<HomeContent> {
               label: '${_viewModel.searchRangeInKm.round()} km',
               onChanged: (double value) async {
                 await _viewModel.setSearchRange(value);
-                setState(() {});
+                if (mounted) {
+                  setState(() {});
+                }
               },
             ),
             ListenableBuilder(

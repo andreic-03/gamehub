@@ -25,9 +25,11 @@ class _ProfileContentState extends State<ProfileContent> {
 
   Future<void> _fetchCurrentUser() async {
     final user = await _profileViewModel.getCurrentUser();
-    setState(() {
-      _user = user;
-    });
+    if (mounted) {
+      setState(() {
+        _user = user;
+      });
+    }
   }
 
   @override

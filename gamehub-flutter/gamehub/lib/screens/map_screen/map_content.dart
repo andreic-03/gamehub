@@ -31,15 +31,19 @@ class _MapContentState extends State<MapContent> {
   Future<void> _initializeMap() async {
     try {
       final position = await _determinePosition();
-      setState(() {
-        _initialPosition = LatLng(position.latitude, position.longitude);
-      });
+      if (mounted) {
+        setState(() {
+          _initialPosition = LatLng(position.latitude, position.longitude);
+        });
+      }
       await _fetchAndSetMarkers(position.latitude, position.longitude);
     } catch (error) {
       // Handle initialization errors
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${'error.error_initializing_map'.localized}: $error')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('${'error.error_initializing_map'.localized}: $error')),
+        );
+      }
     }
   }
 
@@ -50,8 +54,9 @@ class _MapContentState extends State<MapContent> {
       // Fetch game posts from backend
       final gamePosts = await _gamePostService.findAllNearby(latitude, longitude, rangeInKm);
 
-      setState(() {
-        _markers = gamePosts.map((gamePost) {
+      if (mounted) {
+        setState(() {
+          _markers = gamePosts.map((gamePost) {
           return Marker(
             markerId: MarkerId(gamePost.postId.toString()),
             position: LatLng(gamePost.latitude, gamePost.longitude),
@@ -62,12 +67,15 @@ class _MapContentState extends State<MapContent> {
             ),
           );
         }).toSet();
-      });
+        });
+      }
     } catch (error) {
       // Handle errors, e.g., show a snackbar or dialog
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${'error.error_fetching_games'.localized}: $error')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('${'error.error_fetching_games'.localized}: $error')),
+        );
+      }
     }
   }
 
