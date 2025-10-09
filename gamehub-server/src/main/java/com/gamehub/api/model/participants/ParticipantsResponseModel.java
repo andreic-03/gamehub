@@ -14,4 +14,5 @@ public class ParticipantsResponseModel {
     private Long userId;
     private ParticipantsEntity.Status status;
     private LocalDateTime joinedAt;
+    private Boolean isHost;
 }

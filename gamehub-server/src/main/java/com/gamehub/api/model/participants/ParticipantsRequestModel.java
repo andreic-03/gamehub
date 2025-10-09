@@ -13,4 +13,6 @@ public class ParticipantsRequestModel {
 
     @NotNull
     private ParticipantsEntity.Status status;
+    
+    private Boolean isHost = false;
 }

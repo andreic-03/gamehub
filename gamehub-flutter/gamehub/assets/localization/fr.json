@@ -31,7 +31,8 @@
   "map": {
     "title": "GameHub - Carte",
     "scheduled": "Programmé",
-    "max_participants": "Participants max"
+    "max_participants": "Participants max",
+    "refresh_tooltip": "Actualiser les jeux à proximité"
   },
   "profile": {
     "title": "GameHub - Profil",
@@ -118,8 +119,5 @@
     "location_services_disabled": "Les services de localisation sont désactivés",
     "location_permissions_denied": "Les permissions de localisation sont refusées",
     "location_permissions_permanently_denied": "Les permissions de localisation sont refusées de façon permanente, nous ne pouvons pas demander d'autorisations"
-  },
-  "map": {
-    "refresh_tooltip": "Actualiser les jeux à proximité"
   }
 }

@@ -21,6 +21,9 @@
             <column name="joined_at" type="timestamp">
                 <constraints nullable="false"/>
             </column>
+            <column name="is_host" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
             <column name="created_by" type="int">
                 <constraints nullable="true"/>
             </column>

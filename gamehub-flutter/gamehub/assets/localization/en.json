@@ -31,7 +31,8 @@
   "map": {
     "title": "GameHub - Map",
     "scheduled": "Scheduled",
-    "max_participants": "Max Participants"
+    "max_participants": "Max Participants",
+    "refresh_tooltip": "Refresh nearby games"
   },
   "profile": {
     "title": "GameHub - Profile",
@@ -118,8 +119,5 @@
     "location_services_disabled": "Location services are disabled",
     "location_permissions_denied": "Location permissions are denied",
     "location_permissions_permanently_denied": "Location permissions are permanently denied, we cannot request permissions"
-  },
-  "map": {
-    "refresh_tooltip": "Refresh nearby games"
   }
 }

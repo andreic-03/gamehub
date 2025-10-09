@@ -31,7 +31,8 @@
   "map": {
     "title": "GameHub - Hartă",
     "scheduled": "Programat",
-    "max_participants": "Participanți max"
+    "max_participants": "Participanți max",
+    "refresh_tooltip": "Actualizează jocurile din apropiere"
   },
   "profile": {
     "title": "GameHub - Profil",
@@ -118,8 +119,5 @@
     "location_services_disabled": "Serviciile de localizare sunt dezactivate",
     "location_permissions_denied": "Permisiunile de localizare sunt refuzate",
     "location_permissions_permanently_denied": "Permisiunile de localizare sunt refuzate permanent, nu putem solicita permisiuni"
-  },
-  "map": {
-    "refresh_tooltip": "Actualizează jocurile din apropiere"
   }
 }

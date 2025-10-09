@@ -13,6 +13,7 @@ public interface ParticipantsMapper {
 
     @Mapping(source = "gamePost.postId", target = "gamePostId")
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "isHost", target = "isHost")
     ParticipantsResponseModel toParticipantsModel(ParticipantsEntity participants);
 
     @Mapping(target = "participantId", ignore = true)

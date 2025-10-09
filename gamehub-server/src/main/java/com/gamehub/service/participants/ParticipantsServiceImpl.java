@@ -51,6 +51,7 @@ public class ParticipantsServiceImpl implements ParticipantsService {
         participantsEntity.setGamePost(gamePost);
         participantsEntity.setStatus(participantModel.getStatus());
         participantsEntity.setJoinedAt(dateTimeServiceWrapper.now());
+        participantsEntity.setIsHost(participantModel.getIsHost() != null ? participantModel.getIsHost() : false);
 
         return participantsMapper.toParticipantsModel(participantsRepository.save(participantsEntity));
     }

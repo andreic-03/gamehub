@@ -33,6 +33,9 @@ public class ParticipantsEntity extends AuditingEntity {
     @Column(nullable = false, updatable = false)
     private LocalDateTime joinedAt;
 
+    @Column(nullable = false)
+    private Boolean isHost = false;
+
     public enum Status {
         JOINED,
         INTERESTED,

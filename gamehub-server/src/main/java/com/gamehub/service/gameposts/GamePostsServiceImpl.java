@@ -2,13 +2,17 @@ package com.gamehub.service.gameposts;
 
 import com.gamehub.api.model.gameposts.GamePostsRequestModel;
 import com.gamehub.api.model.gameposts.GamePostsResponseModel;
+import com.gamehub.api.model.participants.ParticipantsRequestModel;
 import com.gamehub.config.exception.model.ErrorType;
 import com.gamehub.config.exception.model.GamehubNotFoundException;
 import com.gamehub.mappers.GamePostsMapper;
 import com.gamehub.persistance.entity.GamePostsEntity;
+import com.gamehub.persistance.entity.ParticipantsEntity;
 import com.gamehub.persistance.repository.GamePostsRepository;
 import com.gamehub.persistance.repository.GamesRepository;
+import com.gamehub.persistance.repository.ParticipantsRepository;
 import com.gamehub.persistance.repository.UserRepository;
+import com.gamehub.service.participants.ParticipantsService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -27,6 +31,7 @@ public class GamePostsServiceImpl implements GamePostsService {
     private final GamesRepository gameRepository;
     private final UserRepository userRepository;
     private final GamePostsMapper gamePostsMapper;
+    private final ParticipantsService participantsService;
 
     @Transactional
     @Override
@@ -42,7 +47,21 @@ public class GamePostsServiceImpl implements GamePostsService {
         gamePostsEntity.setHostUser(hostUserEntity);
         gamePostsEntity.setGame(gameEntity);
 
-        return gamePostsMapper.toGamePostsModel(gamePostsRepository.save(gamePostsEntity));
+        // Save the game post first to get the generated ID
+        GamePostsEntity savedGamePost = gamePostsRepository.save(gamePostsEntity);
+        
+        // Automatically add the host as a participant
+        ParticipantsRequestModel hostParticipant = new ParticipantsRequestModel();
+        hostParticipant.setGamePostId(savedGamePost.getPostId());
+        hostParticipant.setStatus(ParticipantsEntity.Status.JOINED);
+        hostParticipant.setIsHost(true);
+        
+        participantsService.createParticipant(hostId, hostParticipant);
+        
+        log.info("Game post created with ID: {} and host {} automatically added as participant", 
+                savedGamePost.getPostId(), hostId);
+
+        return gamePostsMapper.toGamePostsModel(savedGamePost);
     }
 
     @Transactional
