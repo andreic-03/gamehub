@@ -208,6 +208,21 @@ class UpdateGamePostViewModel extends ChangeNotifier {
     }
   }
   
+  bool hasCoordinates() {
+    final lat = double.tryParse(latitudeController.text);
+    final lng = double.tryParse(longitudeController.text);
+    return lat != null && lng != null;
+  }
+
+  void updateCoordinates(double latitude, double longitude, String? address) {
+    latitudeController.text = latitude.toString();
+    longitudeController.text = longitude.toString();
+    if (address != null && address.isNotEmpty) {
+      locationController.text = address;
+    }
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     locationController.dispose();

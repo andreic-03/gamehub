@@ -42,13 +42,27 @@ class CreateGamePostViewModel extends BaseViewModel {
     required BuildContext context,
     required TextEditingController gameIdController,
     required TextEditingController locationController,
-    required TextEditingController latitudeController,
-    required TextEditingController longitudeController,
+    required double? latitude,
+    required double? longitude,
     required DateTime scheduledDate,
     required TextEditingController maxParticipantsController,
     required TextEditingController descriptionController,
   }) async {
     await runBusyFuture(() async {
+      // Validate coordinates
+      if (latitude == null || longitude == null) {
+        ErrorUtil.showErrorDialog(
+          context,
+          {
+            'code': 'VALIDATION_ERROR',
+            'message': 'Location Required',
+            'details': ['Please select a location on the map'],
+            'errorType': 'VALIDATION_ERROR'
+          },
+        );
+        return;
+      }
+
       // Ensure date is in the future
       final now = DateTime.now();
       if (scheduledDate.isBefore(now)) {
@@ -68,8 +82,8 @@ class CreateGamePostViewModel extends BaseViewModel {
         final request = GamePostRequestModel(
           gameId: int.parse(gameIdController.text),
           location: locationController.text,
-          latitude: double.parse(latitudeController.text),
-          longitude: double.parse(longitudeController.text),
+          latitude: latitude!,
+          longitude: longitude!,
           scheduledDate: scheduledDate,
           maxParticipants: int.parse(maxParticipantsController.text),
           description: descriptionController.text.isEmpty ? null : descriptionController.text,

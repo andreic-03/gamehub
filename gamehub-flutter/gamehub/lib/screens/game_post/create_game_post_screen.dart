@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
 import '../../models/game/games_response_model.dart';
 import '../../services/game/game_service.dart';
@@ -8,6 +9,7 @@ import '../../models/game_post/game_post_request_model.dart';
 import '../../services/game_post/game_post_service.dart';
 import '../../localization/localized_text.dart';
 import '../../localization/localization_service.dart';
+import '../../widgets/map_picker_widget.dart';
 import 'create_game_post_view_model.dart';
 
 class CreateGamePostScreen extends StatefulWidget {
@@ -27,10 +29,12 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
   final _gameIdController = TextEditingController();
   final _gameNameController = TextEditingController();
   final _locationController = TextEditingController();
-  final _latitudeController = TextEditingController();
-  final _longitudeController = TextEditingController();
   final _maxParticipantsController = TextEditingController();
   final _descriptionController = TextEditingController();
+  
+  // Location coordinates (will be set by map picker)
+  double? _selectedLatitude;
+  double? _selectedLongitude;
   DateTime _selectedDate = DateTime.now().add(const Duration(days: 1));
   TimeOfDay _selectedTime = TimeOfDay.now();
 
@@ -63,6 +67,29 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
     }
   }
 
+  Future<void> _openMapPicker() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MapPickerWidget(
+          initialLocation: _selectedLatitude != null && _selectedLongitude != null
+              ? LatLng(_selectedLatitude!, _selectedLongitude!)
+              : null,
+          initialAddress: _locationController.text.isNotEmpty ? _locationController.text : null,
+          onLocationSelected: (latitude, longitude, address) {
+            setState(() {
+              _selectedLatitude = latitude;
+              _selectedLongitude = longitude;
+              if (address != null && address.isNotEmpty) {
+                _locationController.text = address;
+              }
+            });
+          },
+        ),
+      ),
+    );
+  }
+
   Future<void> _createGamePost() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -74,8 +101,8 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
       context: context,
       gameIdController: _gameIdController,
       locationController: _locationController,
-      latitudeController: _latitudeController,
-      longitudeController: _longitudeController,
+      latitude: _selectedLatitude,
+      longitude: _selectedLongitude,
       scheduledDate: _selectedDate,
       maxParticipantsController: _maxParticipantsController,
       descriptionController: _descriptionController,
@@ -96,8 +123,6 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
     _gameIdController.dispose();
     _gameNameController.dispose();
     _locationController.dispose();
-    _latitudeController.dispose();
-    _longitudeController.dispose();
     _maxParticipantsController.dispose();
     _descriptionController.dispose();
     super.dispose();
@@ -213,48 +238,26 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
                       },
                     ),
                     const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: _latitudeController,
-                            decoration: InputDecoration(
-                              labelText: 'create_game_post.latitude'.localized,
-                              border: const OutlineInputBorder(),
-                            ),
-                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'create_game_post.required'.localized;
-                              }
-                              if (double.tryParse(value) == null) {
-                                return 'create_game_post.invalid'.localized;
-                              }
-                              return null;
-                            },
-                          ),
+                    
+                    // Map Picker Button
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: _openMapPicker,
+                        icon: const Icon(Icons.map),
+                        label: Text(
+                          _selectedLatitude != null && _selectedLongitude != null
+                              ? 'Location Selected ✓'
+                              : 'Select Location on Map',
                         ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _longitudeController,
-                            decoration: InputDecoration(
-                              labelText: 'create_game_post.longitude'.localized,
-                              border: const OutlineInputBorder(),
-                            ),
-                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'create_game_post.required'.localized;
-                              }
-                              if (double.tryParse(value) == null) {
-                                return 'create_game_post.invalid'.localized;
-                              }
-                              return null;
-                            },
-                          ),
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          backgroundColor: _selectedLatitude != null && _selectedLongitude != null
+                              ? Colors.green
+                              : Colors.blue,
+                          foregroundColor: Colors.white,
                         ),
-                      ],
+                      ),
                     ),
                     const SizedBox(height: 16),
                     ListenableBuilder(

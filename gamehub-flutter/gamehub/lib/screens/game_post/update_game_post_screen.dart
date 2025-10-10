@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../core/utils/date_util.dart';
 import '../../localization/localized_text.dart';
 import '../../localization/localization_service.dart';
 import '../../models/game_post/game_post_response_model.dart';
+import '../../widgets/map_picker_widget.dart';
 import 'update_game_post_view_model.dart';
 
 class UpdateGamePostScreen extends StatefulWidget {
@@ -136,39 +138,29 @@ class _UpdateGamePostScreenState extends State<UpdateGamePostScreen> {
               
               const SizedBox(height: 16),
               
-              // Coordinates Section
+              // Map Picker Section
               _buildSectionHeader('game_post.coordinates'.localized),
               const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: _viewModel.latitudeController,
-                      decoration: InputDecoration(
-                        hintText: 'game_post.latitude'.localized,
-                        border: const OutlineInputBorder(),
-                        prefixIcon: const Icon(Icons.my_location),
-                      ),
-                      validator: _viewModel.validateLatitude,
-                      keyboardType: TextInputType.numberWithOptions(decimal: true),
-                      textInputAction: TextInputAction.next,
-                    ),
+              
+              // Map Picker Button
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: _openMapPicker,
+                  icon: const Icon(Icons.map),
+                  label: Text(
+                    _viewModel.hasCoordinates()
+                        ? 'Location Selected ✓'
+                        : 'Select Location on Map',
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: TextFormField(
-                      controller: _viewModel.longitudeController,
-                      decoration: InputDecoration(
-                        hintText: 'game_post.longitude'.localized,
-                        border: const OutlineInputBorder(),
-                        prefixIcon: const Icon(Icons.my_location),
-                      ),
-                      validator: _viewModel.validateLongitude,
-                      keyboardType: TextInputType.numberWithOptions(decimal: true),
-                      textInputAction: TextInputAction.next,
-                    ),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    backgroundColor: _viewModel.hasCoordinates()
+                        ? Colors.green
+                        : Colors.blue,
+                    foregroundColor: Colors.white,
                   ),
-                ],
+                ),
               ),
               
               const SizedBox(height: 16),
@@ -347,5 +339,27 @@ class _UpdateGamePostScreenState extends State<UpdateGamePostScreen> {
         Navigator.pop(context, true); // Return true to indicate successful update
       }
     }
+  }
+
+  Future<void> _openMapPicker() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MapPickerWidget(
+          initialLocation: _viewModel.hasCoordinates()
+              ? LatLng(
+                  double.parse(_viewModel.latitudeController.text),
+                  double.parse(_viewModel.longitudeController.text),
+                )
+              : null,
+          initialAddress: _viewModel.locationController.text.isNotEmpty
+              ? _viewModel.locationController.text
+              : null,
+          onLocationSelected: (latitude, longitude, address) {
+            _viewModel.updateCoordinates(latitude, longitude, address);
+          },
+        ),
+      ),
+    );
   }
 }
