@@ -84,6 +84,25 @@
     "please_enter_max_participants": "Veuillez entrer le nombre max de participants",
     "please_enter_valid_number": "Veuillez entrer un nombre valide"
   },
+  "game_post": {
+    "location": "Lieu",
+    "coordinates": "Coordonnées",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "scheduled": "Date et heure prévues",
+    "max_participants": "Participants maximum",
+    "description": "Description",
+    "participants": "Participants",
+    "host_name": "Hôte",
+    "game": "Jeu",
+    "current_participants": "Actuel : {count}",
+    "enter_location": "Entrez le lieu",
+    "enter_max_participants": "Entrez le nombre max de participants",
+    "enter_description": "Entrez la description",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "updated_successfully": "Publication de jeu mise à jour avec succès !"
+  },
   "game_post_details": {
     "title": "Publication de Jeu",
     "location": "Lieu",

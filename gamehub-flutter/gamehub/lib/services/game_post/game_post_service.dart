@@ -22,4 +22,7 @@ abstract class GamePostService {
 
   @POST("/game-posts")
   Future<GamePostResponseModel> createGamePost(@Body() GamePostRequestModel request);
+
+  @PUT("/game-posts/{id}")
+  Future<GamePostResponseModel> updateGamePost(@Path("id") int id, @Body() GamePostRequestModel request);
 }

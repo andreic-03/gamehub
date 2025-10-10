@@ -5,6 +5,7 @@ import '../../core/utils/date_util.dart';
 import '../../localization/localized_text.dart';
 import '../../localization/localization_service.dart';
 import 'game_post_details_view_model.dart';
+import 'update_game_post_screen.dart';
 
 class GamePostDetailsScreen extends StatefulWidget {
   final GamePostResponseModel gamePost;
@@ -30,6 +31,22 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
       gamePost: widget.gamePost,
       onGameJoined: widget.onGameJoined,
     );
+  }
+
+  Future<void> _navigateToEditScreen(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => UpdateGamePostScreen(
+          gamePost: widget.gamePost,
+        ),
+      ),
+    );
+    
+    // If the game post was updated successfully, refresh the data
+    if (result == true && widget.onGameJoined != null) {
+      widget.onGameJoined!();
+    }
   }
 
   @override
@@ -238,14 +255,7 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton.icon(
-                          onPressed: () {
-                            // TODO: Navigate to edit game post screen
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Edit functionality coming soon!'),
-                              ),
-                            );
-                          },
+                          onPressed: () => _navigateToEditScreen(context),
                           icon: const Icon(Icons.edit),
                           label: ListenableBuilder(
                             listenable: LocalizationService.instance,

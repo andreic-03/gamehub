@@ -33,4 +33,9 @@ class DateUtil {
   static String formatDateTime(DateTime dateTime) {
     return DateFormat('yyyy-MM-dd HH:mm').format(dateTime);
   }
+  
+  /// Formats a DateTime object to date only: YYYY-MM-DD
+  static String formatDate(DateTime dateTime) {
+    return DateFormat('yyyy-MM-dd').format(dateTime);
+  }
 }

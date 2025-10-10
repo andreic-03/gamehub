@@ -84,6 +84,25 @@
     "please_enter_max_participants": "Te rugăm să introduci numărul maxim de participanți",
     "please_enter_valid_number": "Te rugăm să introduci un număr valid"
   },
+  "game_post": {
+    "location": "Locația",
+    "coordinates": "Coordonate",
+    "latitude": "Latitudine",
+    "longitude": "Longitudine",
+    "scheduled": "Data și ora programate",
+    "max_participants": "Participanți maximi",
+    "description": "Descriere",
+    "participants": "Participanți",
+    "host_name": "Gazdă",
+    "game": "Joc",
+    "current_participants": "Actual: {count}",
+    "enter_location": "Introduceți locația",
+    "enter_max_participants": "Introduceți numărul maxim de participanți",
+    "enter_description": "Introduceți descrierea",
+    "save": "Salvează",
+    "cancel": "Anulează",
+    "updated_successfully": "Postarea jocului a fost actualizată cu succes!"
+  },
   "game_post_details": {
     "title": "Postarea Jocului",
     "location": "Locația",

@@ -84,6 +84,25 @@
     "please_enter_max_participants": "Please enter max participants",
     "please_enter_valid_number": "Please enter a valid number"
   },
+  "game_post": {
+    "location": "Location",
+    "coordinates": "Coordinates",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "scheduled": "Scheduled Date & Time",
+    "max_participants": "Max Participants",
+    "description": "Description",
+    "participants": "Participants",
+    "host_name": "Host",
+    "game": "Game",
+    "current_participants": "Current: {count}",
+    "enter_location": "Enter location",
+    "enter_max_participants": "Enter max participants",
+    "enter_description": "Enter description",
+    "save": "Save",
+    "cancel": "Cancel",
+    "updated_successfully": "Game post updated successfully!"
+  },
   "game_post_details": {
     "title": "Game Post",
     "location": "Location",
