@@ -3,6 +3,7 @@ package com.gamehub.service.participants;
 import com.gamehub.api.model.participants.ParticipantsRequestModel;
 import com.gamehub.api.model.participants.ParticipantsResponseModel;
 import com.gamehub.config.exception.model.ErrorType;
+import com.gamehub.config.exception.model.GamehubConflictException;
 import com.gamehub.config.exception.model.GamehubNotFoundException;
 import com.gamehub.mappers.ParticipantsMapper;
 import com.gamehub.persistance.entity.ParticipantsEntity;
@@ -40,6 +41,11 @@ public class ParticipantsServiceImpl implements ParticipantsService {
     @Transactional
     @Override
     public ParticipantsResponseModel createParticipant(Long userId, ParticipantsRequestModel participantModel) {
+        // Check if user is already participating in this game
+        if (participantsRepository.existsByUserIdAndGamePostId(userId, participantModel.getGamePostId())) {
+            throw new GamehubConflictException(ErrorType.PARTICIPANT_ALREADY_EXISTS);
+        }
+
         ParticipantsEntity participantsEntity = participantsMapper.toParticipantsEntity(participantModel);
 
         var userEntity = userRepository.findById(userId)

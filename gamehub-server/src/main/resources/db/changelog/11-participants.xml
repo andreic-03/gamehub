@@ -58,6 +58,10 @@
                                  baseTableName="participants" baseColumnNames="updated_by"
                                  referencedTableName="users" referencedColumnNames="id"
                                  deleteCascade="false"/>
+
+        <addUniqueConstraint tableName="participants"
+                             columnNames="user_id, game_post_id"
+                             constraintName="uk_participants_user_game_post"/>
     </changeSet>
 
 </databaseChangeLog>

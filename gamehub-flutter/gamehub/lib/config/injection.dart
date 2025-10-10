@@ -13,6 +13,7 @@ import '../services/auth/auth_service.dart';
 import '../services/game_post/game_post_service.dart';
 import '../services/user/user_service.dart';
 import '../services/game/game_service.dart';
+import '../services/participants/participants_service.dart';
 import '../screens/game_post/create_game_post_view_model.dart';
 import '../screens/profile/profile_view_model.dart';
 import '../screens/settings/settings_view_model.dart';
@@ -98,6 +99,11 @@ Future<void> configureDependencies() async {
   ));
 
   getIt.registerLazySingleton<GameService>(() => GameService(
+    getIt<Dio>(),
+    baseUrl: NetworkConstants.baseURL,
+  ));
+
+  getIt.registerLazySingleton<ParticipantsService>(() => ParticipantsService(
     getIt<Dio>(),
     baseUrl: NetworkConstants.baseURL,
   ));

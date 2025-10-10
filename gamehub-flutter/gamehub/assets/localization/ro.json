@@ -91,7 +91,8 @@
     "participants": "Participanți",
     "description": "Descriere",
     "max_participants_text": "Max {count} participanți",
-    "join_game": "Alătură-te jocului"
+    "join_game": "Alătură-te jocului",
+    "joined": "Te-ai alăturat!"
   },
   "base_screen": {
     "home_title": "GameHub - Acasă",

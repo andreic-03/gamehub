@@ -23,6 +23,7 @@ import '../../screens/registration/registration_view_model.dart' as _i693;
 import '../../services/auth/auth_service.dart' as _i756;
 import '../../services/game/game_service.dart' as _i890;
 import '../../services/game_post/game_post_service.dart' as _i624;
+import '../../services/participants/participants_service.dart' as _i877;
 import '../../services/user/user_service.dart' as _i640;
 import '../viewmodels/auth_view_model.dart' as _i928;
 import '../viewmodels/home_view_model.dart' as _i1014;
@@ -59,6 +60,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i640.UserService>(
       () => _i640.UserService(
+        gh<_i361.Dio>(),
+        baseUrl: gh<String>(instanceName: 'baseURL'),
+      ),
+    );
+    gh.factory<_i877.ParticipantsService>(
+      () => _i877.ParticipantsService(
         gh<_i361.Dio>(),
         baseUrl: gh<String>(instanceName: 'baseURL'),
       ),
