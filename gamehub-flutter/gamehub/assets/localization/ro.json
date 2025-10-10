@@ -104,7 +104,21 @@
     "username": "Nume de utilizator",
     "password": "Parolă",
     "login_button": "Autentificare",
-    "please_enter_credentials": "Te rugăm să introduci numele de utilizator și parola"
+    "please_enter_credentials": "Te rugăm să introduci numele de utilizator și parola",
+    "create_account": "Creează cont"
+  },
+  "registration": {
+    "title": "Înregistrare",
+    "header": "Creează cont",
+    "full_name": "Nume complet",
+    "username": "Nume de utilizator",
+    "email": "E-mail",
+    "password": "Parolă",
+    "confirm_password": "Confirmă parola",
+    "register_button": "Înregistrare",
+    "back_to_login": "Înapoi la autentificare",
+    "please_fix_errors": "Te rugăm să corectezi erorile de mai sus",
+    "success_message": "Înregistrarea a fost reușită! Te rugăm să te autentifici cu credențialele tale."
   },
   "bottom_navigation": {
     "home": "Acasă",

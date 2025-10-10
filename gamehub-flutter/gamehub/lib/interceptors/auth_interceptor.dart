@@ -9,12 +9,24 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    if (!options.path.contains('/auth/login')) {
+    // Skip adding Authorization header for public endpoints
+    if (!_isPublicEndpoint(options.path)) {
       final token = _authViewModel.token;
       if (token != null && token.isNotEmpty) {
         options.headers['Authorization'] = 'Bearer $token';
       }
     }
     super.onRequest(options, handler);
+  }
+
+  /// Check if the given path is a public endpoint that doesn't require authentication
+  bool _isPublicEndpoint(String path) {
+    final publicEndpoints = [
+      '/auth/login',
+      '/user/registration',
+      '/auth/logout',
+    ];
+    
+    return publicEndpoints.any((endpoint) => path.contains(endpoint));
   }
 }

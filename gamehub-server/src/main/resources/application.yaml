@@ -37,7 +37,7 @@ security:
       - method: POST
         uris:
           - /auth/login
-#          - /user
+          - /user/registration
           - /auth/logout
           - /user/registration/**
           - /chat.sendMessage/**

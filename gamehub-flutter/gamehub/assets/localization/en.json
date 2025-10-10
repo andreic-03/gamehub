@@ -104,7 +104,21 @@
     "username": "Username",
     "password": "Password",
     "login_button": "Login",
-    "please_enter_credentials": "Please enter both username and password"
+    "please_enter_credentials": "Please enter both username and password",
+    "create_account": "Create Account"
+  },
+  "registration": {
+    "title": "Register",
+    "header": "Create Account",
+    "full_name": "Full Name",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "register_button": "Register",
+    "back_to_login": "Back to Login",
+    "please_fix_errors": "Please fix the errors above",
+    "success_message": "Registration successful! Please login with your credentials."
   },
   "bottom_navigation": {
     "home": "Home",

@@ -32,7 +32,7 @@ class _UserService implements UserService {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/user',
+            '/user/registration',
             queryParameters: queryParameters,
             data: _data,
           )

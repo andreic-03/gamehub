@@ -104,7 +104,21 @@
     "username": "Nom d'utilisateur",
     "password": "Mot de passe",
     "login_button": "Se connecter",
-    "please_enter_credentials": "Veuillez entrer le nom d'utilisateur et le mot de passe"
+    "please_enter_credentials": "Veuillez entrer le nom d'utilisateur et le mot de passe",
+    "create_account": "Créer un compte"
+  },
+  "registration": {
+    "title": "S'inscrire",
+    "header": "Créer un compte",
+    "full_name": "Nom complet",
+    "username": "Nom d'utilisateur",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "confirm_password": "Confirmer le mot de passe",
+    "register_button": "S'inscrire",
+    "back_to_login": "Retour à la connexion",
+    "please_fix_errors": "Veuillez corriger les erreurs ci-dessus",
+    "success_message": "Inscription réussie ! Veuillez vous connecter avec vos identifiants."
   },
   "bottom_navigation": {
     "home": "Accueil",

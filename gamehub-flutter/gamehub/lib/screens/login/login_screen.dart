@@ -6,6 +6,7 @@ import '../../core/viewmodels/auth_view_model.dart';
 import '../../localization/localized_text.dart';
 import '../../localization/localization_service.dart';
 import '../home/home_screen.dart';
+import '../registration/registration_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -102,6 +103,28 @@ class LoginScreen extends StatelessWidget {
                             textAlign: TextAlign.center,
                           ),
                         ],
+                        const SizedBox(height: 16),
+                        
+                        // Registration Button
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const RegistrationScreen(),
+                              ),
+                            );
+                          },
+                          child: ListenableBuilder(
+                            listenable: LocalizationService.instance,
+                            builder: (context, child) {
+                              return Text(
+                                'login.create_account'.localized,
+                                style: const TextStyle(fontSize: 16),
+                              );
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   ),

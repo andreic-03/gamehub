@@ -13,7 +13,7 @@ abstract class UserService {
   @factoryMethod
   factory UserService(Dio dio, {@Named("baseURL") String baseUrl}) = _UserService;
   
-  @POST("/user")
+  @POST("/user/registration")
   Future<UserResponseModel> register(@Body() UserRegistrationRequestModel requestModel);
   
   @GET("/user/info")

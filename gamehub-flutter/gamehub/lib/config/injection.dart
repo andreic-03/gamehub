@@ -16,6 +16,7 @@ import '../services/game/game_service.dart';
 import '../screens/game_post/create_game_post_view_model.dart';
 import '../screens/profile/profile_view_model.dart';
 import '../screens/settings/settings_view_model.dart';
+import '../screens/registration/registration_view_model.dart';
 import '../localization/localization_service.dart';
 
 final GetIt getIt = GetIt.instance;
@@ -110,6 +111,7 @@ Future<void> configureDependencies() async {
         getIt<GameService>(),
       ));
   getIt.registerFactory<SettingsViewModel>(() => SettingsViewModel());
+  getIt.registerFactory<RegistrationViewModel>(() => RegistrationViewModel(getIt<UserService>()));
 
   // 5. Initialize localization service
   await LocalizationService.instance.initialize();

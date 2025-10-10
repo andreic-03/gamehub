@@ -19,6 +19,7 @@ import '../../navigation/app_drawer.dart' as _i175;
 import '../../network/network_module.dart' as _i786;
 import '../../screens/game_post/create_game_post_view_model.dart' as _i953;
 import '../../screens/profile/profile_view_model.dart' as _i970;
+import '../../screens/registration/registration_view_model.dart' as _i693;
 import '../../services/auth/auth_service.dart' as _i756;
 import '../../services/game/game_service.dart' as _i890;
 import '../../services/game_post/game_post_service.dart' as _i624;
@@ -84,6 +85,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i970.ProfileViewModel>(
       () => _i970.ProfileViewModel(gh<_i640.UserService>()),
+    );
+    gh.factory<_i693.RegistrationViewModel>(
+      () => _i693.RegistrationViewModel(gh<_i640.UserService>()),
     );
     return this;
   }
