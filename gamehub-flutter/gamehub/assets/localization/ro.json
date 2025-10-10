@@ -96,7 +96,8 @@
     "joined": "Te-ai alăturat!",
     "already_joined": "Te-ai alăturat deja acestui joc!",
     "game_full": "Acest joc este plin!",
-    "game_full_button": "Joc Complet"
+    "game_full_button": "Joc Complet",
+    "edit_game_post": "Editează jocul"
   },
   "base_screen": {
     "home_title": "GameHub - Acasă",

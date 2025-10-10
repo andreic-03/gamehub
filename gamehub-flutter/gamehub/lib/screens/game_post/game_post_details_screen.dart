@@ -225,6 +225,48 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
                   },
                 ),
               ),
+
+              // Edit Button (only for hosts)
+              ListenableBuilder(
+                listenable: _viewModel,
+                builder: (context, child) {
+                  if (!_viewModel.isHost) return const SizedBox.shrink();
+                  
+                  return Column(
+                    children: [
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            // TODO: Navigate to edit game post screen
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Edit functionality coming soon!'),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.edit),
+                          label: ListenableBuilder(
+                            listenable: LocalizationService.instance,
+                            builder: (context, child) {
+                              return Text('game_post_details.edit_game_post'.localized);
+                            },
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            backgroundColor: Colors.orange,
+                            foregroundColor: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
               
               // Error Message
               if (_viewModel.error != null) ...[

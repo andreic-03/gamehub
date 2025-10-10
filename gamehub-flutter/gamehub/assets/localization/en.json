@@ -96,7 +96,8 @@
     "joined": "Joined!",
     "already_joined": "You have already joined this game!",
     "game_full": "This game is full!",
-    "game_full_button": "Game Full"
+    "game_full_button": "Game Full",
+    "edit_game_post": "Edit Game Post"
   },
   "base_screen": {
     "home_title": "GameHub - Home",
