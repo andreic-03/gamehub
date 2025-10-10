@@ -147,6 +147,7 @@ class HomeContentState extends State<HomeContent> {
                       MaterialPageRoute(
                         builder: (context) => GamePostDetailsScreen(
                           gamePost: gamePost,
+                          onGameJoined: refreshData,
                         ),
                       ),
                     );
@@ -201,9 +202,24 @@ class HomeContentState extends State<HomeContent> {
                                 ListenableBuilder(
                                   listenable: LocalizationService.instance,
                                   builder: (context, child) {
-                                    return Text(
-                                      '${'game_post.participants'.localized}: ${gamePost.currentParticipantCount}/${gamePost.maxParticipants}',
-                                      style: const TextStyle(color: Colors.white70, fontSize: 16),
+                                    final isFull = gamePost.currentParticipantCount >= gamePost.maxParticipants;
+                                    return Row(
+                                      children: [
+                                        Icon(
+                                          isFull ? Icons.person_off : Icons.people,
+                                          color: isFull ? Colors.red : Colors.white70,
+                                          size: 16,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          '${'game_post.participants'.localized}: ${gamePost.currentParticipantCount}/${gamePost.maxParticipants}',
+                                          style: TextStyle(
+                                            color: isFull ? Colors.red : Colors.white70, 
+                                            fontSize: 16,
+                                            fontWeight: isFull ? FontWeight.bold : FontWeight.normal,
+                                          ),
+                                        ),
+                                      ],
                                     );
                                   },
                                 ),

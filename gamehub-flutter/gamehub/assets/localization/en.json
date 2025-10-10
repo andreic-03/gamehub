@@ -94,7 +94,9 @@
     "joined_participants_text": "Joined {current}/{max}",
     "join_game": "Join Game",
     "joined": "Joined!",
-    "already_joined": "You have already joined this game!"
+    "already_joined": "You have already joined this game!",
+    "game_full": "This game is full!",
+    "game_full_button": "Game Full"
   },
   "base_screen": {
     "home_title": "GameHub - Home",

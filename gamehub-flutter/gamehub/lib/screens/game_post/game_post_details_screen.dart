@@ -8,10 +8,12 @@ import 'game_post_details_view_model.dart';
 
 class GamePostDetailsScreen extends StatefulWidget {
   final GamePostResponseModel gamePost;
+  final VoidCallback? onGameJoined;
 
   const GamePostDetailsScreen({
     Key? key,
     required this.gamePost,
+    this.onGameJoined,
   }) : super(key: key);
 
   @override
@@ -24,7 +26,10 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    _viewModel = GamePostDetailsViewModel(gamePost: widget.gamePost);
+    _viewModel = GamePostDetailsViewModel(
+      gamePost: widget.gamePost,
+      onGameJoined: widget.onGameJoined,
+    );
   }
 
   @override
@@ -126,11 +131,11 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
                           const Icon(Icons.people, color: Colors.green),
                           const SizedBox(width: 8),
                           ListenableBuilder(
-                            listenable: LocalizationService.instance,
+                            listenable: Listenable.merge([LocalizationService.instance, _viewModel]),
                             builder: (context, child) {
                               return Text(
                                 'game_post_details.joined_participants_text'.localized
-                                    .replaceAll('{current}', widget.gamePost.currentParticipantCount.toString())
+                                    .replaceAll('{current}', _viewModel.currentParticipantCount.toString())
                                     .replaceAll('{max}', widget.gamePost.maxParticipants.toString()),
                                 style: const TextStyle(fontSize: 16),
                               );
@@ -173,18 +178,22 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
               // Join Button
               SizedBox(
                 width: double.infinity,
-                child: ListenableBuilder(
-                  listenable: _viewModel,
-                  builder: (context, child) {
-                    return ElevatedButton(
-                      onPressed: _viewModel.hasJoined ? null : _viewModel.joinGame,
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        backgroundColor: _viewModel.hasJoined ? Colors.green : null,
-                      ),
+          child: ListenableBuilder(
+            listenable: _viewModel,
+            builder: (context, child) {
+              return ElevatedButton(
+                onPressed: _viewModel.canJoinGame ? _viewModel.joinGame : null,
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  backgroundColor: _viewModel.hasJoined 
+                      ? Colors.green 
+                      : _viewModel.isGameFull 
+                          ? Colors.grey 
+                          : null,
+                ),
                       child: _viewModel.isLoading
                           ? const SizedBox(
                               height: 20,
@@ -194,17 +203,24 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
                                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                               ),
                             )
-                          : ListenableBuilder(
-                              listenable: LocalizationService.instance,
-                              builder: (context, child) {
-                                return Text(
-                                  _viewModel.hasJoined 
-                                      ? 'game_post_details.joined'.localized
-                                      : 'game_post_details.join_game'.localized,
-                                  style: const TextStyle(fontSize: 18),
-                                );
-                              },
-                            ),
+                : ListenableBuilder(
+                    listenable: LocalizationService.instance,
+                    builder: (context, child) {
+                      String buttonText;
+                      if (_viewModel.hasJoined) {
+                        buttonText = 'game_post_details.joined'.localized;
+                      } else if (_viewModel.isGameFull) {
+                        buttonText = 'game_post_details.game_full_button'.localized;
+                      } else {
+                        buttonText = 'game_post_details.join_game'.localized;
+                      }
+                      
+                      return Text(
+                        buttonText,
+                        style: const TextStyle(fontSize: 18),
+                      );
+                    },
+                  ),
                     );
                   },
                 ),

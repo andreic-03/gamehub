@@ -22,6 +22,7 @@ public enum ErrorType {
     //Participants
     PARTICIPANT_NOT_FOUND("E2300", "Participant not found"),
     PARTICIPANT_ALREADY_EXISTS("E2301", "User is already participating in this game"),
+    GAME_IS_FULL("E2302", "Game is full, cannot join"),
 
     //General
     INTERNAL_SERVER_ERROR("E9000", "Something unexpected happened"),

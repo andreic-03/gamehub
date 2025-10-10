@@ -46,13 +46,21 @@ public class ParticipantsServiceImpl implements ParticipantsService {
         if (participantsRepository.existsByUserIdAndGamePostId(userId, participantModel.getGamePostId())) {
             throw new GamehubBadRequestException(ErrorType.PARTICIPANT_ALREADY_EXISTS);
         }
+        
+        // Get the game post to check max participants
+        var gamePost = gamePostsRepository.findById(participantModel.getGamePostId())
+                .orElseThrow(() -> new GamehubNotFoundException(ErrorType.GAME_POST_NOT_FOUND));
+        
+        // Check if the game is full
+        Long currentParticipantCount = participantsRepository.countByGamePostId(participantModel.getGamePostId());
+        if (currentParticipantCount >= gamePost.getMaxParticipants()) {
+            throw new GamehubBadRequestException(ErrorType.GAME_IS_FULL);
+        }
 
         ParticipantsEntity participantsEntity = participantsMapper.toParticipantsEntity(participantModel);
 
         var userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new GamehubNotFoundException(ErrorType.USER_NOT_FOUND));
-        var gamePost = gamePostsRepository.findById(participantModel.getGamePostId())
-                .orElseThrow(() -> new GamehubNotFoundException(ErrorType.GAME_POST_NOT_FOUND));
 
         participantsEntity.setUser(userEntity);
         participantsEntity.setGamePost(gamePost);

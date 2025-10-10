@@ -94,7 +94,9 @@
     "joined_participants_text": "Alăturat {current}/{max}",
     "join_game": "Alătură-te jocului",
     "joined": "Te-ai alăturat!",
-    "already_joined": "Te-ai alăturat deja acestui joc!"
+    "already_joined": "Te-ai alăturat deja acestui joc!",
+    "game_full": "Acest joc este plin!",
+    "game_full_button": "Joc Complet"
   },
   "base_screen": {
     "home_title": "GameHub - Acasă",

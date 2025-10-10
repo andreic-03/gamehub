@@ -14,20 +14,27 @@ class GamePostDetailsViewModel extends ChangeNotifier {
   final GamePostService _gamePostService;
   final ParticipantsService _participantsService;
   final GamePostResponseModel gamePost;
+  final VoidCallback? onGameJoined;
   bool _isLoading = false;
   String? _error;
   bool _hasJoined = false;
+  int _currentParticipantCount;
 
   GamePostDetailsViewModel({
     required this.gamePost,
+    this.onGameJoined,
     GamePostService? gamePostService,
     ParticipantsService? participantsService,
   }) : _gamePostService = gamePostService ?? GetIt.instance<GamePostService>(),
-       _participantsService = participantsService ?? GetIt.instance<ParticipantsService>();
+       _participantsService = participantsService ?? GetIt.instance<ParticipantsService>(),
+       _currentParticipantCount = gamePost.currentParticipantCount;
 
   bool get isLoading => _isLoading;
   String? get error => _error;
   bool get hasJoined => _hasJoined;
+  int get currentParticipantCount => _currentParticipantCount;
+  bool get isGameFull => _currentParticipantCount >= gamePost.maxParticipants;
+  bool get canJoinGame => !_hasJoined && !isGameFull && !_isLoading;
 
   Future<void> joinGame() async {
     try {
@@ -47,6 +54,7 @@ class GamePostDetailsViewModel extends ChangeNotifier {
       
       // Update state to reflect successful join
       _hasJoined = true;
+      _currentParticipantCount++; // Increment local count immediately
       _isLoading = false;
       notifyListeners();
       
@@ -58,6 +66,9 @@ class GamePostDetailsViewModel extends ChangeNotifier {
         backgroundColor: Colors.green[800],
         textColor: Colors.white,
       );
+      
+      // Call the callback to refresh the parent screen
+      onGameJoined?.call();
       
     } catch (e) {
       _isLoading = false;
@@ -75,6 +86,17 @@ class GamePostDetailsViewModel extends ChangeNotifier {
             toastLength: Toast.LENGTH_LONG,
             gravity: ToastGravity.BOTTOM,
             backgroundColor: Colors.orange[800],
+            textColor: Colors.white,
+          );
+        } else if (apiError.code == 'E2302') {
+          // Game is full error
+          _error = 'game_post_details.game_full'.localized;
+          // Show toast message for better user experience
+          Fluttertoast.showToast(
+            msg: 'game_post_details.game_full'.localized,
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.red[800],
             textColor: Colors.white,
           );
         } else {
