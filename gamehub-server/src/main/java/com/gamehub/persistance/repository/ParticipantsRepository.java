@@ -26,4 +26,12 @@ public interface ParticipantsRepository extends JpaRepository<ParticipantsEntity
      */
     @Query("SELECT COUNT(p) > 0 FROM ParticipantsEntity p WHERE p.user.id = :userId AND p.gamePost.postId = :gamePostId")
     boolean existsByUserIdAndGamePostId(@Param("userId") Long userId, @Param("gamePostId") Long gamePostId);
+    
+    /**
+     * Count the number of participants for a specific game post
+     * @param gamePostId The game post ID
+     * @return The number of participants
+     */
+    @Query("SELECT COUNT(p) FROM ParticipantsEntity p WHERE p.gamePost.postId = :gamePostId")
+    Long countByGamePostId(@Param("gamePostId") Long gamePostId);
 }

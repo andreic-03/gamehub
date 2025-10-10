@@ -58,14 +58,14 @@ extension GetItInjectableX on _i174.GetIt {
         baseUrl: gh<String>(instanceName: 'baseURL'),
       ),
     );
-    gh.factory<_i640.UserService>(
-      () => _i640.UserService(
+    gh.factory<_i877.ParticipantsService>(
+      () => _i877.ParticipantsService(
         gh<_i361.Dio>(),
         baseUrl: gh<String>(instanceName: 'baseURL'),
       ),
     );
-    gh.factory<_i877.ParticipantsService>(
-      () => _i877.ParticipantsService(
+    gh.factory<_i640.UserService>(
+      () => _i640.UserService(
         gh<_i361.Dio>(),
         baseUrl: gh<String>(instanceName: 'baseURL'),
       ),

@@ -14,6 +14,7 @@ class GamePostResponseModel {
   final double longitude;
   final String scheduledDate;
   final int maxParticipants;
+  final int currentParticipantCount;
   final String? description;
 
   GamePostResponseModel({
@@ -27,6 +28,7 @@ class GamePostResponseModel {
     required this.longitude,
     required this.scheduledDate,
     required this.maxParticipants,
+    required this.currentParticipantCount,
     this.description,
   });
 

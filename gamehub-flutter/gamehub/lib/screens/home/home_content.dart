@@ -202,7 +202,7 @@ class HomeContentState extends State<HomeContent> {
                                   listenable: LocalizationService.instance,
                                   builder: (context, child) {
                                     return Text(
-                                      '${'game_post.participants'.localized}: ${gamePost.maxParticipants}',
+                                      '${'game_post.participants'.localized}: ${gamePost.currentParticipantCount}/${gamePost.maxParticipants}',
                                       style: const TextStyle(color: Colors.white70, fontSize: 16),
                                     );
                                   },

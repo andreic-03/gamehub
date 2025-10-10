@@ -129,7 +129,9 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
                             listenable: LocalizationService.instance,
                             builder: (context, child) {
                               return Text(
-                                'game_post_details.max_participants_text'.localized.replaceAll('{count}', widget.gamePost.maxParticipants.toString()),
+                                'game_post_details.joined_participants_text'.localized
+                                    .replaceAll('{current}', widget.gamePost.currentParticipantCount.toString())
+                                    .replaceAll('{max}', widget.gamePost.maxParticipants.toString()),
                                 style: const TextStyle(fontSize: 16),
                               );
                             },

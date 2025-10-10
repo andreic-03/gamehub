@@ -32,6 +32,7 @@ public class GamePostsServiceImpl implements GamePostsService {
     private final UserRepository userRepository;
     private final GamePostsMapper gamePostsMapper;
     private final ParticipantsService participantsService;
+    private final ParticipantsRepository participantsRepository;
 
     @Transactional
     @Override
@@ -61,7 +62,7 @@ public class GamePostsServiceImpl implements GamePostsService {
         log.info("Game post created with ID: {} and host {} automatically added as participant", 
                 savedGamePost.getPostId(), hostId);
 
-        return gamePostsMapper.toGamePostsModel(savedGamePost);
+        return toGamePostsModelWithParticipantCount(savedGamePost);
     }
 
     @Transactional
@@ -71,7 +72,7 @@ public class GamePostsServiceImpl implements GamePostsService {
 
         gamePostsMapper.updateGamePostEntity(existingGamePost, gamePostsModel);
 
-        return gamePostsMapper.toGamePostsModel(gamePostsRepository.save(existingGamePost));
+        return toGamePostsModelWithParticipantCount(gamePostsRepository.save(existingGamePost));
     }
 
     @Transactional
@@ -89,12 +90,25 @@ public class GamePostsServiceImpl implements GamePostsService {
     @Override
     public List<GamePostsResponseModel> findGamePostsNearby(Double latitude, Double longitude, Double rangeInKm) {
         return gamePostsRepository.findNearbyGamePosts(latitude, longitude, rangeInKm).stream()
-                .map(gamePostsMapper::toGamePostsModel)
+                .map(this::toGamePostsModelWithParticipantCount)
                 .collect(Collectors.toList());
     }
 
     private GamePostsEntity getGamePostById(Long id) {
         return gamePostsRepository.findById(id)
                 .orElseThrow(() -> new GamehubNotFoundException(ErrorType.GAME_POST_NOT_FOUND));
+    }
+
+    /**
+     * Convert GamePostsEntity to GamePostsResponseModel with participant count
+     */
+    private GamePostsResponseModel toGamePostsModelWithParticipantCount(GamePostsEntity gamePost) {
+        GamePostsResponseModel responseModel = gamePostsMapper.toGamePostsModel(gamePost);
+        
+        // Get participant count for this game post
+        Long participantCount = participantsRepository.countByGamePostId(gamePost.getPostId());
+        responseModel.setCurrentParticipantCount(participantCount.intValue());
+        
+        return responseModel;
     }
 }

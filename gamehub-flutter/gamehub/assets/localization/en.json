@@ -91,6 +91,7 @@
     "participants": "Participants",
     "description": "Description",
     "max_participants_text": "Max {count} participants",
+    "joined_participants_text": "Joined {current}/{max}",
     "join_game": "Join Game",
     "joined": "Joined!",
     "already_joined": "You have already joined this game!"

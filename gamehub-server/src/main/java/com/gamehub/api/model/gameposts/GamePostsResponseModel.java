@@ -20,5 +20,6 @@ public class GamePostsResponseModel {
     private Double longitude;
     private LocalDateTime scheduledDate;
     private Integer maxParticipants;
+    private Integer currentParticipantCount;
     private String description;
 }

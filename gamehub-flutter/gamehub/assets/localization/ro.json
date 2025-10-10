@@ -91,6 +91,7 @@
     "participants": "Participanți",
     "description": "Descriere",
     "max_participants_text": "Max {count} participanți",
+    "joined_participants_text": "Alăturat {current}/{max}",
     "join_game": "Alătură-te jocului",
     "joined": "Te-ai alăturat!",
     "already_joined": "Te-ai alăturat deja acestui joc!"
