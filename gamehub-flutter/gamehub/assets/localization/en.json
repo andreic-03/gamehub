@@ -92,7 +92,8 @@
     "description": "Description",
     "max_participants_text": "Max {count} participants",
     "join_game": "Join Game",
-    "joined": "Joined!"
+    "joined": "Joined!",
+    "already_joined": "You have already joined this game!"
   },
   "base_screen": {
     "home_title": "GameHub - Home",
