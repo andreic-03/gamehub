@@ -79,4 +79,4 @@ class HomeViewModel extends BaseViewModel {
     return await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
   }
-} 
+}

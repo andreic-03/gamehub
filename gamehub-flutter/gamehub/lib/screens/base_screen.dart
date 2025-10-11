@@ -9,7 +9,7 @@ import '../config/injection.dart';
 import '../services/auth/auth_service.dart';
 import '../localization/localized_text.dart';
 import '../localization/localization_service.dart';
-import 'home/home_content.dart';
+import 'home/home_screen.dart';
 
 class BaseScreen extends StatefulWidget {
   final Widget? floatingActionButton;
@@ -26,15 +26,14 @@ class BaseScreen extends StatefulWidget {
 class BaseScreenState extends State<BaseScreen> {
   int _selectedIndex = 0;
   final GlobalKey<HomeContentState> _homeContentKey = GlobalKey<HomeContentState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   late final List<Widget> _screens;
 
   final List<String> _titleKeys = [
     'base_screen.home_title',
     'base_screen.map_title',
-    'base_screen.profile_title',
-    // 'GameHub - Settings',
-    // 'GameHub - Info',
+    'base_screen.profile_title'
   ];
 
   @override
@@ -43,9 +42,7 @@ class BaseScreenState extends State<BaseScreen> {
     _screens = [
       HomeContent(key: _homeContentKey),
       MapContent(),
-      ProfileContent(),
-      // SettingsContent(),
-      // InfoContent(),
+      ProfileContent()
     ];
   }
 
@@ -69,20 +66,29 @@ class BaseScreenState extends State<BaseScreen> {
     final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
     
     return Scaffold(
-      appBar: AppBar(
-        title: ListenableBuilder(
-          listenable: LocalizationService.instance,
-          builder: (context, child) {
-            return Text(_titleKeys[_selectedIndex].localized);
-          },
-        ),
-      ),
+      key: _scaffoldKey,
       drawer: AppDrawer(
           onSelectScreen: _onItemTapped,
           authService: authService,
           authViewModel: authViewModel,
       ),
-      body: _screens[_selectedIndex],
+      body: Stack(
+        children: [
+          _screens[_selectedIndex],
+          // Floating hamburger menu button
+          Positioned(
+            top: 50,
+            left: 16,
+            child: FloatingActionButton.small(
+              heroTag: "base_screen_menu_button",
+              onPressed: () {
+                _scaffoldKey.currentState?.openDrawer();
+              },
+              child: Icon(Icons.menu),
+            ),
+          ),
+        ],
+      ),
       bottomNavigationBar: AppBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,

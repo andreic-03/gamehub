@@ -27,16 +27,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const LocalizedText('settings.title'),
-        elevation: 0,
-      ),
-      body: ListenableBuilder(
-        listenable: _viewModel,
-        builder: (context, child) {
-          return ListView(
-              padding: const EdgeInsets.all(16.0),
-              children: [
+      body: Stack(
+        children: [
+          ListenableBuilder(
+            listenable: _viewModel,
+            builder: (context, child) {
+              return ListView(
+                  padding: const EdgeInsets.fromLTRB(16.0, 120.0, 16.0, 16.0),
+                  children: [
                 // Language Section
                 Card(
                   child: Padding(
@@ -110,9 +108,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ),
                 ),
-              ],
-            );
-        },
+                  ],
+                );
+            },
+          ),
+          // Custom back button
+          Positioned(
+            top: 50,
+            left: 16,
+            child: FloatingActionButton.small(
+              heroTag: "settings_back_button",
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Icon(Icons.arrow_back),
+            ),
+          ),
+        ],
       ),
     );
   }

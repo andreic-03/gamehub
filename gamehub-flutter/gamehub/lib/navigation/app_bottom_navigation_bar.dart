@@ -38,7 +38,6 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
             ),
           ],
           currentIndex: widget.selectedIndex,
-          selectedItemColor: Colors.amber[800],
           onTap: widget.onItemTapped,
         );
       },
