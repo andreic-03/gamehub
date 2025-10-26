@@ -131,13 +131,12 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const LocalizedText('create_game_post.title'),
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
+      body: Stack(
+        children: [
+          _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(16.0, 120.0, 16.0, 16.0),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -349,6 +348,20 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
                 ),
               ),
             ),
+          // Custom back button
+          Positioned(
+            top: 50,
+            left: 16,
+            child: FloatingActionButton.small(
+              heroTag: "create_game_post_back_button",
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Icon(Icons.arrow_back),
+            ),
+          ),
+        ],
+      ),
     );
   }
 } 

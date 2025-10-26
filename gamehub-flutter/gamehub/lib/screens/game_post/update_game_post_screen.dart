@@ -38,37 +38,12 @@ class _UpdateGamePostScreenState extends State<UpdateGamePostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: ListenableBuilder(
-          listenable: LocalizationService.instance,
-          builder: (context, child) {
-            return Text('game_post_details.edit_game_post'.localized);
-          },
-        ),
-        backgroundColor: Colors.green,
-        foregroundColor: Colors.white,
-        actions: [
-          ListenableBuilder(
-            listenable: _viewModel,
-            builder: (context, child) {
-              return TextButton(
-                onPressed: _viewModel.isLoading ? null : _saveGamePost,
-                child: Text(
-                  'game_post.save'.localized,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
+      body: Stack(
+        children: [
+          Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(16.0, 120.0, 16.0, 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -309,8 +284,22 @@ class _UpdateGamePostScreenState extends State<UpdateGamePostScreen> {
                 },
               ),
             ],
+            ),
+            ),
           ),
-        ),
+          // Custom back button
+          Positioned(
+            top: 50,
+            left: 16,
+            child: FloatingActionButton.small(
+              heroTag: "update_game_post_back_button",
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Icon(Icons.arrow_back),
+            ),
+          ),
+        ],
       ),
     );
   }

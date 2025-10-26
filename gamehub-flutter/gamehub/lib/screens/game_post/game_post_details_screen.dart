@@ -52,13 +52,11 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const LocalizedText('game_post_details.title'),
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 120.0, 16.0, 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -301,7 +299,21 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
               ],
             ],
           ),
-        ),
+            ),
+          ),
+          // Custom back button
+          Positioned(
+            top: 50,
+            left: 16,
+            child: FloatingActionButton.small(
+              heroTag: "game_post_details_back_button",
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Icon(Icons.arrow_back),
+            ),
+          ),
+        ],
       ),
     );
   }
