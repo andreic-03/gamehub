@@ -45,10 +45,6 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
               icon: const Icon(Icons.map),
               label: 'bottom_navigation.map'.localized,
             ),
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.person),
-              label: 'bottom_navigation.profile'.localized,
-            ),
           ],
           currentIndex: widget.selectedIndex,
           onTap: widget.onItemTapped,

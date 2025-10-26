@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gamehub/core/viewmodels/auth_view_model.dart';
 import 'package:gamehub/screens/profile/profile_avatar.dart';
+import 'package:gamehub/screens/profile/profile_screen.dart';
 import 'package:gamehub/screens/settings/settings_screen.dart';
 import 'package:gamehub/localization/localized_text.dart';
 import 'package:injectable/injectable.dart';
@@ -90,6 +91,19 @@ class AppDrawer extends StatelessWidget {
           //     Navigator.pop(context); // Close the drawer
           //   },
           // ),
+          ListTile(
+            leading: Icon(Icons.person),
+            title: LocalizedText('navigation.profile'),
+            onTap: () {
+              Navigator.pop(context); // Close the drawer
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ProfileContent(),
+                ),
+              );
+            },
+          ),
           ListTile(
             leading: Icon(Icons.settings),
             title: LocalizedText('navigation.settings'),

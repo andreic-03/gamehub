@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:gamehub/core/viewmodels/auth_view_model.dart';
 import 'package:gamehub/screens/map_screen/map_content.dart';
-import 'package:gamehub/screens/profile/profile_content.dart';
 import '../navigation/app_bottom_navigation_bar.dart';
 import '../navigation/app_drawer.dart';
 import '../config/injection.dart';
@@ -31,19 +30,12 @@ class BaseScreenState extends State<BaseScreen> {
 
   late final List<Widget> _screens;
 
-  final List<String> _titleKeys = [
-    'base_screen.home_title',
-    'base_screen.map_title',
-    'base_screen.profile_title'
-  ];
-
   @override
   void initState() {
     super.initState();
     _screens = [
       HomeContent(key: _homeContentKey),
       MapContent(),
-      ProfileContent()
     ];
   }
 
