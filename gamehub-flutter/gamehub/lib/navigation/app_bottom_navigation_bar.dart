@@ -42,6 +42,21 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
               label: 'bottom_navigation.home'.localized,
             ),
             BottomNavigationBarItem(
+              icon: widget.isRefreshing && widget.selectedIndex == 1
+                  ? SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                    )
+                  : const Icon(Icons.article),
+              label: 'bottom_navigation.my_posts'.localized,
+            ),
+            BottomNavigationBarItem(
               icon: const Icon(Icons.map),
               label: 'bottom_navigation.map'.localized,
             ),

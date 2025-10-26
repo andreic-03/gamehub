@@ -147,6 +147,7 @@
   },
   "bottom_navigation": {
     "home": "Home",
+    "my_posts": "My Games",
     "map": "Map",
     "profile": "Profile"
   },

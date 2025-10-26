@@ -53,4 +53,12 @@ public class GamePostsController {
     ) {
         return gamePostsService.findGamePostsNearby(latitude, longitude, rangeInKm);
     }
+
+    @RolesAllowed({ROLE_ADMIN, ROLE_USER})
+    @GetMapping("/my-posts")
+    public List<GamePostsResponseModel> getMyGamePosts(
+            @AuthenticationPrincipal AppUserPrincipal user
+    ) {
+        return gamePostsService.findGamePostsByHostUserId(user.getUserEntity().getId());
+    }
 }

@@ -15,4 +15,7 @@ public interface GamePostsRepository extends JpaRepository<GamePostsEntity, Long
     List<GamePostsEntity> findNearbyGamePosts(@Param("latitude") double latitude,
                                               @Param("longitude") double longitude,
                                               @Param("rangeInKm") double rangeInKm);
+
+    @Query("SELECT g FROM GamePostsEntity g WHERE g.hostUser.id = :userId ORDER BY g.scheduledDate ASC")
+    List<GamePostsEntity> findByHostUserId(@Param("userId") Long userId);
 }

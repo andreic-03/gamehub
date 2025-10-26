@@ -11,4 +11,5 @@ public interface GamePostsService {
     GamePostsResponseModel updateGamePost(Long gamePostId, GamePostsRequestModel gamePostsModel);
     void delete(Long id);
     List<GamePostsResponseModel> findGamePostsNearby(Double latitude, Double longitude, Double rangeInKm);
+    List<GamePostsResponseModel> findGamePostsByHostUserId(Long userId);
 }

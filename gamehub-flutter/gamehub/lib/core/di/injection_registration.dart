@@ -10,6 +10,7 @@ import '../../services/auth/auth_service.dart';
 import '../../services/game_post/game_post_service.dart';
 import '../../services/user/user_service.dart';
 import '../../screens/profile/profile_view_model.dart';
+import '../../screens/my_game_posts/my_game_posts_view_model.dart';
 
 /// Register all view models that are not automatically discovered by the injectable generator
 @InjectableInit(
@@ -54,6 +55,15 @@ extension ViewModelRegistration on GetIt {
       }
     } catch (e) {
       print('Error registering ProfileViewModel: $e');
+    }
+    
+    // Register MyGamePostsViewModel if not already registered
+    try {
+      if (!isRegistered<MyGamePostsViewModel>()) {
+        registerFactory<MyGamePostsViewModel>(() => MyGamePostsViewModel(get<GamePostService>()));
+      }
+    } catch (e) {
+      print('Error registering MyGamePostsViewModel: $e');
     }
     
     // AppDrawer is now created directly in the UI where needed instead of through dependency injection

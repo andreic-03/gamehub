@@ -147,6 +147,7 @@
   },
   "bottom_navigation": {
     "home": "Accueil",
+    "my_posts": "Mes Jeux",
     "map": "Carte",
     "profile": "Profil"
   },

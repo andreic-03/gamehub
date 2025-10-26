@@ -99,6 +99,18 @@ public class GamePostsServiceImpl implements GamePostsService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    @Override
+    public List<GamePostsResponseModel> findGamePostsByHostUserId(Long userId) {
+        LocalDate today = LocalDate.now();
+        
+        return gamePostsRepository.findByHostUserId(userId).stream()
+                .filter(gamePost -> gamePost.getScheduledDate().toLocalDate().isAfter(today) || 
+                                  gamePost.getScheduledDate().toLocalDate().isEqual(today))
+                .map(this::toGamePostsModelWithParticipantCount)
+                .collect(Collectors.toList());
+    }
+
     private GamePostsEntity getGamePostById(Long id) {
         return gamePostsRepository.findById(id)
                 .orElseThrow(() -> new GamehubNotFoundException(ErrorType.GAME_POST_NOT_FOUND));

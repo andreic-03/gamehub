@@ -20,6 +20,9 @@ abstract class GamePostService {
       @Query("rangeInKm") double rangeInKm,
       );
 
+  @GET("/game-posts/my-posts")
+  Future<List<GamePostResponseModel>> findMyGamePosts();
+
   @POST("/game-posts")
   Future<GamePostResponseModel> createGamePost(@Body() GamePostRequestModel request);
 

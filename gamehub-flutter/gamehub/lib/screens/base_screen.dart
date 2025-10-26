@@ -9,6 +9,7 @@ import '../services/auth/auth_service.dart';
 import '../localization/localized_text.dart';
 import '../localization/localization_service.dart';
 import 'home/home_screen.dart';
+import 'my_game_posts/my_game_posts_screen.dart';
 
 class BaseScreen extends StatefulWidget {
   final Widget? floatingActionButton;
@@ -26,6 +27,7 @@ class BaseScreenState extends State<BaseScreen> {
   int _selectedIndex = 0;
   bool _isRefreshing = false;
   final GlobalKey<HomeContentState> _homeContentKey = GlobalKey<HomeContentState>();
+  final GlobalKey<MyGamePostsContentState> _myGamePostsContentKey = GlobalKey<MyGamePostsContentState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   late final List<Widget> _screens;
@@ -35,6 +37,7 @@ class BaseScreenState extends State<BaseScreen> {
     super.initState();
     _screens = [
       HomeContent(key: _homeContentKey),
+      MyGamePostsContent(key: _myGamePostsContentKey),
       MapContent(),
     ];
   }
@@ -50,6 +53,13 @@ class BaseScreenState extends State<BaseScreen> {
         refreshHomeContent();
       }
     }
+    
+    // If clicking on my posts button (index 1) and there are game posts, refresh the data
+    if (index == 1 && _myGamePostsContentKey.currentState != null) {
+      if (_myGamePostsContentKey.currentState!.hasGamePosts) {
+        refreshMyGamePostsContent();
+      }
+    }
   }
 
   // Method to refresh home content
@@ -61,6 +71,25 @@ class BaseScreenState extends State<BaseScreen> {
       
       try {
         await _homeContentKey.currentState!.refreshData();
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isRefreshing = false;
+          });
+        }
+      }
+    }
+  }
+  
+  // Method to refresh my game posts content
+  Future<void> refreshMyGamePostsContent() async {
+    if (_myGamePostsContentKey.currentState != null) {
+      setState(() {
+        _isRefreshing = true;
+      });
+      
+      try {
+        await _myGamePostsContentKey.currentState!.refreshContent();
       } finally {
         if (mounted) {
           setState(() {

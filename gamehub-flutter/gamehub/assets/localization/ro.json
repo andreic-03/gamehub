@@ -147,6 +147,7 @@
   },
   "bottom_navigation": {
     "home": "Acasă",
+    "my_posts": "Jocurile Mele",
     "map": "Hartă",
     "profile": "Profil"
   },
