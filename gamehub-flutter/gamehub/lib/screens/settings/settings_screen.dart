@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import '../../config/injection.dart';
 import '../../localization/localized_text.dart';
 import '../../localization/localization_service.dart';
+import '../../widgets/custom_back_button.dart';
 import 'settings_view_model.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -113,16 +114,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
           // Custom back button
-          Positioned(
-            top: 50,
-            left: 16,
-            child: FloatingActionButton.small(
-              heroTag: "settings_back_button",
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Icon(Icons.arrow_back),
-            ),
+          CustomBackButton(
+            heroTag: "settings_back_button",
           ),
         ],
       ),

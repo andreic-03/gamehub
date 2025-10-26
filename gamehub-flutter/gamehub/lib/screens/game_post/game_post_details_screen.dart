@@ -4,6 +4,7 @@ import '../../models/game_post/game_post_response_model.dart';
 import '../../core/utils/date_util.dart';
 import '../../localization/localized_text.dart';
 import '../../localization/localization_service.dart';
+import '../../widgets/custom_back_button.dart';
 import 'game_post_details_view_model.dart';
 import 'update_game_post_screen.dart';
 
@@ -302,16 +303,8 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
             ),
           ),
           // Custom back button
-          Positioned(
-            top: 50,
-            left: 16,
-            child: FloatingActionButton.small(
-              heroTag: "game_post_details_back_button",
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Icon(Icons.arrow_back),
-            ),
+          CustomBackButton(
+            heroTag: "game_post_details_back_button",
           ),
         ],
       ),

@@ -4,6 +4,7 @@ import 'package:gamehub/screens/profile/profile_view_model.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/user/user_response_model.dart';
+import '../../widgets/custom_back_button.dart';
 
 class ProfileContent extends StatefulWidget {
   const ProfileContent({super.key});
@@ -45,7 +46,7 @@ class _ProfileContentState extends State<ProfileContent> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ProfileAvatar(
-                  firstName: _user!.fullName,
+                  fullName: _user!.fullName,
                   imageUrl: _user!.profilePictureUrl,
                   radius: 40,
                 ),
@@ -63,16 +64,8 @@ class _ProfileContentState extends State<ProfileContent> {
                 : Text(_profileViewModel.errorMessage ?? 'Error loading profile'),
           ),
           // Custom back button
-          Positioned(
-            top: 50,
-            left: 16,
-            child: FloatingActionButton.small(
-              heroTag: "profile_back_button",
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Icon(Icons.arrow_back),
-            ),
+          CustomBackButton(
+            heroTag: "profile_back_button",
           ),
         ],
       ),

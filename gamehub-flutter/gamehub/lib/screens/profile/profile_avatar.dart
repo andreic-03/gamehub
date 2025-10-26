@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class ProfileAvatar extends StatelessWidget {
   final String? imageUrl;
-  final String firstName;
+  final String fullName;
   final double radius;
 
   const ProfileAvatar({
     super.key,
     this.imageUrl,
-    required this.firstName,
+    required this.fullName,
     this.radius = 30,
   });
 
@@ -32,7 +32,7 @@ class ProfileAvatar extends StatelessWidget {
         radius: radius,
         backgroundColor: Colors.green,
         child: Text(
-          firstName.isNotEmpty ? firstName[0].toUpperCase() : '?',
+          fullName.isNotEmpty ? fullName[0].toUpperCase() : '?',
           style: TextStyle(
             color: Colors.white,
             fontSize: radius * 1.3,

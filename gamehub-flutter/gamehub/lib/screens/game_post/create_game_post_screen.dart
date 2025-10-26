@@ -10,6 +10,7 @@ import '../../services/game_post/game_post_service.dart';
 import '../../localization/localized_text.dart';
 import '../../localization/localization_service.dart';
 import '../../widgets/map_picker_widget.dart';
+import '../../widgets/custom_back_button.dart';
 import 'create_game_post_view_model.dart';
 
 class CreateGamePostScreen extends StatefulWidget {
@@ -349,16 +350,8 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
               ),
             ),
           // Custom back button
-          Positioned(
-            top: 50,
-            left: 16,
-            child: FloatingActionButton.small(
-              heroTag: "create_game_post_back_button",
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Icon(Icons.arrow_back),
-            ),
+          CustomBackButton(
+            heroTag: "create_game_post_back_button",
           ),
         ],
       ),

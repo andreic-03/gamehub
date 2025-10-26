@@ -47,7 +47,7 @@ class AppDrawer extends StatelessWidget {
               children: [
                 ProfileAvatar(
                     imageUrl: null,
-                    firstName: "John",
+                    fullName: "John",
                     radius: 40,
                 ),
                 SizedBox(width: 20),
