@@ -19,6 +19,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -89,7 +90,11 @@ public class GamePostsServiceImpl implements GamePostsService {
     @Transactional
     @Override
     public List<GamePostsResponseModel> findGamePostsNearby(Double latitude, Double longitude, Double rangeInKm) {
+        LocalDate today = LocalDate.now();
+        
         return gamePostsRepository.findNearbyGamePosts(latitude, longitude, rangeInKm).stream()
+                .filter(gamePost -> gamePost.getScheduledDate().toLocalDate().isAfter(today) || 
+                                  gamePost.getScheduledDate().toLocalDate().isEqual(today))
                 .map(this::toGamePostsModelWithParticipantCount)
                 .collect(Collectors.toList());
     }

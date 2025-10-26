@@ -25,6 +25,7 @@ class BaseScreen extends StatefulWidget {
 
 class BaseScreenState extends State<BaseScreen> {
   int _selectedIndex = 0;
+  bool _isRefreshing = false;
   final GlobalKey<HomeContentState> _homeContentKey = GlobalKey<HomeContentState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -50,12 +51,31 @@ class BaseScreenState extends State<BaseScreen> {
     setState(() {
       _selectedIndex = index;
     });
+    
+    // If clicking on home button (index 0) and there are game posts, refresh the data
+    if (index == 0 && _homeContentKey.currentState != null) {
+      if (_homeContentKey.currentState!.hasGamePosts) {
+        refreshHomeContent();
+      }
+    }
   }
 
   // Method to refresh home content
   Future<void> refreshHomeContent() async {
     if (_homeContentKey.currentState != null) {
-      await _homeContentKey.currentState!.refreshData();
+      setState(() {
+        _isRefreshing = true;
+      });
+      
+      try {
+        await _homeContentKey.currentState!.refreshData();
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isRefreshing = false;
+          });
+        }
+      }
     }
   }
 
@@ -92,6 +112,7 @@ class BaseScreenState extends State<BaseScreen> {
       bottomNavigationBar: AppBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
+        isRefreshing: _isRefreshing,
       ),
       floatingActionButton: _selectedIndex == 0 ? widget.floatingActionButton : null,
     );

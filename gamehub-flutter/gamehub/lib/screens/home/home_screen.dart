@@ -16,18 +16,31 @@ class HomeContent extends StatefulWidget {
 
 class HomeContentState extends State<HomeContent> {
   late final HomeViewModel _viewModel;
+  late final PageController _pageController;
 
   @override
   void initState() {
     super.initState();
     _viewModel = getIt<HomeViewModel>();
+    _pageController = PageController();
     _loadData();
   }
 
   // Method to refresh data that can be called externally
   Future<void> refreshData() async {
     await _loadData();
+    // Reset PageView to first item after refresh
+    if (_pageController.hasClients) {
+      _pageController.animateToPage(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
   }
+
+  // Method to check if there are game posts available
+  bool get hasGamePosts => _viewModel.gamePosts.isNotEmpty;
 
   Future<void> _loadData() async {
     await _viewModel.fetchGamePosts();
@@ -38,7 +51,7 @@ class HomeContentState extends State<HomeContent> {
 
   @override
   void dispose() {
-    // Clean up any resources if needed
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -136,6 +149,7 @@ class HomeContentState extends State<HomeContent> {
           // ),
           Expanded(
             child: PageView.builder(
+              controller: _pageController,
               scrollDirection: Axis.vertical,
               itemCount: gamePosts.length,
               itemBuilder: (context, index) {

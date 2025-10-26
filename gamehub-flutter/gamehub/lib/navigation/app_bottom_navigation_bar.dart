@@ -5,11 +5,13 @@ import '../localization/localization_service.dart';
 class AppBottomNavigationBar extends StatefulWidget {
   final int selectedIndex;
   final ValueChanged<int> onItemTapped;
+  final bool isRefreshing;
 
   const AppBottomNavigationBar({
     Key? key,
     required this.selectedIndex,
     required this.onItemTapped,
+    this.isRefreshing = false,
   }) : super(key: key);
 
   @override
@@ -25,7 +27,18 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
         return BottomNavigationBar(
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: const Icon(Icons.home),
+              icon: widget.isRefreshing && widget.selectedIndex == 0
+                  ? SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                    )
+                  : const Icon(Icons.home),
               label: 'bottom_navigation.home'.localized,
             ),
             BottomNavigationBarItem(

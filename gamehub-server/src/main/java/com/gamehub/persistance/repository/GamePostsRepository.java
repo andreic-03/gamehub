@@ -10,7 +10,8 @@ import java.util.List;
 public interface GamePostsRepository extends JpaRepository<GamePostsEntity, Long> {
 
     @Query("SELECT g FROM GamePostsEntity g " +
-            "WHERE (6371 * acos(cos(radians(:latitude)) * cos(radians(g.latitude)) * cos(radians(g.longitude) - radians(:longitude)) + sin(radians(:latitude)) * sin(radians(g.latitude)))) <= :rangeInKm")
+            "WHERE (6371 * acos(cos(radians(:latitude)) * cos(radians(g.latitude)) * cos(radians(g.longitude) - radians(:longitude)) + sin(radians(:latitude)) * sin(radians(g.latitude)))) <= :rangeInKm " +
+            "ORDER BY g.scheduledDate ASC")
     List<GamePostsEntity> findNearbyGamePosts(@Param("latitude") double latitude,
                                               @Param("longitude") double longitude,
                                               @Param("rangeInKm") double rangeInKm);
