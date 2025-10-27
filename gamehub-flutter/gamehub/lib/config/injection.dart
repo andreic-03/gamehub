@@ -14,6 +14,7 @@ import '../services/game_post/game_post_service.dart';
 import '../services/user/user_service.dart';
 import '../services/game/game_service.dart';
 import '../services/participants/participants_service.dart';
+import '../services/location/location_service.dart';
 import '../screens/game_post/create_game_post_view_model.dart';
 import '../screens/profile/profile_view_model.dart';
 import '../screens/settings/settings_view_model.dart';
@@ -109,9 +110,15 @@ Future<void> configureDependencies() async {
     baseUrl: NetworkConstants.baseURL,
   ));
 
+  // Register Location Service
+  getIt.registerLazySingleton<LocationService>(() => LocationService());
+
   // 4. Register View Models
   getIt.registerLazySingleton<AuthViewModel>(() => AuthViewModel(getIt<AuthService>()));
-  getIt.registerFactory<HomeViewModel>(() => HomeViewModel(getIt<GamePostService>()));
+  getIt.registerFactory<HomeViewModel>(() => HomeViewModel(
+        getIt<GamePostService>(),
+        getIt<LocationService>(),
+      ));
   getIt.registerFactory<ProfileViewModel>(() => ProfileViewModel(getIt<UserService>()));
   getIt.registerFactory<CreateGamePostViewModel>(() => CreateGamePostViewModel(
         getIt<GamePostService>(),

@@ -92,9 +92,11 @@ class MyGamePostsContentState extends State<MyGamePostsContent> {
 
   Widget _buildGamePostsList() {
     final gamePosts = _viewModel.gamePosts;
-    return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(16.0, 120.0, 16.0, 16.0),
-      itemCount: gamePosts.length,
+    return Stack(
+      children: [
+        ListView.builder(
+          padding: const EdgeInsets.fromLTRB(16.0, 100.0, 16.0, 16.0),
+          itemCount: gamePosts.length,
       itemBuilder: (context, index) {
         final gamePost = gamePosts[index];
         return Card(
@@ -205,9 +207,30 @@ class MyGamePostsContentState extends State<MyGamePostsContent> {
                 ],
               ),
             ),
+                     ),
+         );
+       },
+        ),
+        // Gradient overlay to make content fade under the menu button
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 100,
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Theme.of(context).scaffoldBackgroundColor,
+                  Theme.of(context).scaffoldBackgroundColor.withOpacity(0.0),
+                ],
+              ),
+            ),
           ),
-        );
-      },
+        ),
+      ],
     );
-  }
-}
+   }
+ }
