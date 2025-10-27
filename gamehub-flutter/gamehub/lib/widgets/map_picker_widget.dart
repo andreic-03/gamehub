@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:dio/dio.dart';
+import 'custom_back_button.dart';
 
 class MapPickerWidget extends StatefulWidget {
   final LatLng? initialLocation;
@@ -168,25 +169,13 @@ class _MapPickerWidgetState extends State<MapPickerWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Select Location'),
-        backgroundColor: Colors.green,
-        foregroundColor: Colors.white,
-        actions: [
-          TextButton(
-            onPressed: _selectedLocation != null ? _confirmSelection : null,
-            child: const Text(
-              'Confirm',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            ),
-          ),
-        ],
-      ),
-      body: Column(
+      body: Stack(
+        children: [
+          Column(
         children: [
           // Search Bar
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(16, 100, 16, 16),
             child: Column(
               children: [
                 TextField(
@@ -269,46 +258,25 @@ class _MapPickerWidgetState extends State<MapPickerWidget> {
                         : {},
                   ),
           ),
-          
-          // Selected Location Info
-          if (_selectedLocation != null)
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.green.shade50,
-                border: Border(top: BorderSide(color: Colors.green.shade200)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Selected Location:',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green.shade800,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  if (_selectedAddress != null)
-                    Text(_selectedAddress!)
-                  else
-                    Text(
-                      'Location selected on map',
-                      style: TextStyle(color: Colors.grey.shade600),
-                    ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Tap on the map or drag the pin to select exact location',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade600,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          ],
+        ),
+          CustomBackButton(
+            heroTag: "map_picker_back_button",
+          ),
         ],
       ),
+      floatingActionButton: _selectedLocation != null
+          ? FloatingActionButton.extended(
+              onPressed: _confirmSelection,
+              backgroundColor: Colors.green,
+              icon: const Icon(Icons.check, color: Colors.white),
+              label: const Text(
+                'Confirm Location',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            )
+          : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

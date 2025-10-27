@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
             await _baseScreenKey.currentState!.refreshHomeContent();
           }
         },
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
