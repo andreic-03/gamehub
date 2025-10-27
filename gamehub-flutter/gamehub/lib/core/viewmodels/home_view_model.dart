@@ -1,20 +1,19 @@
+import 'package:geolocator/geolocator.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../models/game_post/game_post_response_model.dart';
 import '../../../services/game_post/game_post_service.dart';
-import '../../../services/location/location_service.dart';
 import 'base_view_model.dart';
 
 /// ViewModel that handles home screen business logic
 @injectable
 class HomeViewModel extends BaseViewModel {
   final GamePostService _gamePostService;
-  final LocationService _locationService;
   List<GamePostResponseModel> _gamePosts = [];
   double _searchRangeInKm = 15.0;
 
-  /// Constructor that injects the game post service and location service
-  HomeViewModel(this._gamePostService, this._locationService);
+  /// Constructor that injects the game post service
+  HomeViewModel(this._gamePostService);
 
   /// Returns the current list of game posts
   List<GamePostResponseModel> get gamePosts => _gamePosts;
@@ -32,16 +31,16 @@ class HomeViewModel extends BaseViewModel {
   Future<void> fetchGamePosts() async {
     await runBusyFuture(() async {
       try {
-        final position = await _locationService.getCurrentPosition();
+        final position = await _determinePosition();
         final latitude = position.latitude;
         final longitude = position.longitude;
-
+        
         _gamePosts = await _gamePostService.findAllNearby(
           latitude, 
           longitude, 
           _searchRangeInKm
         );
-
+        
         return _gamePosts;
       } catch (e) {
         setError(e.toString());
@@ -49,5 +48,35 @@ class HomeViewModel extends BaseViewModel {
         return _gamePosts;
       }
     });
+  }
+
+  /// Determines the user's current position
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Check if location services are enabled
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      throw Exception('Location services are disabled.');
+    }
+
+    // Check for location permissions
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        throw Exception('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      throw Exception(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When permissions are granted, get the current position
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
   }
 }

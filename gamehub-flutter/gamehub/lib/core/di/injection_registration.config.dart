@@ -24,7 +24,6 @@ import '../../screens/registration/registration_view_model.dart' as _i693;
 import '../../services/auth/auth_service.dart' as _i756;
 import '../../services/game/game_service.dart' as _i890;
 import '../../services/game_post/game_post_service.dart' as _i624;
-import '../../services/location/location_service.dart' as _i876;
 import '../../services/participants/participants_service.dart' as _i877;
 import '../../services/user/user_service.dart' as _i640;
 import '../viewmodels/auth_view_model.dart' as _i928;
@@ -41,7 +40,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i1059.AuthInterceptor>(() => networkModule.authInterceptor);
     gh.lazySingleton<Map<String, String>>(() => networkModule.headers);
     gh.lazySingleton<_i361.Dio>(() => networkModule.dio);
-    gh.lazySingleton<_i876.LocationService>(() => _i876.LocationService());
     gh.factory<String>(() => networkModule.baseURL, instanceName: 'baseURL');
     gh.factory<_i756.AuthService>(
       () => _i756.AuthService(
@@ -73,12 +71,6 @@ extension GetItInjectableX on _i174.GetIt {
         baseUrl: gh<String>(instanceName: 'baseURL'),
       ),
     );
-    gh.factory<_i1014.HomeViewModel>(
-      () => _i1014.HomeViewModel(
-        gh<_i624.GamePostService>(),
-        gh<_i876.LocationService>(),
-      ),
-    );
     gh.factory<_i928.AuthViewModel>(
       () => _i928.AuthViewModel(gh<_i756.AuthService>()),
     );
@@ -95,6 +87,9 @@ extension GetItInjectableX on _i174.GetIt {
         authService: gh<_i756.AuthService>(),
         authViewModel: gh<_i928.AuthViewModel>(),
       ),
+    );
+    gh.factory<_i1014.HomeViewModel>(
+      () => _i1014.HomeViewModel(gh<_i624.GamePostService>()),
     );
     gh.factory<_i550.MyGamePostsViewModel>(
       () => _i550.MyGamePostsViewModel(gh<_i624.GamePostService>()),

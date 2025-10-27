@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gamehub/services/location/location_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
@@ -43,7 +42,7 @@ extension ViewModelRegistration on GetIt {
     // Register HomeViewModel if not already registered
     try {
       if (!isRegistered<HomeViewModel>()) {
-        registerFactory<HomeViewModel>(() => HomeViewModel(get<GamePostService>(), get<LocationService>()));
+        registerFactory<HomeViewModel>(() => HomeViewModel(get<GamePostService>()));
       }
     } catch (e) {
       print('Error registering HomeViewModel: $e');
