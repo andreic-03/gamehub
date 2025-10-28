@@ -101,79 +101,88 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         children: [
           SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(16.0),
               child: Form(
                 key: _formKey,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const SizedBox(height: 80),
-                    ReactiveLocalizedText(
-                      'settings.change_password',
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                    ),
-                    const SizedBox(height: 32),
                     
-                    // Old Password Field
-                    TextFormField(
-                      controller: _oldPasswordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: 'settings.old_password'.localized,
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.lock_outline),
+                    // Password Fields Card
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'settings.change_password'.localized,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            
+                            // Old Password Field
+                            TextFormField(
+                              controller: _oldPasswordController,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                labelText: 'settings.old_password'.localized,
+                                prefixIcon: Icon(Icons.lock_outline),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'app.required'.localized;
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            
+                            // New Password Field
+                            TextFormField(
+                              controller: _newPasswordController,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                labelText: 'settings.new_password'.localized,
+                                prefixIcon: Icon(Icons.lock),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'app.required'.localized;
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            
+                            // Confirm Password Field
+                            TextFormField(
+                              controller: _confirmPasswordController,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                labelText: 'settings.confirm_password'.localized,
+                                prefixIcon: Icon(Icons.lock_reset),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'app.required'.localized;
+                                }
+                                if (value != _newPasswordController.text) {
+                                  return 'settings.passwords_do_not_match'.localized;
+                                }
+                                return null;
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'app.required'.localized;
-                        }
-                        return null;
-                      },
                     ),
                     const SizedBox(height: 24),
-                    
-                    // New Password Field
-                    TextFormField(
-                      controller: _newPasswordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: 'settings.new_password'.localized,
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.lock),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'app.required'.localized;
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 24),
-                    
-                    // Confirm Password Field
-                    TextFormField(
-                      controller: _confirmPasswordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: 'settings.confirm_password'.localized,
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.lock_reset),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'app.required'.localized;
-                        }
-                        if (value != _newPasswordController.text) {
-                          return 'settings.passwords_do_not_match'.localized;
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 32),
                     
                     // Change Password Button
                     SizedBox(

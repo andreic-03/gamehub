@@ -57,16 +57,6 @@
     "password_changed_success": "Parola a fost schimbată cu succes",
     "password_change_error": "Eroare la schimbarea parolei"
   },
-  "game_post": {
-    "game": "Joc",
-    "scheduled": "Programat",
-    "participants": "Participanți",
-    "host_name": "Numele gazdei",
-    "location": "Locația",
-    "description": "Descriere",
-    "date_time": "Data și ora",
-    "max_participants": "Participanți max"
-  },
   "auth": {
     "login": "Autentificare",
     "username": "Nume de utilizator",
@@ -102,16 +92,17 @@
     "please_enter_valid_number": "Te rugăm să introduci un număr valid"
   },
   "game_post": {
+    "game": "Joc",
+    "scheduled": "Data și ora programate",
+    "participants": "Participanți",
+    "host_name": "Gazdă",
     "location": "Locația",
+    "description": "Descriere",
+    "date_time": "Data și ora",
+    "max_participants": "Participanți maximi",
     "coordinates": "Coordonate",
     "latitude": "Latitudine",
     "longitude": "Longitudine",
-    "scheduled": "Data și ora programate",
-    "max_participants": "Participanți maximi",
-    "description": "Descriere",
-    "participants": "Participanți",
-    "host_name": "Gazdă",
-    "game": "Joc",
     "current_participants": "Actual: {count}",
     "enter_location": "Introduceți locația",
     "enter_max_participants": "Introduceți numărul maxim de participanți",

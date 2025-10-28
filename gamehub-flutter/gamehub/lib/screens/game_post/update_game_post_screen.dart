@@ -96,132 +96,203 @@ class _UpdateGamePostScreenState extends State<UpdateGamePostScreen> {
                 ),
               ),
               
+              const SizedBox(height: 16),
+              
+              // Location Card
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'game_post.location'.localized,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: _viewModel.locationController,
+                        decoration: InputDecoration(
+                          labelText: 'create_game_post.location_name'.localized,
+                          prefixIcon: const Icon(Icons.location_on_outlined),
+                        ),
+                        validator: _viewModel.validateLocation,
+                        textInputAction: TextInputAction.next,
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: _openMapPicker,
+                          icon: const Icon(Icons.map),
+                          label: Text(
+                            _viewModel.hasCoordinates()
+                                ? 'Location Selected ✓'
+                                : 'Select Location on Map',
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            backgroundColor: _viewModel.hasCoordinates()
+                                ? Colors.green
+                                : Colors.blue,
+                            foregroundColor: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              
+              const SizedBox(height: 16),
+              
+              // Date & Time Card
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'game_post.scheduled'.localized,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ListenableBuilder(
+                              listenable: _viewModel,
+                              builder: (context, child) {
+                                return InkWell(
+                                  onTap: () => _viewModel.selectDate(context),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(16),
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.calendar_today, size: 20, color: Colors.grey.shade600),
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'create_game_post.date_label'.localized,
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.grey.shade600,
+                                                ),
+                                              ),
+                                              Text(
+                                                DateUtil.formatDate(_viewModel.selectedDate),
+                                                style: const TextStyle(fontSize: 16),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: ListenableBuilder(
+                              listenable: _viewModel,
+                              builder: (context, child) {
+                                return InkWell(
+                                  onTap: () => _viewModel.selectTime(context),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(16),
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.access_time, size: 20, color: Colors.grey.shade600),
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'create_game_post.time_label'.localized,
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.grey.shade600,
+                                                ),
+                                              ),
+                                              Text(
+                                                _viewModel.selectedTime.format(context),
+                                                style: const TextStyle(fontSize: 16),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              
+              const SizedBox(height: 16),
+              
+              // Participants & Description Card
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'create_game_post.details'.localized,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: _viewModel.maxParticipantsController,
+                        decoration: InputDecoration(
+                          labelText: 'create_game_post.max_participants'.localized,
+                          prefixIcon: const Icon(Icons.people_outline),
+                          suffixText: 'game_post.current_participants'.localized.replaceAll('{count}', widget.gamePost.currentParticipantCount.toString()),
+                        ),
+                        validator: _viewModel.validateMaxParticipants,
+                        keyboardType: TextInputType.number,
+                        textInputAction: TextInputAction.next,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _viewModel.descriptionController,
+                        decoration: InputDecoration(
+                          labelText: 'create_game_post.description_optional'.localized,
+                          prefixIcon: const Icon(Icons.description_outlined),
+                        ),
+                        validator: _viewModel.validateDescription,
+                        maxLines: 3,
+                        textInputAction: TextInputAction.done,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              
               const SizedBox(height: 24),
-              
-              // Location Section
-              _buildSectionHeader('game_post.location'.localized),
-              const SizedBox(height: 8),
-              TextFormField(
-                controller: _viewModel.locationController,
-                decoration: InputDecoration(
-                  hintText: 'game_post.enter_location'.localized,
-                  border: const OutlineInputBorder(),
-                  prefixIcon: const Icon(Icons.location_on),
-                ),
-                validator: _viewModel.validateLocation,
-                textInputAction: TextInputAction.next,
-              ),
-              
-              const SizedBox(height: 16),
-              
-              // Map Picker Section
-              _buildSectionHeader('game_post.coordinates'.localized),
-              const SizedBox(height: 8),
-              
-              // Map Picker Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: _openMapPicker,
-                  icon: const Icon(Icons.map),
-                  label: Text(
-                    _viewModel.hasCoordinates()
-                        ? 'Location Selected ✓'
-                        : 'Select Location on Map',
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    backgroundColor: _viewModel.hasCoordinates()
-                        ? Colors.green
-                        : Colors.blue,
-                    foregroundColor: Colors.white,
-                  ),
-                ),
-              ),
-              
-              const SizedBox(height: 16),
-              
-              // Date and Time Section
-              _buildSectionHeader('game_post.scheduled'.localized),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: ListenableBuilder(
-                      listenable: _viewModel,
-                      builder: (context, child) {
-                        return InkWell(
-                          onTap: () => _viewModel.selectDate(context),
-                          child: InputDecorator(
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              prefixIcon: Icon(Icons.calendar_today),
-                            ),
-                            child: Text(
-                              DateUtil.formatDate(_viewModel.selectedDate),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: ListenableBuilder(
-                      listenable: _viewModel,
-                      builder: (context, child) {
-                        return InkWell(
-                          onTap: () => _viewModel.selectTime(context),
-                          child: InputDecorator(
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              prefixIcon: Icon(Icons.access_time),
-                            ),
-                            child: Text(_viewModel.selectedTime.format(context)),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              
-              const SizedBox(height: 16),
-              
-              // Max Participants Section
-              _buildSectionHeader('game_post.max_participants'.localized),
-              const SizedBox(height: 8),
-              TextFormField(
-                controller: _viewModel.maxParticipantsController,
-                decoration: InputDecoration(
-                  hintText: 'game_post.enter_max_participants'.localized,
-                  border: const OutlineInputBorder(),
-                  prefixIcon: const Icon(Icons.people),
-                  suffixText: 'game_post.current_participants'.localized.replaceAll('{count}', widget.gamePost.currentParticipantCount.toString()),
-                ),
-                validator: _viewModel.validateMaxParticipants,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-              ),
-              
-              const SizedBox(height: 16),
-              
-              // Description Section
-              _buildSectionHeader('game_post.description'.localized),
-              const SizedBox(height: 8),
-              TextFormField(
-                controller: _viewModel.descriptionController,
-                decoration: InputDecoration(
-                  hintText: 'game_post.enter_description'.localized,
-                  border: const OutlineInputBorder(),
-                  prefixIcon: const Icon(Icons.description),
-                ),
-                validator: _viewModel.validateDescription,
-                maxLines: 3,
-                textInputAction: TextInputAction.done,
-              ),
-              
-              const SizedBox(height: 32),
               
               // Save Button
               SizedBox(
@@ -293,17 +364,6 @@ class _UpdateGamePostScreenState extends State<UpdateGamePostScreen> {
             heroTag: "update_game_post_back_button",
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildSectionHeader(String title) {
-    return Text(
-      title,
-      style: const TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.bold,
-        color: Colors.green,
       ),
     );
   }

@@ -57,16 +57,6 @@
     "password_changed_success": "Password changed successfully",
     "password_change_error": "Error changing password"
   },
-  "game_post": {
-    "game": "Game",
-    "scheduled": "Scheduled",
-    "participants": "Participants",
-    "host_name": "Host name",
-    "location": "Location",
-    "description": "Description",
-    "date_time": "Date & Time",
-    "max_participants": "Max Participants"
-  },
   "auth": {
     "login": "Login",
     "username": "Username",
@@ -102,16 +92,17 @@
     "please_enter_valid_number": "Please enter a valid number"
   },
   "game_post": {
+    "game": "Game",
+    "scheduled": "Scheduled Date & Time",
+    "participants": "Participants",
+    "host_name": "Host",
     "location": "Location",
+    "description": "Description",
+    "date_time": "Date & Time",
+    "max_participants": "Max Participants",
     "coordinates": "Coordinates",
     "latitude": "Latitude",
     "longitude": "Longitude",
-    "scheduled": "Scheduled Date & Time",
-    "max_participants": "Max Participants",
-    "description": "Description",
-    "participants": "Participants",
-    "host_name": "Host",
-    "game": "Game",
     "current_participants": "Current: {count}",
     "enter_location": "Enter location",
     "enter_max_participants": "Enter max participants",
