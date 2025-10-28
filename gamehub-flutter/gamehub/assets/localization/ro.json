@@ -38,13 +38,6 @@
   "profile": {
     "title": "GameHub - Profil",
     "edit_profile": "Editează profilul",
-    "change_password": "Schimbă parola",
-    "old_password": "Parola veche",
-    "new_password": "Parola nouă",
-    "confirm_password": "Confirmă parola",
-    "passwords_do_not_match": "Parolele nu se potrivesc",
-    "password_changed_success": "Parola a fost schimbată cu succes",
-    "password_change_error": "Eroare la schimbarea parolei",
     "level": "Nivel",
     "games_played": "Jocuri Jucate",
     "error_loading": "Eroare la încărcarea profilului"
@@ -52,9 +45,17 @@
   "settings": {
     "title": "Setări",
     "language": "Limbă",
+    "security": "Securitate",
     "more_settings": "Mai multe setări",
     "more_settings_description": "Setări suplimentare vor fi adăugate aici în actualizările viitoare.",
-    "select_language": "Selectează limba"
+    "select_language": "Selectează limba",
+    "change_password": "Schimbă parola",
+    "old_password": "Parola veche",
+    "new_password": "Parola nouă",
+    "confirm_password": "Confirmă parola",
+    "passwords_do_not_match": "Parolele nu se potrivesc",
+    "password_changed_success": "Parola a fost schimbată cu succes",
+    "password_change_error": "Eroare la schimbarea parolei"
   },
   "game_post": {
     "game": "Joc",

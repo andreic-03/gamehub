@@ -38,13 +38,6 @@
   "profile": {
     "title": "GameHub - Profile",
     "edit_profile": "Edit Profile",
-    "change_password": "Change Password",
-    "old_password": "Old Password",
-    "new_password": "New Password",
-    "confirm_password": "Confirm Password",
-    "passwords_do_not_match": "Passwords do not match",
-    "password_changed_success": "Password changed successfully",
-    "password_change_error": "Error changing password",
     "level": "Level",
     "games_played": "Games Played",
     "error_loading": "Error loading profile"
@@ -52,9 +45,17 @@
   "settings": {
     "title": "Settings",
     "language": "Language",
+    "security": "Security",
     "more_settings": "More Settings",
     "more_settings_description": "Additional settings will be added here in future updates.",
-    "select_language": "Select Language"
+    "select_language": "Select Language",
+    "change_password": "Change Password",
+    "old_password": "Old Password",
+    "new_password": "New Password",
+    "confirm_password": "Confirm Password",
+    "passwords_do_not_match": "Passwords do not match",
+    "password_changed_success": "Password changed successfully",
+    "password_change_error": "Error changing password"
   },
   "game_post": {
     "game": "Game",

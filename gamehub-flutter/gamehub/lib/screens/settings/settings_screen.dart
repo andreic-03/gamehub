@@ -4,6 +4,7 @@ import '../../config/injection.dart';
 import '../../localization/localized_text.dart';
 import '../../localization/localization_service.dart';
 import '../../widgets/custom_back_button.dart';
+import 'change_password_screen.dart';
 import 'settings_view_model.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -66,6 +67,60 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   child: Text(
                                     _viewModel.selectedLanguage,
                                     style: const TextStyle(fontSize: 16),
+                                  ),
+                                ),
+                                const Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                  color: Colors.grey,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                
+                // Security Section
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const LocalizedText(
+                          'settings.security',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ChangePasswordScreen(),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.lock_outline,
+                                  color: Colors.blue,
+                                ),
+                                const SizedBox(width: 12),
+                                const Expanded(
+                                  child: LocalizedText(
+                                    'settings.change_password',
+                                    style: TextStyle(fontSize: 16),
                                   ),
                                 ),
                                 const Icon(

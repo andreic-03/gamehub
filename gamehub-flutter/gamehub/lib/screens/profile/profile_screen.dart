@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gamehub/screens/profile/profile_avatar.dart';
 import 'package:gamehub/screens/profile/profile_view_model.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../core/viewmodels/auth_view_model.dart';
-import '../../models/user/user_password_change_model.dart';
 import '../../models/user/user_response_model.dart';
-import '../../services/user/user_service.dart';
 import '../../widgets/custom_back_button.dart';
-import '../../localization/localization_service.dart';
 import '../../localization/localized_text.dart';
 
 class ProfileContent extends StatefulWidget {
@@ -21,16 +16,12 @@ class ProfileContent extends StatefulWidget {
 
 class _ProfileContentState extends State<ProfileContent> {
   late ProfileViewModel _profileViewModel;
-  late UserService _userService;
-  late AuthViewModel _authViewModel;
   UserResponseModel? _user;
 
   @override
   void initState() {
     super.initState();
     _profileViewModel = GetIt.I<ProfileViewModel>();
-    _userService = GetIt.I<UserService>();
-    _authViewModel = GetIt.I<AuthViewModel>();
     _fetchCurrentUser();
   }
 
@@ -40,130 +31,6 @@ class _ProfileContentState extends State<ProfileContent> {
       setState(() {
         _user = user;
       });
-    }
-  }
-
-  Future<void> _changePassword() async {
-    final oldPasswordController = TextEditingController();
-    final newPasswordController = TextEditingController();
-    final confirmPasswordController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
-
-    final result = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: ReactiveLocalizedText('profile.change_password'),
-        content: Form(
-          key: formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                controller: oldPasswordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'profile.old_password'.localized,
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'app.required'.localized;
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: newPasswordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'profile.new_password'.localized,
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'app.required'.localized;
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: confirmPasswordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'profile.confirm_password'.localized,
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'app.required'.localized;
-                  }
-                  if (value != newPasswordController.text) {
-                    return 'profile.passwords_do_not_match'.localized;
-                  }
-                  return null;
-                },
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: ReactiveLocalizedText('app.cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              if (formKey.currentState!.validate()) {
-                Navigator.of(context).pop(true);
-              }
-            },
-            child: ReactiveLocalizedText('app.confirm'),
-          ),
-        ],
-      ),
-    );
-
-    if (result == true) {
-      try {
-        final requestModel = UserPasswordChangeModel(
-          oldPassword: oldPasswordController.text,
-          newPassword: newPasswordController.text,
-        );
-        
-        await _userService.changePassword(requestModel);
-        
-        // Clear the authentication token since the backend invalidates the session
-        _authViewModel.clearToken();
-        
-        if (mounted) {
-          // Show success dialog first
-          await showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) => AlertDialog(
-              title: ReactiveLocalizedText('profile.change_password'),
-              content: ReactiveLocalizedText('profile.password_changed_success'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Close dialog
-                    Navigator.of(context).pushReplacementNamed('/login');
-                  },
-                  child: ReactiveLocalizedText('app.ok'),
-                ),
-              ],
-            ),
-          );
-        }
-      } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('${'profile.password_change_error'.localized}: $e')),
-          );
-        }
-      }
     }
   }
 
@@ -304,13 +171,6 @@ class _ProfileContentState extends State<ProfileContent> {
                                   // Add functionality for profile screen
                                 },
                                 child: ReactiveLocalizedText('profile.edit_profile'),
-                              ),
-                              const SizedBox(height: 16),
-                              
-                              // Change Password Button
-                              ElevatedButton(
-                                onPressed: _changePassword,
-                                child: ReactiveLocalizedText('profile.change_password'),
                               ),
                               const SizedBox(height: 16),
                             ],
