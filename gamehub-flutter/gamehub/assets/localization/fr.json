@@ -10,7 +10,8 @@
     "save": "Enregistrer",
     "edit": "Modifier",
     "delete": "Supprimer",
-    "confirm": "Confirmer"
+    "confirm": "Confirmer",
+    "required": "Requis"
   },
   "navigation": {
     "home": "Accueil",
@@ -37,7 +38,16 @@
   "profile": {
     "title": "GameHub - Profil",
     "edit_profile": "Modifier le profil",
-    "level": "Niveau"
+    "change_password": "Changer le mot de passe",
+    "old_password": "Ancien mot de passe",
+    "new_password": "Nouveau mot de passe",
+    "confirm_password": "Confirmer le mot de passe",
+    "passwords_do_not_match": "Les mots de passe ne correspondent pas",
+    "password_changed_success": "Mot de passe modifié avec succès",
+    "password_change_error": "Erreur lors du changement de mot de passe",
+    "level": "Niveau",
+    "games_played": "Jeux Joués",
+    "error_loading": "Erreur lors du chargement du profil"
   },
   "settings": {
     "title": "Paramètres",

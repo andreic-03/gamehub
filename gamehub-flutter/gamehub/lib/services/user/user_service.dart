@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:gamehub/models/user/user_password_change_model.dart';
 import 'package:gamehub/models/user/user_registration_request_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/error_logger.dart';
@@ -18,4 +19,7 @@ abstract class UserService {
   
   @GET("/user/info")
   Future<UserResponseModel> getCurrentUser();
+  
+  @PUT("/user/password-reset")
+  Future<void> changePassword(@Body() UserPasswordChangeModel requestModel);
 }

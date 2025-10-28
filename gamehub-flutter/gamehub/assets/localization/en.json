@@ -10,7 +10,8 @@
     "save": "Save",
     "edit": "Edit",
     "delete": "Delete",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "required": "Required"
   },
   "navigation": {
     "home": "Home",
@@ -37,7 +38,16 @@
   "profile": {
     "title": "GameHub - Profile",
     "edit_profile": "Edit Profile",
-    "level": "Level"
+    "change_password": "Change Password",
+    "old_password": "Old Password",
+    "new_password": "New Password",
+    "confirm_password": "Confirm Password",
+    "passwords_do_not_match": "Passwords do not match",
+    "password_changed_success": "Password changed successfully",
+    "password_change_error": "Error changing password",
+    "level": "Level",
+    "games_played": "Games Played",
+    "error_loading": "Error loading profile"
   },
   "settings": {
     "title": "Settings",
