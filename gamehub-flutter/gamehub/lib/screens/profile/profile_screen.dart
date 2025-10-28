@@ -163,7 +163,7 @@ class _ProfileContentState extends State<ProfileContent> {
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 24),
+                              const SizedBox(height: 35),
                               
                               // Edit Profile Button
                               ElevatedButton(

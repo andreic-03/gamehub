@@ -74,10 +74,16 @@
     "login_button": "Autentificare",
     "login_error": "Autentificarea a eșuat. Te rugăm să încerci din nou."
   },
-  "create_game_post": {
+    "create_game_post": {
     "title": "Creează Postare Joc",
+    "details": "Detalii",
     "game_name": "Numele jocului",
+    "results": "Rezultate",
     "location": "Locația",
+    "location_name": "Numele locației",
+    "location_hint": "Introduceți locația sau alegeți-o pe hartă",
+    "date_label": "Data",
+    "time_label": "Ora",
     "latitude": "Latitudine",
     "longitude": "Longitudine",
     "scheduled_date_time": "Data și ora programată",

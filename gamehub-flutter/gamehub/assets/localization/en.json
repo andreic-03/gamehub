@@ -74,10 +74,16 @@
     "login_button": "Login",
     "login_error": "Login failed. Please try again."
   },
-  "create_game_post": {
+    "create_game_post": {
     "title": "Create Game Post",
+    "details": "Details",
     "game_name": "Game Name",
+    "results": "Results",
     "location": "Location",
+    "location_name": "Location name",
+    "location_hint": "Enter location or pick on map",
+    "date_label": "Date",
+    "time_label": "Time",
     "latitude": "Latitude",
     "longitude": "Longitude",
     "scheduled_date_time": "Scheduled Date & Time",

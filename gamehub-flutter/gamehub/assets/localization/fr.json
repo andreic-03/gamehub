@@ -74,10 +74,16 @@
     "login_button": "Se connecter",
     "login_error": "Échec de la connexion. Veuillez réessayer."
   },
-  "create_game_post": {
+    "create_game_post": {
     "title": "Créer une Publication de Jeu",
+    "details": "Détails",
     "game_name": "Nom du jeu",
+    "results": "Résultats",
     "location": "Lieu",
+    "location_name": "Nom du lieu",
+    "location_hint": "Entrez le lieu ou sélectionnez-le sur la carte",
+    "date_label": "Date",
+    "time_label": "Heure",
     "latitude": "Latitude",
     "longitude": "Longitude",
     "scheduled_date_time": "Date et heure programmées",
