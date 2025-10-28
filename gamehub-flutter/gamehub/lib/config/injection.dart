@@ -110,7 +110,7 @@ Future<void> configureDependencies() async {
   ));
 
   // 4. Register View Models
-  getIt.registerLazySingleton<AuthViewModel>(() => AuthViewModel(getIt<AuthService>()));
+  getIt.registerLazySingleton<AuthViewModel>(() => AuthViewModel(getIt<AuthService>(), getIt<UserService>()));
   getIt.registerFactory<HomeViewModel>(() => HomeViewModel(getIt<GamePostService>()));
   getIt.registerFactory<ProfileViewModel>(() => ProfileViewModel(getIt<UserService>()));
   getIt.registerFactory<CreateGamePostViewModel>(() => CreateGamePostViewModel(

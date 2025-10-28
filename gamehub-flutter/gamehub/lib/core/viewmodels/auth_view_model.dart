@@ -1,19 +1,22 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
-import '../../../services/auth/auth_service.dart';
-import '../../../models/auth/auth_request_model.dart';
-import '../../../models/error/error_response.dart';
+import '../../services/auth/auth_service.dart';
+import '../../services/user/user_service.dart';
+import '../../models/auth/auth_request_model.dart';
+import '../../models/error/error_response.dart';
 import '../errors/api_error.dart';
 import 'base_view_model.dart';
+import '../utils/user_cache.dart';
 
 /// ViewModel that handles authentication-related business logic
 @injectable
 class AuthViewModel extends BaseViewModel {
   final AuthService _authService;
+  final UserService _userService;
   String? _token;
 
   /// Constructor that injects the auth service
-  AuthViewModel(this._authService);
+  AuthViewModel(this._authService, this._userService);
 
   /// Returns the current auth token
   String? get token => _token;
@@ -30,6 +33,8 @@ class AuthViewModel extends BaseViewModel {
   /// Clears the authentication token and notifies listeners
   void clearToken() {
     _token = null;
+    // Clear cached user data
+    UserCache.clear();
     notifyListeners();
   }
 
@@ -45,6 +50,16 @@ class AuthViewModel extends BaseViewModel {
         final authResponse = await _authService.login(authRequest);
         
         setToken(authResponse.accessToken);
+        
+        // Load and cache user data immediately after successful login
+        try {
+          final user = await _userService.getCurrentUser();
+          UserCache.setUser(user);
+        } catch (e) {
+          // If we can't load user data, continue anyway - it will be loaded later
+          // This prevents login from failing if there's an issue with the user endpoint
+        }
+        
         return true;
       } on DioException catch (e) {
         if (e.response != null && e.response!.data != null) {

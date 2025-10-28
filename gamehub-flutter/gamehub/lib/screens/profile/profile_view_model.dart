@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import '../../core/utils/user_cache.dart';
 import '../../core/viewmodels/base_view_model.dart';
 import '../../services/user/user_service.dart';
 import '../../models/error/error_response.dart';
@@ -12,9 +13,17 @@ class ProfileViewModel extends BaseViewModel {
   ProfileViewModel(this._userService);
 
   Future<UserResponseModel?> getCurrentUser() async {
+    // First check if we have a cached user
+    if (UserCache.cachedUser != null) {
+      return UserCache.cachedUser;
+    }
+
     return await runBusyFuture(() async {
       try {
-        return await _userService.getCurrentUser();
+        final user = await _userService.getCurrentUser();
+        // Cache the user for future use
+        UserCache.setUser(user);
+        return user;
       } on DioException catch (e) {
         if (e.response != null && e.response!.data != null) {
           final errorResponse = ErrorResponse.fromJson(e.response!.data);

@@ -11,11 +11,13 @@ import 'update_game_post_screen.dart';
 class GamePostDetailsScreen extends StatefulWidget {
   final GamePostResponseModel gamePost;
   final VoidCallback? onGameJoined;
+  final int? currentUserId;
 
   const GamePostDetailsScreen({
     Key? key,
     required this.gamePost,
     this.onGameJoined,
+    this.currentUserId,
   }) : super(key: key);
 
   @override
@@ -31,6 +33,7 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
     _viewModel = GamePostDetailsViewModel(
       gamePost: widget.gamePost,
       onGameJoined: widget.onGameJoined,
+      currentUserId: widget.currentUserId,
     );
   }
 

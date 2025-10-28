@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gamehub/localization/localized_text.dart';
 import 'package:get_it/get_it.dart';
 import '../../core/errors/api_error.dart';
+import '../../core/utils/user_cache.dart';
 import '../../localization/localization_service.dart';
 import '../../models/game_post/game_post_response_model.dart';
 import '../../models/participants/participants_request_model.dart';
@@ -23,18 +24,27 @@ class GamePostDetailsViewModel extends ChangeNotifier {
   bool _hasJoined = false;
   int _currentParticipantCount;
   UserResponseModel? _currentUser;
+  int? _currentUserId;
 
   GamePostDetailsViewModel({
     required this.gamePost,
     this.onGameJoined,
+    int? currentUserId,
     GamePostService? gamePostService,
     ParticipantsService? participantsService,
     UserService? userService,
   }) : _gamePostService = gamePostService ?? GetIt.instance<GamePostService>(),
        _participantsService = participantsService ?? GetIt.instance<ParticipantsService>(),
        _userService = userService ?? GetIt.instance<UserService>(),
-       _currentParticipantCount = gamePost.currentParticipantCount {
-    _loadCurrentUser();
+       _currentParticipantCount = gamePost.currentParticipantCount,
+       _currentUserId = currentUserId {
+    // Use provided userId, cached userId, or load from API
+    _currentUserId ??= currentUserId ?? UserCache.cachedUserId;
+    if (_currentUserId == null) {
+      _loadCurrentUser();
+    } else if (UserCache.cachedUser != null) {
+      _currentUser = UserCache.cachedUser;
+    }
   }
 
   bool get isLoading => _isLoading;
@@ -43,7 +53,7 @@ class GamePostDetailsViewModel extends ChangeNotifier {
   int get currentParticipantCount => _currentParticipantCount;
   bool get isGameFull => _currentParticipantCount >= gamePost.maxParticipants;
   bool get canJoinGame => !_hasJoined && !isGameFull && !_isLoading;
-  bool get isHost => _currentUser?.id == gamePost.hostUserId;
+  bool get isHost => (_currentUserId ?? _currentUser?.id) == gamePost.hostUserId;
 
   Future<void> joinGame() async {
     try {
@@ -122,11 +132,15 @@ class GamePostDetailsViewModel extends ChangeNotifier {
   Future<void> _loadCurrentUser() async {
     try {
       _currentUser = await _userService.getCurrentUser();
+      // Cache the user for future use
+      UserCache.setUser(_currentUser);
+      _currentUserId = _currentUser?.id;
       notifyListeners();
     } catch (e) {
       // If we can't load the current user, we'll just assume they're not the host
       // This could happen if the user is not authenticated or there's a network error
       _currentUser = null;
+      notifyListeners();
     }
   }
 } 
