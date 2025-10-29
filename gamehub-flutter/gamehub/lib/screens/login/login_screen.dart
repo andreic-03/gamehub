@@ -149,19 +149,27 @@ class LoginScreen extends StatelessWidget {
       _passwordController.text,
     );
 
-    if (success) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
-    } else if (viewModel.hasError) {
-      Fluttertoast.showToast(
-        msg: viewModel.errorMessage!,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.grey[800],
-        textColor: Colors.white,
-      );
+    // On successful login:
+    // - viewModel.login() sets the token and calls notifyListeners()
+    // - The Consumer in main.dart listens to this and automatically rebuilds
+    // - The home property switches from LoginScreen to HomeScreen
+    // Navigation is now handled by main.dart's Consumer, ensuring proper widget lifecycle
+    
+    // Show error if login failed
+    if (!success && viewModel.hasError) {
+      // Show error toast - using try-catch to handle cases where context might be invalid
+      try {
+        Fluttertoast.showToast(
+          msg: viewModel.errorMessage!,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.grey[800],
+          textColor: Colors.white,
+        );
+      } catch (_) {
+        // Context may be invalid if widget was disposed during login
+        // Silently ignore - the error state is already set in the viewModel
+      }
     }
   }
 }

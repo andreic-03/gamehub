@@ -55,8 +55,10 @@ class _AppDrawerState extends State<AppDrawer> {
   void _handleLogout(BuildContext context) async {
     final success = await widget._authViewModel.logout();
     if (success) {
-      Navigator.pop(context);
-      Navigator.of(context).pushReplacementNamed('/login');
+      // Navigation is handled automatically by main.dart's Consumer when auth state changes
+      // When logout succeeds, clearToken() is called and notifyListeners() is triggered,
+      // which causes the Consumer in main.dart to rebuild with LoginScreen as home
+      Navigator.pop(context); // Close the drawer
     }
   }
 
