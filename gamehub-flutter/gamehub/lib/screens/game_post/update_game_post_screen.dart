@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../../core/utils/error_util.dart';
 import '../../core/utils/date_util.dart';
 import '../../localization/localized_text.dart';
 import '../../localization/localization_service.dart';
@@ -370,15 +371,18 @@ class _UpdateGamePostScreenState extends State<UpdateGamePostScreen> {
 
   Future<void> _saveGamePost() async {
     if (_formKey.currentState!.validate()) {
-      final success = await _viewModel.updateGamePost();
-      if (success && mounted) {
+      final updated = await _viewModel.updateGamePost();
+      if (updated != null && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('game_post.updated_successfully'.localized),
             backgroundColor: Colors.green,
           ),
         );
-        Navigator.pop(context, true); // Return true to indicate successful update
+        Navigator.pop(context, updated); // Return updated model to details
+      } else if (updated == null && mounted && _viewModel.lastException != null) {
+        // Show API error using the same snackbar utility
+        ErrorUtil.showErrorSnackBar(context, _viewModel.lastException!);
       }
     }
   }

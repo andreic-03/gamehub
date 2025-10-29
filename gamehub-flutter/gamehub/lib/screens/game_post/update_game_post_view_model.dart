@@ -22,6 +22,7 @@ class UpdateGamePostViewModel extends ChangeNotifier {
   
   bool _isLoading = false;
   String? _error;
+  Object? _lastException;
   
   UpdateGamePostViewModel({
     required this.originalGamePost,
@@ -33,6 +34,7 @@ class UpdateGamePostViewModel extends ChangeNotifier {
   // Getters
   bool get isLoading => _isLoading;
   String? get error => _error;
+  Object? get lastException => _lastException;
   DateTime get selectedDate => _selectedDate;
   TimeOfDay get selectedTime => _selectedTime;
   
@@ -162,16 +164,17 @@ class UpdateGamePostViewModel extends ChangeNotifier {
     );
   }
   
-  Future<bool> updateGamePost() async {
+  Future<GamePostResponseModel?> updateGamePost() async {
     if (!isFormValid) {
       _error = 'Please fix all validation errors';
       notifyListeners();
-      return false;
+      return null;
     }
     
     try {
       _isLoading = true;
       _error = null;
+      _lastException = null;
       notifyListeners();
       
       final updateRequest = GamePostRequestModel(
@@ -186,14 +189,15 @@ class UpdateGamePostViewModel extends ChangeNotifier {
             : descriptionController.text.trim(),
       );
       
-      await _gamePostService.updateGamePost(originalGamePost.postId, updateRequest);
+      final updated = await _gamePostService.updateGamePost(originalGamePost.postId, updateRequest);
       
       _isLoading = false;
       notifyListeners();
-      return true;
+      return updated;
       
     } catch (e) {
       _isLoading = false;
+      _lastException = e;
       
       // Handle specific API errors
       if (e is DioException) {
@@ -204,7 +208,7 @@ class UpdateGamePostViewModel extends ChangeNotifier {
       }
       
       notifyListeners();
-      return false;
+      return null;
     }
   }
   

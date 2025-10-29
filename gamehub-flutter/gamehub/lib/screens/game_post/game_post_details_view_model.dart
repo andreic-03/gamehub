@@ -21,6 +21,7 @@ class GamePostDetailsViewModel extends ChangeNotifier {
   final VoidCallback? onGameJoined;
   bool _isLoading = false;
   String? _error;
+  Object? _lastException;
   bool _hasJoined = false;
   int _currentParticipantCount;
   UserResponseModel? _currentUser;
@@ -49,6 +50,7 @@ class GamePostDetailsViewModel extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
   String? get error => _error;
+  Object? get lastException => _lastException;
   bool get hasJoined => _hasJoined;
   int get currentParticipantCount => _currentParticipantCount;
   bool get isGameFull => _currentParticipantCount >= gamePost.maxParticipants;
@@ -141,6 +143,36 @@ class GamePostDetailsViewModel extends ChangeNotifier {
       // This could happen if the user is not authenticated or there's a network error
       _currentUser = null;
       notifyListeners();
+    }
+  }
+
+  Future<bool> deleteGamePost() async {
+    try {
+      _isLoading = true;
+      _error = null;
+      _lastException = null;
+      notifyListeners();
+
+      await _gamePostService.deleteGamePost(gamePost.postId);
+      
+      _isLoading = false;
+      notifyListeners();
+      return true;
+      
+    } catch (e) {
+      _isLoading = false;
+      _lastException = e;
+      
+      // Handle specific API errors
+      if (e is DioException) {
+        final apiError = ApiError.fromDioError(e);
+        _error = apiError.userFriendlyMessage;
+      } else {
+        _error = e.toString();
+      }
+      
+      notifyListeners();
+      return false;
     }
   }
 } 

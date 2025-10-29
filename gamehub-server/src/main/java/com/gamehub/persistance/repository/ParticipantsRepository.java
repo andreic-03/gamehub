@@ -2,8 +2,10 @@ package com.gamehub.persistance.repository;
 
 import com.gamehub.persistance.entity.ParticipantsEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -34,4 +36,13 @@ public interface ParticipantsRepository extends JpaRepository<ParticipantsEntity
      */
     @Query("SELECT COUNT(p) FROM ParticipantsEntity p WHERE p.gamePost.postId = :gamePostId")
     Long countByGamePostId(@Param("gamePostId") Long gamePostId);
+    
+    /**
+     * Delete all participants for a specific game post
+     * @param gamePostId The game post ID
+     */
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM ParticipantsEntity p WHERE p.gamePost.postId = :gamePostId")
+    void deleteByGamePostId(@Param("gamePostId") Long gamePostId);
 }

@@ -124,7 +124,13 @@
     "already_joined": "You have already joined this game!",
     "game_full": "This game is full!",
     "game_full_button": "Game Full",
-    "edit_game_post": "Edit Game Post"
+    "edit_game_post": "Edit Game Post",
+    "delete_game_post": "Delete Game Post",
+    "delete_confirmation_title": "Delete Game Post",
+    "delete_confirmation_message": "Are you sure you want to delete this game post? This action cannot be undone.",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleted_successfully": "Game post deleted successfully"
   },
   "base_screen": {
     "home_title": "GameHub - Home",

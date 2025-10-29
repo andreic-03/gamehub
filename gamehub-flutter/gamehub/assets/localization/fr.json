@@ -124,7 +124,13 @@
     "already_joined": "Vous avez déjà rejoint ce jeu !",
     "game_full": "Ce jeu est complet !",
     "game_full_button": "Jeu Complet",
-    "edit_game_post": "Modifier le jeu"
+    "edit_game_post": "Modifier le jeu",
+    "delete_game_post": "Supprimer le jeu",
+    "delete_confirmation_title": "Supprimer le jeu",
+    "delete_confirmation_message": "Êtes-vous sûr de vouloir supprimer ce jeu ? Cette action ne peut pas être annulée.",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "deleted_successfully": "Jeu supprimé avec succès"
   },
   "base_screen": {
     "home_title": "GameHub - Accueil",

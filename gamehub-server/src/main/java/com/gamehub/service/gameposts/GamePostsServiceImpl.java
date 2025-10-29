@@ -79,12 +79,10 @@ public class GamePostsServiceImpl implements GamePostsService {
     @Transactional
     @Override
     public void delete(Long id) {
-        try {
-            gamePostsRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException ex) {
-            log.error("Game post not found with id: {}", id);
-            throw new GamehubNotFoundException(ErrorType.GAME_POST_NOT_FOUND);
-        }
+        getGamePostById(id);
+
+        participantsRepository.deleteByGamePostId(id);
+        gamePostsRepository.deleteById(id);
     }
 
     @Transactional

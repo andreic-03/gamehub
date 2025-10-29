@@ -124,7 +124,13 @@
     "already_joined": "Te-ai alăturat deja acestui joc!",
     "game_full": "Acest joc este plin!",
     "game_full_button": "Joc Complet",
-    "edit_game_post": "Editează jocul"
+    "edit_game_post": "Editează jocul",
+    "delete_game_post": "Șterge jocul",
+    "delete_confirmation_title": "Șterge jocul",
+    "delete_confirmation_message": "Ești sigur că vrei să ștergi acest joc? Această acțiune nu poate fi anulată.",
+    "cancel": "Anulează",
+    "delete": "Șterge",
+    "deleted_successfully": "Jocul a fost șters cu succes"
   },
   "base_screen": {
     "home_title": "GameHub - Acasă",

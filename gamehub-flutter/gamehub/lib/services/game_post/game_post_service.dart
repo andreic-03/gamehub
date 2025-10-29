@@ -28,4 +28,7 @@ abstract class GamePostService {
 
   @PUT("/game-posts/{id}")
   Future<GamePostResponseModel> updateGamePost(@Path("id") int id, @Body() GamePostRequestModel request);
+
+  @DELETE("/game-posts/{id}")
+  Future<void> deleteGamePost(@Path("id") int id);
 }
