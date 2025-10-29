@@ -48,4 +48,11 @@ public class ParticipantsController {
     public void delete(@PathVariable("id") final Long id) {
         participantsService.delete(id);
     }
+
+    @RolesAllowed({ROLE_ADMIN, ROLE_USER})
+    @GetMapping("/is-joined")
+    public boolean isJoined(@AuthenticationPrincipal AppUserPrincipal user,
+                            @RequestParam("gamePostId") final Long gamePostId) {
+        return participantsService.isUserJoined(user.getUserEntity().getId(), gamePostId);
+    }
 }

@@ -15,4 +15,7 @@ abstract class ParticipantsService {
 
   @POST("/participants")
   Future<ParticipantsResponseModel> createParticipant(@Body() ParticipantsRequestModel request);
+
+  @GET("/participants/is-joined")
+  Future<bool> isJoined(@Query("gamePostId") int gamePostId);
 }

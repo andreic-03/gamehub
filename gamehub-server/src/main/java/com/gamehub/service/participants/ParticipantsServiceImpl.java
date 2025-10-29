@@ -87,6 +87,11 @@ public class ParticipantsServiceImpl implements ParticipantsService {
 
     }
 
+    @Override
+    public boolean isUserJoined(Long userId, Long gamePostId) {
+        return participantsRepository.existsByUserIdAndGamePostId(userId, gamePostId);
+    }
+
     private ParticipantsEntity getParticipantsById(Long id) {
         return participantsRepository.findById(id)
                 .orElseThrow(() -> new GamehubNotFoundException(ErrorType.PARTICIPANT_NOT_FOUND));

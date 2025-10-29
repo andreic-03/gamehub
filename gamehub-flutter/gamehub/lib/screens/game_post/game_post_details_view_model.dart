@@ -20,6 +20,7 @@ class GamePostDetailsViewModel extends ChangeNotifier {
   final GamePostResponseModel gamePost;
   final VoidCallback? onGameJoined;
   bool _isLoading = false;
+  bool _isCheckingJoinStatus = false;
   String? _error;
   Object? _lastException;
   bool _hasJoined = false;
@@ -35,7 +36,7 @@ class GamePostDetailsViewModel extends ChangeNotifier {
     ParticipantsService? participantsService,
     UserService? userService,
   }) : _gamePostService = gamePostService ?? GetIt.instance<GamePostService>(),
-       _participantsService = participantsService ?? GetIt.instance<ParticipantsService>(),
+      _participantsService = participantsService ?? GetIt.instance<ParticipantsService>(),
        _userService = userService ?? GetIt.instance<UserService>(),
        _currentParticipantCount = gamePost.currentParticipantCount,
        _currentUserId = currentUserId {
@@ -45,16 +46,18 @@ class GamePostDetailsViewModel extends ChangeNotifier {
       _loadCurrentUser();
     } else if (UserCache.cachedUser != null) {
       _currentUser = UserCache.cachedUser;
+      _checkIfJoined();
     }
   }
 
   bool get isLoading => _isLoading;
+  bool get isCheckingJoinStatus => _isCheckingJoinStatus;
   String? get error => _error;
   Object? get lastException => _lastException;
   bool get hasJoined => _hasJoined;
   int get currentParticipantCount => _currentParticipantCount;
   bool get isGameFull => _currentParticipantCount >= gamePost.maxParticipants;
-  bool get canJoinGame => !_hasJoined && !isGameFull && !_isLoading;
+  bool get canJoinGame => !_hasJoined && !isGameFull && !_isLoading && !_isCheckingJoinStatus;
   bool get isHost => (_currentUserId ?? _currentUser?.id) == gamePost.hostUserId;
 
   Future<void> joinGame() async {
@@ -138,10 +141,28 @@ class GamePostDetailsViewModel extends ChangeNotifier {
       UserCache.setUser(_currentUser);
       _currentUserId = _currentUser?.id;
       notifyListeners();
+      await _checkIfJoined();
     } catch (e) {
       // If we can't load the current user, we'll just assume they're not the host
       // This could happen if the user is not authenticated or there's a network error
       _currentUser = null;
+      notifyListeners();
+    }
+  }
+
+  Future<void> _checkIfJoined() async {
+    try {
+      if (_currentUserId == null) return;
+      _isCheckingJoinStatus = true;
+      notifyListeners();
+      
+      final joined = await _participantsService.isJoined(gamePost.postId);
+      _hasJoined = joined;
+      _isCheckingJoinStatus = false;
+      notifyListeners();
+    } catch (_) {
+      // Silent fail; the button will remain enabled if we can't verify
+      _isCheckingJoinStatus = false;
       notifyListeners();
     }
   }

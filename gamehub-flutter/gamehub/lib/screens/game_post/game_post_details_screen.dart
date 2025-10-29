@@ -290,6 +290,8 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
                     child: ListenableBuilder(
                       listenable: _viewModel,
                       builder: (context, child) {
+                        final isChecking = _viewModel.isCheckingJoinStatus;
+                        final isLoading = _viewModel.isLoading;
                         return ElevatedButton(
                           onPressed: _viewModel.canJoinGame ? _viewModel.joinGame : null,
                           style: ElevatedButton.styleFrom(
@@ -303,7 +305,7 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
                                     ? Colors.grey 
                                     : null,
                           ),
-                          child: _viewModel.isLoading
+                          child: isLoading || isChecking
                               ? const SizedBox(
                                   height: 20,
                                   width: 20,
