@@ -84,12 +84,24 @@ public class ParticipantsServiceImpl implements ParticipantsService {
     @Transactional
     @Override
     public void delete(Long id) {
-
+        participantsRepository.findById(id)
+                .orElseThrow(() -> new GamehubNotFoundException(ErrorType.PARTICIPANT_NOT_FOUND));
+        participantsRepository.deleteById(id);
     }
 
     @Override
     public boolean isUserJoined(Long userId, Long gamePostId) {
         return participantsRepository.existsByUserIdAndGamePostId(userId, gamePostId);
+    }
+
+    @Transactional
+    @Override
+    public void leaveGame(Long userId, Long gamePostId) {
+        ParticipantsEntity participant = participantsRepository.findByUserIdAndGamePostId(userId, gamePostId)
+                .orElseThrow(() -> new GamehubNotFoundException(ErrorType.PARTICIPANT_NOT_FOUND));
+        
+        participantsRepository.delete(participant);
+        log.info("User {} left game post {}", userId, gamePostId);
     }
 
     private ParticipantsEntity getParticipantsById(Long id) {

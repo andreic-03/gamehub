@@ -167,6 +167,47 @@ class GamePostDetailsViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> leaveGame() async {
+    try {
+      _isLoading = true;
+      _error = null;
+      notifyListeners();
+
+      await _participantsService.leaveGame(gamePost.postId);
+      
+      // Update state to reflect successful leave
+      _hasJoined = false;
+      _currentParticipantCount = _currentParticipantCount > 0 ? _currentParticipantCount - 1 : 0;
+      _isLoading = false;
+      notifyListeners();
+      
+      // Show success toast message
+      Fluttertoast.showToast(
+        msg: 'game_post_details.left_successfully'.localized,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.blue[800],
+        textColor: Colors.white,
+      );
+      
+      // Call the callback to refresh the parent screen
+      onGameJoined?.call();
+      
+    } catch (e) {
+      _isLoading = false;
+      
+      // Handle specific API errors
+      if (e is DioException) {
+        final apiError = ApiError.fromDioError(e);
+        _error = apiError.userFriendlyMessage;
+      } else {
+        _error = e.toString();
+      }
+      
+      notifyListeners();
+    }
+  }
+
   Future<bool> deleteGamePost() async {
     try {
       _isLoading = true;

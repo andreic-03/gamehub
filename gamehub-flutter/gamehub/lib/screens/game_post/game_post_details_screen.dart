@@ -284,57 +284,103 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
                 ),
                   const SizedBox(height: 24),
 
-                  // Join Button
-                  SizedBox(
-                    width: double.infinity,
-                    child: ListenableBuilder(
-                      listenable: _viewModel,
-                      builder: (context, child) {
-                        final isChecking = _viewModel.isCheckingJoinStatus;
-                        final isLoading = _viewModel.isLoading;
-                        return ElevatedButton(
-                          onPressed: _viewModel.canJoinGame ? _viewModel.joinGame : null,
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            backgroundColor: _viewModel.hasJoined 
-                                ? Colors.green 
-                                : _viewModel.isGameFull 
+                  // Join/Leave Button (only for non-hosts)
+                  ListenableBuilder(
+                    listenable: _viewModel,
+                    builder: (context, child) {
+                      if (_viewModel.isHost) return const SizedBox.shrink();
+                      
+                      // Show Leave button if user has joined
+                      if (_viewModel.hasJoined) {
+                        return SizedBox(
+                          width: double.infinity,
+                          child: ListenableBuilder(
+                            listenable: _viewModel,
+                            builder: (context, child) {
+                              final isLoading = _viewModel.isLoading;
+                              return ElevatedButton(
+                                onPressed: isLoading ? null : _viewModel.leaveGame,
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  backgroundColor: Colors.orange,
+                                  foregroundColor: Colors.white,
+                                ),
+                                child: isLoading
+                                    ? const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                        ),
+                                      )
+                                    : ListenableBuilder(
+                                        listenable: LocalizationService.instance,
+                                        builder: (context, child) {
+                                          return Text(
+                                            'game_post_details.leave_game'.localized,
+                                            style: const TextStyle(fontSize: 18),
+                                          );
+                                        },
+                                      ),
+                              );
+                            },
+                          ),
+                        );
+                      }
+                      
+                      // Show Join button if user hasn't joined
+                      return SizedBox(
+                        width: double.infinity,
+                        child: ListenableBuilder(
+                          listenable: _viewModel,
+                          builder: (context, child) {
+                            final isChecking = _viewModel.isCheckingJoinStatus;
+                            final isLoading = _viewModel.isLoading;
+                            return ElevatedButton(
+                              onPressed: _viewModel.canJoinGame ? _viewModel.joinGame : null,
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                backgroundColor: _viewModel.isGameFull 
                                     ? Colors.grey 
                                     : null,
-                          ),
-                          child: isLoading || isChecking
-                              ? const SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                  ),
-                                )
-                              : ListenableBuilder(
-                                  listenable: LocalizationService.instance,
-                                  builder: (context, child) {
-                                    String buttonText;
-                                    if (_viewModel.hasJoined) {
-                                      buttonText = 'game_post_details.joined'.localized;
-                                    } else if (_viewModel.isGameFull) {
-                                      buttonText = 'game_post_details.game_full_button'.localized;
-                                    } else {
-                                      buttonText = 'game_post_details.join_game'.localized;
-                                    }
-                                    
-                                    return Text(
-                                      buttonText,
-                                      style: const TextStyle(fontSize: 18),
-                                    );
-                                  },
-                                ),
-                        );
-                      },
-                    ),
+                              ),
+                              child: isLoading || isChecking
+                                  ? const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                      ),
+                                    )
+                                  : ListenableBuilder(
+                                      listenable: LocalizationService.instance,
+                                      builder: (context, child) {
+                                        String buttonText;
+                                        if (_viewModel.isGameFull) {
+                                          buttonText = 'game_post_details.game_full_button'.localized;
+                                        } else {
+                                          buttonText = 'game_post_details.join_game'.localized;
+                                        }
+                                        
+                                        return Text(
+                                          buttonText,
+                                          style: const TextStyle(fontSize: 18),
+                                        );
+                                      },
+                                    ),
+                            );
+                          },
+                        ),
+                      );
+                    },
                   ),
 
                   // Edit and Delete Buttons (only for hosts)

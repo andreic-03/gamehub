@@ -130,7 +130,9 @@
     "delete_confirmation_message": "Ești sigur că vrei să ștergi acest joc? Această acțiune nu poate fi anulată.",
     "cancel": "Anulează",
     "delete": "Șterge",
-    "deleted_successfully": "Jocul a fost șters cu succes"
+    "deleted_successfully": "Jocul a fost șters cu succes",
+    "leave_game": "Părăsește jocul",
+    "left_successfully": "Ai părăsit jocul"
   },
   "base_screen": {
     "home_title": "GameHub - Acasă",

@@ -11,4 +11,5 @@ public interface ParticipantsService {
     ParticipantsResponseModel updateParticipant(Long participantId, ParticipantsRequestModel participantModel);
     void delete(Long id);
     boolean isUserJoined(Long userId, Long gamePostId);
+    void leaveGame(Long userId, Long gamePostId);
 }

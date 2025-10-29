@@ -18,4 +18,7 @@ abstract class ParticipantsService {
 
   @GET("/participants/is-joined")
   Future<bool> isJoined(@Query("gamePostId") int gamePostId);
+
+  @DELETE("/participants/leave")
+  Future<void> leaveGame(@Query("gamePostId") int gamePostId);
 }

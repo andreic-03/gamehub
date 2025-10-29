@@ -130,7 +130,9 @@
     "delete_confirmation_message": "Are you sure you want to delete this game post? This action cannot be undone.",
     "cancel": "Cancel",
     "delete": "Delete",
-    "deleted_successfully": "Game post deleted successfully"
+    "deleted_successfully": "Game post deleted successfully",
+    "leave_game": "Leave Game",
+    "left_successfully": "You have left the game"
   },
   "base_screen": {
     "home_title": "GameHub - Home",

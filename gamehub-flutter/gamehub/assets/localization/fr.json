@@ -130,7 +130,9 @@
     "delete_confirmation_message": "Êtes-vous sûr de vouloir supprimer ce jeu ? Cette action ne peut pas être annulée.",
     "cancel": "Annuler",
     "delete": "Supprimer",
-    "deleted_successfully": "Jeu supprimé avec succès"
+    "deleted_successfully": "Jeu supprimé avec succès",
+    "leave_game": "Quitter le jeu",
+    "left_successfully": "Vous avez quitté le jeu"
   },
   "base_screen": {
     "home_title": "GameHub - Accueil",

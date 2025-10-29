@@ -55,4 +55,12 @@ public class ParticipantsController {
                             @RequestParam("gamePostId") final Long gamePostId) {
         return participantsService.isUserJoined(user.getUserEntity().getId(), gamePostId);
     }
+
+    @RolesAllowed({ROLE_ADMIN, ROLE_USER})
+    @DeleteMapping("/leave")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void leaveGame(@AuthenticationPrincipal AppUserPrincipal user,
+                          @RequestParam("gamePostId") final Long gamePostId) {
+        participantsService.leaveGame(user.getUserEntity().getId(), gamePostId);
+    }
 }
