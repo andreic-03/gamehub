@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:geolocator/geolocator.dart';
 import '../../services/auth/auth_service.dart';
 import '../../services/user/user_service.dart';
 import '../../models/auth/auth_request_model.dart';
@@ -7,6 +8,7 @@ import '../../models/error/error_response.dart';
 import '../errors/api_error.dart';
 import 'base_view_model.dart';
 import '../utils/user_cache.dart';
+import '../utils/location_cache.dart';
 
 /// ViewModel that handles authentication-related business logic
 @injectable
@@ -35,6 +37,8 @@ class AuthViewModel extends BaseViewModel {
     _token = null;
     // Clear cached user data
     UserCache.clear();
+    // Clear cached location data
+    LocationCache.clear();
     notifyListeners();
   }
 
@@ -58,6 +62,14 @@ class AuthViewModel extends BaseViewModel {
         } catch (e) {
           // If we can't load user data, continue anyway - it will be loaded later
           // This prevents login from failing if there's an issue with the user endpoint
+        }
+        
+        // Cache user location immediately after successful login
+        try {
+          await _cacheUserLocation();
+        } catch (e) {
+          // If we can't get location, continue anyway - location can be fetched later
+          // This prevents login from failing if there's an issue with location permissions
         }
         
         return true;
@@ -116,6 +128,37 @@ class AuthViewModel extends BaseViewModel {
         throw 'An unexpected error occurred during logout. Please try again.';
       }
     }) ?? false;
+  }
+  
+  /// Caches the user's current location
+  Future<void> _cacheUserLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Check if location services are enabled
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      throw Exception('Location services are disabled.');
+    }
+
+    // Check for location permissions
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        throw Exception('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      throw Exception(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When permissions are granted, get the current position and cache it
+    final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    LocationCache.setPosition(position);
   }
   
   // TODO: Add these methods when the AuthService supports them

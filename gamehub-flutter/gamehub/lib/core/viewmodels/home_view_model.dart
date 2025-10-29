@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import '../../../models/game_post/game_post_response_model.dart';
 import '../../../services/game_post/game_post_service.dart';
 import 'base_view_model.dart';
+import '../utils/location_cache.dart';
 
 /// ViewModel that handles home screen business logic
 @injectable
@@ -31,9 +32,22 @@ class HomeViewModel extends BaseViewModel {
   Future<void> fetchGamePosts() async {
     await runBusyFuture(() async {
       try {
-        final position = await _determinePosition();
-        final latitude = position.latitude;
-        final longitude = position.longitude;
+        double latitude;
+        double longitude;
+        
+        // Try to use cached location first
+        if (LocationCache.hasLocation) {
+          latitude = LocationCache.cachedLatitude!;
+          longitude = LocationCache.cachedLongitude!;
+        } else {
+          // If no cached location, fetch it
+          final position = await _determinePosition();
+          latitude = position.latitude;
+          longitude = position.longitude;
+          
+          // Cache it for future use
+          LocationCache.setPosition(position);
+        }
         
         _gamePosts = await _gamePostService.findAllNearby(
           latitude, 

@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:dio/dio.dart';
 import 'custom_back_button.dart';
+import '../core/utils/location_cache.dart';
 
 class MapPickerWidget extends StatefulWidget {
   final LatLng? initialLocation;
@@ -47,9 +48,25 @@ class _MapPickerWidgetState extends State<MapPickerWidget> {
 
   Future<void> _getCurrentLocation() async {
     try {
-      final position = await Geolocator.getCurrentPosition();
+      double latitude;
+      double longitude;
+      
+      // Try to use cached location first
+      if (LocationCache.hasLocation) {
+        latitude = LocationCache.cachedLatitude!;
+        longitude = LocationCache.cachedLongitude!;
+      } else {
+        // If no cached location, fetch it
+        final position = await Geolocator.getCurrentPosition();
+        latitude = position.latitude;
+        longitude = position.longitude;
+        
+        // Cache it for future use
+        LocationCache.setPosition(position);
+      }
+      
       setState(() {
-        _selectedLocation = LatLng(position.latitude, position.longitude);
+        _selectedLocation = LatLng(latitude, longitude);
       });
     } catch (e) {
       // Fallback to a default location (e.g., Paris)

@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import '../../services/game_post/game_post_service.dart';
 import '../../config/injection.dart';
 import '../../core/utils/date_util.dart';
+import '../../core/utils/location_cache.dart';
 import '../../localization/localization_service.dart';
 
 class MapContent extends StatefulWidget {
@@ -30,13 +31,29 @@ class _MapContentState extends State<MapContent> {
 
   Future<void> _initializeMap() async {
     try {
-      final position = await _determinePosition();
+      double latitude;
+      double longitude;
+      
+      // Try to use cached location first
+      if (LocationCache.hasLocation) {
+        latitude = LocationCache.cachedLatitude!;
+        longitude = LocationCache.cachedLongitude!;
+      } else {
+        // If no cached location, fetch it
+        final position = await _determinePosition();
+        latitude = position.latitude;
+        longitude = position.longitude;
+        
+        // Cache it for future use
+        LocationCache.setPosition(position);
+      }
+      
       if (mounted) {
         setState(() {
-          _initialPosition = LatLng(position.latitude, position.longitude);
+          _initialPosition = LatLng(latitude, longitude);
         });
       }
-      await _fetchAndSetMarkers(position.latitude, position.longitude);
+      await _fetchAndSetMarkers(latitude, longitude);
     } catch (error) {
       // Handle initialization errors
       if (mounted) {
