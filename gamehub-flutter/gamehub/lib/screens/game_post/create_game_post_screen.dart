@@ -49,6 +49,7 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
       setState(() {
         _selectedDate = picked;
       });
+      _viewModel.setSelectedDate(_selectedDate);
     }
   }
 
@@ -65,6 +66,7 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
           _selectedTime.minute,
         );
       });
+      _viewModel.setSelectedTime(_selectedTime);
     }
   }
 
@@ -416,6 +418,18 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
                                 ),
                               ],
                             ),
+                            const SizedBox(height: 8),
+                            ListenableBuilder(
+                              listenable: _viewModel,
+                               builder: (context, child) {
+                                final errorText = _viewModel.validateDateTime(_viewModel.scheduledDateTime);
+                                 if (errorText == null) return const SizedBox.shrink();
+                                 return Text(
+                                   errorText,
+                                   style: TextStyle(color: Colors.red.shade700, fontSize: 12),
+                                 );
+                               },
+                             ),
                           ],
                         ),
                       ),
@@ -445,15 +459,8 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
                               ),
                               keyboardType: TextInputType.number,
                               onTap: _closeGameSuggestions,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'create_game_post.please_enter_max_participants'.localized;
-                                }
-                                if (int.tryParse(value) == null) {
-                                  return 'create_game_post.please_enter_valid_number'.localized;
-                                }
-                                return null;
-                              },
+                              validator: _viewModel.validateMaxParticipants,
+                              textInputAction: TextInputAction.next,
                             ),
                             const SizedBox(height: 16),
                             TextFormField(

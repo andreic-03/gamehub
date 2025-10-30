@@ -21,6 +21,27 @@ class CreateGamePostViewModel extends BaseViewModel {
 
   Timer? _searchDebounce;
 
+  DateTime _selectedDate = DateTime.now().add(const Duration(days: 1));
+  TimeOfDay _selectedTime = TimeOfDay.now();
+
+  void setSelectedDate(DateTime date) {
+    _selectedDate = date;
+    notifyListeners();
+  }
+
+  void setSelectedTime(TimeOfDay time) {
+    _selectedTime = time;
+    notifyListeners();
+  }
+
+  DateTime get scheduledDateTime => DateTime(
+        _selectedDate.year,
+        _selectedDate.month,
+        _selectedDate.day,
+        _selectedTime.hour,
+        _selectedTime.minute,
+      );
+
   Future<DateTime?> selectDate(BuildContext context, DateTime current, TimeOfDay selectedTime) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -61,13 +82,15 @@ class CreateGamePostViewModel extends BaseViewModel {
         return false;
       }
 
-      // Ensure date is at least 2 hours in the future
-      final now = DateTime.now();
-      final minAllowed = now.add(const Duration(hours: 2));
-      if (scheduledDate.isBefore(minAllowed)) {
+      // Validate form fields (location, participants, date-time)
+      if (!isFormValid(
+        location: locationController.text,
+        maxParticipants: maxParticipantsController.text,
+      )) {
+        setError('registration.please_fix_errors'.localized);
         CustomToast.showText(
           context,
-          'create_game_post.date_must_be_future'.localized,
+          'registration.please_fix_errors'.localized,
           backgroundColor: Colors.red,
         );
         return false;
@@ -108,6 +131,48 @@ class CreateGamePostViewModel extends BaseViewModel {
         return false;
       }
     }) ?? false;
+  }
+
+  /// Validates that scheduled date-time is at least current time + 2 hours
+  String? validateDateTime(DateTime scheduledDateTime) {
+    final DateTime minAllowed = DateTime.now().add(const Duration(hours: 2));
+    if (scheduledDateTime.isBefore(minAllowed)) {
+      return 'create_game_post.date_must_be_future'.localized;
+    }
+    return null;
+  }
+
+  String? validateLocation(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'create_game_post.please_enter_location'.localized;
+    }
+    return null;
+  }
+
+  String? validateMaxParticipants(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'create_game_post.max_participants_required'.localized;
+    }
+    final max = int.tryParse(value);
+    if (max == null) {
+      return 'create_game_post.please_enter_valid_number'.localized;
+    }
+    if (max < 2) {
+      return 'create_game_post.min_participants_two'.localized;
+    }
+    if (max > 100) {
+      return 'create_game_post.max_participants_limit'.localized;
+    }
+    return null;
+  }
+
+  bool isFormValid({
+    required String location,
+    required String maxParticipants,
+  }) {
+    return validateLocation(location) == null &&
+        validateMaxParticipants(maxParticipants) == null &&
+        validateDateTime(scheduledDateTime) == null;
   }
 
   void onGameNameChanged(
