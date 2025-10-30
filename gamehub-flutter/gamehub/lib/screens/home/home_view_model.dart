@@ -25,8 +25,8 @@ class HomeViewModel extends BaseViewModel {
   /// Sets the search range in kilometers and refreshes data
   Future<void> setSearchRange(double rangeInKm) async {
     _searchRangeInKm = rangeInKm;
-    // Persist the chosen range so a subsequent manual refresh can use it
-    LocationCache.setSearchRange(rangeInKm);
+    // Persist silently so navigation away/back restores this value
+    LocationCache.setSearchRangeSilent(rangeInKm);
   }
 
   /// Fetches game posts from the service based on the user's location

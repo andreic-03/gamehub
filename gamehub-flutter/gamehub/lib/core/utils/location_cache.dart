@@ -1,4 +1,5 @@
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter/foundation.dart';
 
 /// Global cache for user location data to avoid repeated API calls
 class LocationCache {
@@ -6,6 +7,7 @@ class LocationCache {
   static double? _cachedLongitude;
   static Position? _cachedPosition;
   static double? _cachedSearchRangeInKm;
+  static final ValueNotifier<int> searchRangeVersion = ValueNotifier<int>(0);
 
   /// Get the cached latitude
   static double? get cachedLatitude => _cachedLatitude;
@@ -36,6 +38,13 @@ class LocationCache {
   /// Set the cached search range in kilometers
   static void setSearchRange(double rangeInKm) {
     _cachedSearchRangeInKm = rangeInKm;
+    // Notify listeners that range changed
+    searchRangeVersion.value = searchRangeVersion.value + 1;
+  }
+
+  /// Set the cached search range without notifying listeners
+  static void setSearchRangeSilent(double rangeInKm) {
+    _cachedSearchRangeInKm = rangeInKm;
   }
 
   /// Check if location is cached
@@ -50,6 +59,8 @@ class LocationCache {
     _cachedLongitude = null;
     _cachedPosition = null;
     _cachedSearchRangeInKm = null;
+    // Reset version
+    searchRangeVersion.value = searchRangeVersion.value + 1;
   }
 }
 

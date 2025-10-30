@@ -8,6 +8,7 @@ import '../game_post/game_post_details_screen.dart';
 import '../base_screen.dart';
 import '../game_post/create_game_post_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../../core/utils/location_cache.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -56,6 +57,8 @@ class HomeContentState extends State<HomeContent> {
     _viewModel = getIt<HomeViewModel>();
     _pageController = PageController();
     _loadData();
+    // Refresh automatically when search range changes elsewhere (e.g., Settings)
+    LocationCache.searchRangeVersion.addListener(_onExternalRangeChanged);
   }
 
   // Method to refresh data that can be called externally
@@ -95,7 +98,13 @@ class HomeContentState extends State<HomeContent> {
   @override
   void dispose() {
     _pageController.dispose();
+    LocationCache.searchRangeVersion.removeListener(_onExternalRangeChanged);
     super.dispose();
+  }
+
+  void _onExternalRangeChanged() {
+    // When range changes, refresh data and reset to first page
+    refreshData();
   }
 
   @override
