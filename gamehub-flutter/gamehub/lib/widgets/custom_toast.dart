@@ -7,6 +7,8 @@ class CustomToast {
     String message, {
     Duration duration = const Duration(seconds: 2),
     double bottomOffset = 96,
+    Color backgroundColor = Colors.black87,
+    Color textColor = Colors.white,
   }) {
     final fToast = FToast();
     fToast.init(context);
@@ -25,7 +27,7 @@ class CustomToast {
         margin: const EdgeInsets.symmetric(horizontal: 16.0),
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
         decoration: BoxDecoration(
-          color: Colors.black87,
+          color: backgroundColor,
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: Row(
@@ -34,7 +36,7 @@ class CustomToast {
             Flexible(
               child: Text(
                 message,
-                style: const TextStyle(color: Colors.white),
+                style: TextStyle(color: textColor),
               ),
             ),
           ],

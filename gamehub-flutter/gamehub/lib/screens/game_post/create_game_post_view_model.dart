@@ -3,7 +3,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import '../../config/injection.dart';
-import '../../core/utils/error_util.dart';
+import '../../widgets/custom_toast.dart';
+import '../../localization/localized_text.dart';
+import '../../core/errors/api_error.dart';
 import '../../core/viewmodels/base_view_model.dart';
 import '../../models/game/games_response_model.dart';
 import '../../models/game_post/game_post_request_model.dart';
@@ -38,7 +40,7 @@ class CreateGamePostViewModel extends BaseViewModel {
     return picked;
   }
 
-  Future<void> createGamePost({
+  Future<bool> createGamePost({
     required BuildContext context,
     required TextEditingController gameIdController,
     required TextEditingController locationController,
@@ -48,34 +50,27 @@ class CreateGamePostViewModel extends BaseViewModel {
     required TextEditingController maxParticipantsController,
     required TextEditingController descriptionController,
   }) async {
-    await runBusyFuture(() async {
+    return await runBusyFuture(() async {
       // Validate coordinates
       if (latitude == null || longitude == null) {
-        ErrorUtil.showErrorDialog(
+        CustomToast.showText(
           context,
-          {
-            'code': 'VALIDATION_ERROR',
-            'message': 'Location Required',
-            'details': ['Please select a location on the map'],
-            'errorType': 'VALIDATION_ERROR'
-          },
+          'create_game_post.select_location_on_map'.localized,
+          backgroundColor: Colors.red,
         );
-        return;
+        return false;
       }
 
-      // Ensure date is in the future
+      // Ensure date is at least 2 hours in the future
       final now = DateTime.now();
-      if (scheduledDate.isBefore(now)) {
-        ErrorUtil.showErrorDialog(
+      final minAllowed = now.add(const Duration(hours: 2));
+      if (scheduledDate.isBefore(minAllowed)) {
+        CustomToast.showText(
           context,
-          {
-            'code': 'VALIDATION_ERROR',
-            'message': 'Invalid Date',
-            'details': ['Selected date must be in the future'],
-            'errorType': 'VALIDATION_ERROR'
-          },
+          'create_game_post.date_must_be_future'.localized,
+          backgroundColor: Colors.red,
         );
-        return;
+        return false;
       }
 
       try {
@@ -90,10 +85,29 @@ class CreateGamePostViewModel extends BaseViewModel {
         );
 
         await _gamePostService.createGamePost(request);
+        return true;
       } catch (e) {
-        ErrorUtil.showErrorDialog(context, e);
+        String message;
+        try {
+          if (e is DioException) {
+            final apiError = ApiError.fromDioError(e);
+            message = apiError.message;
+          } else if (e is ApiError) {
+            message = e.message;
+          } else {
+            message = '${'create_game_post.error_creating'.localized}: $e';
+          }
+        } catch (_) {
+          message = '${'create_game_post.error_creating'.localized}: $e';
+        }
+        CustomToast.showText(
+          context,
+          message,
+          backgroundColor: Colors.red,
+        );
+        return false;
       }
-    });
+    }) ?? false;
   }
 
   void onGameNameChanged(

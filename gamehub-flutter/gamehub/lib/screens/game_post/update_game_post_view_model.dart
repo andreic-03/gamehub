@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import '../../core/errors/api_error.dart';
+import '../../widgets/custom_toast.dart';
+import '../../localization/localized_text.dart';
 import '../../models/game_post/game_post_request_model.dart';
 import '../../models/game_post/game_post_response_model.dart';
 import '../../services/game_post/game_post_service.dart';
@@ -86,72 +88,44 @@ class UpdateGamePostViewModel extends ChangeNotifier {
   
   String? validateLocation(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Location is required';
+      return 'create_game_post.location_required'.localized;
     }
     return null;
   }
-  
-  String? validateLatitude(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Latitude is required';
-    }
-    final lat = double.tryParse(value);
-    if (lat == null) {
-      return 'Please enter a valid latitude';
-    }
-    if (lat < -90 || lat > 90) {
-      return 'Latitude must be between -90 and 90';
-    }
-    return null;
-  }
-  
-  String? validateLongitude(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Longitude is required';
-    }
-    final lng = double.tryParse(value);
-    if (lng == null) {
-      return 'Please enter a valid longitude';
-    }
-    if (lng < -180 || lng > 180) {
-      return 'Longitude must be between -180 and 180';
-    }
-    return null;
-  }
-  
+
   String? validateMaxParticipants(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Max participants is required';
+      return 'create_game_post.max_participants_required'.localized;
     }
     final max = int.tryParse(value);
     if (max == null) {
-      return 'Please enter a valid number';
+      return 'create_game_post.please_enter_valid_number'.localized;
     }
     if (max < 2) {
-      return 'Must have at least 2 participants';
+      return 'create_game_post.min_participants_two'.localized;
     }
     if (max > 100) {
-      return 'Maximum 100 participants allowed';
+      return 'create_game_post.max_participants_limit'.localized;
     }
     if (max < originalGamePost.currentParticipantCount) {
-      return 'Cannot be less than current participants (${originalGamePost.currentParticipantCount})';
+      return 'create_game_post.cannot_be_less_than_current'.localized
+          .replaceAll('{count}', originalGamePost.currentParticipantCount.toString());
     }
     return null;
   }
   
   String? validateDescription(String? value) {
     if (value != null && value.length > 500) {
-      return 'Description must be less than 500 characters';
+      return 'create_game_post.description_max_500'.localized;
     }
     return null;
   }
   
   bool get isFormValid {
     return validateLocation(locationController.text) == null &&
-           validateLatitude(latitudeController.text) == null &&
-           validateLongitude(longitudeController.text) == null &&
-           validateMaxParticipants(maxParticipantsController.text) == null &&
-           validateDescription(descriptionController.text) == null;
+            validateMaxParticipants(maxParticipantsController.text) == null &&
+            validateDescription(descriptionController.text) == null &&
+            validateDateTime() == null;
   }
   
   DateTime get scheduledDateTime {
@@ -163,11 +137,23 @@ class UpdateGamePostViewModel extends ChangeNotifier {
       _selectedTime.minute,
     );
   }
+
+  /// Validates that scheduled date-time is at least current time + 2 hours
+  String? validateDateTime() {
+    final DateTime minAllowed = DateTime.now().add(const Duration(hours: 2));
+    final DateTime selected = scheduledDateTime;
+    if (selected.isBefore(minAllowed)) {
+      return 'create_game_post.date_must_be_future'.localized;
+    }
+    return null;
+  }
   
-  Future<GamePostResponseModel?> updateGamePost() async {
+  Future<GamePostResponseModel?> updateGamePost({required BuildContext context}) async {
     if (!isFormValid) {
-      _error = 'Please fix all validation errors';
+      _error = 'registration.please_fix_errors'.localized;
       notifyListeners();
+      // Brief user-facing feedback
+      CustomToast.showText(context, 'registration.please_fix_errors'.localized, backgroundColor: Colors.red);
       return null;
     }
     
@@ -200,12 +186,20 @@ class UpdateGamePostViewModel extends ChangeNotifier {
       _lastException = e;
       
       // Handle specific API errors
+      String message;
       if (e is DioException) {
         final apiError = ApiError.fromDioError(e);
         _error = apiError.userFriendlyMessage;
+        message = apiError.message;
+      } else if (e is ApiError) {
+        _error = e.userFriendlyMessage;
+        message = e.message;
       } else {
         _error = e.toString();
+        message = e.toString();
       }
+      // Show toast with only the API message
+      CustomToast.showText(context, message, backgroundColor: Colors.red);
       
       notifyListeners();
       return null;

@@ -81,7 +81,7 @@ class _UpdateGamePostScreenState extends State<UpdateGamePostScreen> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Hosted by ${widget.gamePost.hostName}',
+                                  'game_post.hosted_by'.localized.replaceAll('{name}', widget.gamePost.hostName),
                                   style: TextStyle(
                                     color: Colors.grey[600],
                                     fontSize: 14,
@@ -96,9 +96,9 @@ class _UpdateGamePostScreenState extends State<UpdateGamePostScreen> {
                   ),
                 ),
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               // Location Card
               Card(
                 child: Padding(
@@ -131,8 +131,8 @@ class _UpdateGamePostScreenState extends State<UpdateGamePostScreen> {
                           icon: const Icon(Icons.map),
                           label: Text(
                             _viewModel.hasCoordinates()
-                                ? 'Location Selected ✓'
-                                : 'Select Location on Map',
+                                ? 'create_game_post.location_selected'.localized
+                                : 'create_game_post.select_location_on_map_button'.localized,
                           ),
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 16),
@@ -147,9 +147,9 @@ class _UpdateGamePostScreenState extends State<UpdateGamePostScreen> {
                   ),
                 ),
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               // Date & Time Card
               Card(
                 child: Padding(
@@ -244,13 +244,25 @@ class _UpdateGamePostScreenState extends State<UpdateGamePostScreen> {
                           ),
                         ],
                       ),
+                      const SizedBox(height: 8),
+                      ListenableBuilder(
+                        listenable: _viewModel,
+                        builder: (context, child) {
+                          final errorText = _viewModel.validateDateTime();
+                          if (errorText == null) return const SizedBox.shrink();
+                          return Text(
+                            'create_game_post.date_must_be_future'.localized,
+                            style: TextStyle(color: Colors.red.shade700, fontSize: 12),
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               // Participants & Description Card
               Card(
                 child: Padding(
@@ -292,9 +304,9 @@ class _UpdateGamePostScreenState extends State<UpdateGamePostScreen> {
                   ),
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Save Button
               SizedBox(
                 width: double.infinity,
@@ -328,34 +340,8 @@ class _UpdateGamePostScreenState extends State<UpdateGamePostScreen> {
                   },
                 ),
               ),
-              
+
               const SizedBox(height: 16),
-              
-              // Error Message
-              ListenableBuilder(
-                listenable: _viewModel,
-                builder: (context, child) {
-                  if (_viewModel.error == null) return const SizedBox.shrink();
-                  
-                  return Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.red.shade50,
-                      border: Border.all(color: Colors.red.shade200),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      _viewModel.error!,
-                      style: TextStyle(
-                        color: Colors.red.shade700,
-                        fontSize: 14,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  );
-                },
-              ),
             ],
             ),
             ),
@@ -371,7 +357,7 @@ class _UpdateGamePostScreenState extends State<UpdateGamePostScreen> {
 
   Future<void> _saveGamePost() async {
     if (_formKey.currentState!.validate()) {
-      final updated = await _viewModel.updateGamePost();
+      final updated = await _viewModel.updateGamePost(context: context);
       if (updated != null && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -380,9 +366,6 @@ class _UpdateGamePostScreenState extends State<UpdateGamePostScreen> {
           ),
         );
         Navigator.pop(context, updated); // Return updated model to details
-      } else if (updated == null && mounted && _viewModel.lastException != null) {
-        // Show API error using the same snackbar utility
-        ErrorUtil.showErrorSnackBar(context, _viewModel.lastException!);
       }
     }
   }

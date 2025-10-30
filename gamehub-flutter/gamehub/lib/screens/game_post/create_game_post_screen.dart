@@ -104,7 +104,7 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
       _isLoading = true;
     });
 
-    await _viewModel.createGamePost(
+    final success = await _viewModel.createGamePost(
       context: context,
       gameIdController: _gameIdController,
       locationController: _locationController,
@@ -120,9 +120,9 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
       _isLoading = false;
     });
     if (!mounted) return;
-    
-    // Return true to indicate successful creation
-    Navigator.pop(context, true);
+    if (success) {
+      Navigator.pop(context, true);
+    }
   }
 
   @override
@@ -308,8 +308,8 @@ class _CreateGamePostScreenState extends State<CreateGamePostScreen> {
                                 icon: const Icon(Icons.map),
                                 label: Text(
                                   _selectedLatitude != null && _selectedLongitude != null
-                                      ? 'Location Selected ✓'
-                                      : 'Select Location on Map',
+                                      ? 'create_game_post.location_selected'.localized
+                                      : 'create_game_post.select_location_on_map_button'.localized,
                                 ),
                                 style: ElevatedButton.styleFrom(
                                   padding: const EdgeInsets.symmetric(vertical: 16),
