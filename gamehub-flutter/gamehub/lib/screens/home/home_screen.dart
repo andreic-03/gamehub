@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gamehub/models/game_post/game_post_response_model.dart';
 import '../../config/injection.dart';
 import 'home_view_model.dart';
 import '../../core/utils/date_util.dart';
@@ -8,6 +7,7 @@ import '../../localization/localization_service.dart';
 import '../game_post/game_post_details_screen.dart';
 import '../base_screen.dart';
 import '../game_post/create_game_post_screen.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -74,11 +74,22 @@ class HomeContentState extends State<HomeContent> {
   // Method to check if there are game posts available
   bool get hasGamePosts => _viewModel.gamePosts.isNotEmpty;
 
-  Future<void> _loadData() async {
+  Future<void> _loadData({bool userInitiated = false}) async {
     await _viewModel.fetchGamePosts();
-    if (mounted) {
-      setState(() {});
+    if (!mounted) return;
+    setState(() {});
+    if (userInitiated && _viewModel.gamePosts.isEmpty && !_viewModel.isLoading && !_viewModel.hasError) {
+      _showNoGamesToast();
     }
+  }
+
+  void _showNoGamesToast() {
+    final message = '${'home.no_games'.localized}. ${'home.refresh'.localized}';
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+    );
   }
 
   @override
@@ -145,7 +156,7 @@ class HomeContentState extends State<HomeContent> {
             ),
             const SizedBox(height: 24),
             ElevatedButton(
-              onPressed: _loadData,
+              onPressed: () => _loadData(userInitiated: true),
               child: LocalizedText('home.refresh'),
             ),
           ],

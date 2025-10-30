@@ -6,6 +6,8 @@ import '../../localization/localization_service.dart';
 import '../../widgets/custom_back_button.dart';
 import 'change_password_screen.dart';
 import 'settings_view_model.dart';
+import '../../core/utils/location_cache.dart';
+import 'search_range_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -17,6 +19,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   late final SettingsViewModel _viewModel;
   late final LocalizationService _localizationService;
+  double _rangeInKm = 15.0;
 
   @override
   void initState() {
@@ -24,6 +27,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _viewModel = getIt<SettingsViewModel>();
     _localizationService = LocalizationService.instance;
     _viewModel.initialize();
+    // Initialize range from cache if available
+    if (LocationCache.hasSearchRange && LocationCache.cachedSearchRangeInKm != null) {
+      _rangeInKm = LocationCache.cachedSearchRangeInKm!;
+    }
   }
 
   @override
@@ -67,6 +74,69 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   child: Text(
                                     _viewModel.selectedLanguage,
                                     style: const TextStyle(fontSize: 16),
+                                  ),
+                                ),
+                                const Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                  color: Colors.grey,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                // Search Range Section
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const LocalizedText(
+                          'settings.search_range',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        InkWell(
+                          onTap: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const SearchRangeScreen(),
+                              ),
+                            );
+                            setState(() {
+                              if (LocationCache.hasSearchRange && LocationCache.cachedSearchRangeInKm != null) {
+                                _rangeInKm = LocationCache.cachedSearchRangeInKm!;
+                              }
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.tune,
+                                  color: Colors.blue,
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: ListenableBuilder(
+                                    listenable: LocalizationService.instance,
+                                    builder: (context, child) {
+                                      return Text(
+                                        '${'settings.change_search_range'.localized}: ${_rangeInKm.round()} ${'home.km'.localized}',
+                                        style: const TextStyle(fontSize: 16),
+                                      );
+                                    },
                                   ),
                                 ),
                                 const Icon(

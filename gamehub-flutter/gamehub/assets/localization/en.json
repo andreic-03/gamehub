@@ -46,6 +46,8 @@
     "title": "Settings",
     "language": "Language",
     "security": "Security",
+    "search_range": "Search range",
+    "change_search_range": "Change search range",
     "more_settings": "More Settings",
     "more_settings_description": "Additional settings will be added here in future updates.",
     "select_language": "Select Language",

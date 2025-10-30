@@ -46,6 +46,8 @@
     "title": "Setări",
     "language": "Limbă",
     "security": "Securitate",
+    "search_range": "Raza de căutare",
+    "change_search_range": "Schimbă raza de căutare",
     "more_settings": "Mai multe setări",
     "more_settings_description": "Setări suplimentare vor fi adăugate aici în actualizările viitoare.",
     "select_language": "Selectează limba",

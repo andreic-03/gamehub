@@ -46,6 +46,8 @@
     "title": "Paramètres",
     "language": "Langue",
     "security": "Sécurité",
+    "search_range": "Rayon de recherche",
+    "change_search_range": "Modifier le rayon de recherche",
     "more_settings": "Plus de paramètres",
     "more_settings_description": "Des paramètres supplémentaires seront ajoutés ici dans les futures mises à jour.",
     "select_language": "Sélectionner la langue",
