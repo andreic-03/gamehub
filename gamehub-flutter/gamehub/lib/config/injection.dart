@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../core/viewmodels/auth_view_model.dart';
-import '../core/viewmodels/home_view_model.dart';
+import '../screens/home/home_view_model.dart';
 import '../core/errors/api_error.dart';
 import '../interceptors/auth_interceptor.dart';
 import '../network/network_constants.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:gamehub/core/viewmodels/auth_view_model.dart';
-import 'package:gamehub/screens/home/home_view_model.dart';
+import 'package:gamehub/screens/home/home_screen.dart';
 import 'package:gamehub/screens/login/login_screen.dart';
 import 'package:gamehub/config/injection.dart';
 import 'package:gamehub/ui/theme/theme.dart';

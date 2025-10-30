@@ -5,7 +5,6 @@ import '../../config/injection.dart';
 import '../../core/viewmodels/auth_view_model.dart';
 import '../../localization/localized_text.dart';
 import '../../localization/localization_service.dart';
-import '../home/home_view_model.dart';
 import '../registration/registration_screen.dart';
 
 class LoginScreen extends StatelessWidget {

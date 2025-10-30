@@ -1,11 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:gamehub/models/game_post/game_post_response_model.dart';
 import '../../config/injection.dart';
-import '../../core/viewmodels/home_view_model.dart';
+import 'home_view_model.dart';
 import '../../core/utils/date_util.dart';
 import '../../localization/localized_text.dart';
 import '../../localization/localization_service.dart';
 import '../game_post/game_post_details_screen.dart';
+import '../base_screen.dart';
+import '../game_post/create_game_post_screen.dart';
+
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<BaseScreenState> _baseScreenKey = GlobalKey<BaseScreenState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return BaseScreen(
+      key: _baseScreenKey,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CreateGamePostScreen(),
+            ),
+          );
+          if (result == true && _baseScreenKey.currentState != null) {
+            await _baseScreenKey.currentState!.refreshHomeContent();
+          }
+        },
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
+    );
+  }
+}
 
 class HomeContent extends StatefulWidget {
   const HomeContent({super.key});
