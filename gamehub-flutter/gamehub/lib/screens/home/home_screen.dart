@@ -9,6 +9,7 @@ import '../base_screen.dart';
 import '../game_post/create_game_post_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../core/utils/location_cache.dart';
+import '../../widgets/custom_toast.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -88,11 +89,7 @@ class HomeContentState extends State<HomeContent> {
 
   void _showNoGamesToast() {
     final message = '${'home.no_games'.localized}. ${'home.refresh'.localized}';
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-    );
+    CustomToast.showText(context, message, bottomOffset: 96);
   }
 
   @override
