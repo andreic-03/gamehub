@@ -124,15 +124,11 @@ class HomeContentState extends State<HomeContent> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             LocalizedText('home.no_games'),
-            ElevatedButton(
-              onPressed: _loadData,
-              child: LocalizedText('home.refresh'),
-            ),
             Slider(
               value: _viewModel.searchRangeInKm,
-              min: 1.0,
+              min: 0.0,
               max: 50.0,
-              divisions: 49,
+              divisions: 5,
               label: '${_viewModel.searchRangeInKm.round()} km',
               onChanged: (double value) async {
                 await _viewModel.setSearchRange(value);
@@ -146,6 +142,11 @@ class HomeContentState extends State<HomeContent> {
               builder: (context, child) {
                 return Text('${'home.search_range'.localized}: ${_viewModel.searchRangeInKm.round()} ${'home.km'.localized}');
               },
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: _loadData,
+              child: LocalizedText('home.refresh'),
             ),
           ],
         ),

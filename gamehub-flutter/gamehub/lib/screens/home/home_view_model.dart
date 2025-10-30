@@ -25,7 +25,8 @@ class HomeViewModel extends BaseViewModel {
   /// Sets the search range in kilometers and refreshes data
   Future<void> setSearchRange(double rangeInKm) async {
     _searchRangeInKm = rangeInKm;
-    await fetchGamePosts();
+    // Persist the chosen range so a subsequent manual refresh can use it
+    LocationCache.setSearchRange(rangeInKm);
   }
 
   /// Fetches game posts from the service based on the user's location
@@ -49,10 +50,17 @@ class HomeViewModel extends BaseViewModel {
           LocationCache.setPosition(position);
         }
         
+        final effectiveRangeKm = LocationCache.hasSearchRange
+            ? LocationCache.cachedSearchRangeInKm!
+            : _searchRangeInKm;
+
+        // Keep local state in sync with cached preference so UI reflects it
+        _searchRangeInKm = effectiveRangeKm;
+
         _gamePosts = await _gamePostService.findAllNearby(
           latitude, 
           longitude, 
-          _searchRangeInKm
+          effectiveRangeKm
         );
         
         return _gamePosts;
