@@ -14,7 +14,6 @@ import '../services/game_post/game_post_service.dart';
 import '../services/user/user_service.dart';
 import '../services/game/game_service.dart';
 import '../services/participants/participants_service.dart';
-import '../screens/game_post/create_game_post_view_model.dart';
 import '../screens/profile/profile_view_model.dart';
 import '../screens/settings/settings_view_model.dart';
 import '../screens/registration/registration_view_model.dart';
@@ -113,10 +112,6 @@ Future<void> configureDependencies() async {
   getIt.registerLazySingleton<AuthViewModel>(() => AuthViewModel(getIt<AuthService>(), getIt<UserService>()));
   getIt.registerFactory<HomeViewModel>(() => HomeViewModel(getIt<GamePostService>()));
   getIt.registerFactory<ProfileViewModel>(() => ProfileViewModel(getIt<UserService>()));
-  getIt.registerFactory<CreateGamePostViewModel>(() => CreateGamePostViewModel(
-        getIt<GamePostService>(),
-        getIt<GameService>(),
-      ));
   getIt.registerFactory<SettingsViewModel>(() => SettingsViewModel());
   getIt.registerFactory<RegistrationViewModel>(() => RegistrationViewModel(getIt<UserService>()));
   getIt.registerFactory<MyGamePostsViewModel>(() => MyGamePostsViewModel(getIt<GamePostService>()));

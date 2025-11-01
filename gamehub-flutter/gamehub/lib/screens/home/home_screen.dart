@@ -6,7 +6,7 @@ import '../../localization/localized_text.dart';
 import '../../localization/localization_service.dart';
 import '../game_post/game_post_details_screen.dart';
 import '../base_screen.dart';
-import '../game_post/create_game_post_screen.dart';
+import '../game_post/edit_game_post_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../core/utils/location_cache.dart';
 import '../../widgets/custom_toast.dart';
@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
           final result = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const CreateGamePostScreen(),
+              builder: (context) => const EditGamePostScreen(),
             ),
           );
           if (result == true && _baseScreenKey.currentState != null) {

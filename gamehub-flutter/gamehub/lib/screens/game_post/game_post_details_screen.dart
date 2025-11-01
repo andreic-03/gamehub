@@ -7,7 +7,7 @@ import '../../localization/localized_text.dart';
 import '../../localization/localization_service.dart';
 import '../../widgets/custom_back_button.dart';
 import 'game_post_details_view_model.dart';
-import 'update_game_post_screen.dart';
+import 'edit_game_post_screen.dart';
 
 class GamePostDetailsScreen extends StatefulWidget {
   final GamePostResponseModel gamePost;
@@ -44,7 +44,7 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => UpdateGamePostScreen(
+        builder: (context) => EditGamePostScreen(
           gamePost: _currentGamePost,
         ),
       ),
