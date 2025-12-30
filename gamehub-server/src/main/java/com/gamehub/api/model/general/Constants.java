@@ -18,6 +18,7 @@ public final class Constants {
     public static final String API_GAMES = "/games";
     public static final String API_PARTICIPANTS = "/participants";
     public static final String API_REVIEWS = "/reviews";
+    public static final String API_MESSAGES = "/messages";
 
     public static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     public static final String ACCESS_TOKEN_PREFIX_NAME = "Bearer";

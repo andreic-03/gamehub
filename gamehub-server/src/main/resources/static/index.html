@@ -8,6 +8,7 @@
 
 	<script type="text/javascript">
 		var stompClient = null;
+		var currentSubscription = null;
 		var authToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjoiQURNSU4iLCJpYXQiOjE3MTkyMTUyNzMsImV4cCI6MTcxOTMwMTY3M30.Zj0MhV8JZCkrg0vXLbl8FR4nmdk4px27qQiRvKSfpIUrVQ36mHOGMMvNw0D1t01dt8BwBfg4amU6gEQysFMEcg';
 
 		function setConnected(connected) {
@@ -24,13 +25,39 @@
 			stompClient.connect({}, function(frame) {
 				setConnected(true);
 				console.log('Connected: ' + frame);
-				stompClient.subscribe('/topic', function(messagesModel) {
-					showMessageOutput(JSON.parse(messagesModel.body));
-				});
+				// Subscribe to a specific game post topic after connection
+				subscribeToGamePost();
 			});
 		}
 
+		function subscribeToGamePost() {
+			var postId = document.getElementById('postId').value;
+			if (!postId || postId.trim() === '') {
+				alert('Please enter a Game Post ID to subscribe');
+				return;
+			}
+
+			// Unsubscribe from previous topic if any
+			if (currentSubscription) {
+				currentSubscription.unsubscribe();
+			}
+
+			// Subscribe to the specific game post topic
+			// Format: /topic/gamePost/{gamePostId}
+			var topic = '/topic/gamePost/' + postId;
+			currentSubscription = stompClient.subscribe(topic, function(messagesModel) {
+				showMessageOutput(JSON.parse(messagesModel.body));
+			});
+			
+			console.log('Subscribed to topic: ' + topic);
+			alert('Subscribed to Game Post: ' + postId);
+		}
+
 		function disconnect() {
+			if(currentSubscription) {
+				currentSubscription.unsubscribe();
+				currentSubscription = null;
+			}
 			if(stompClient != null) {
 				stompClient.disconnect();
 			}
@@ -39,10 +66,28 @@
 		}
 
 		function sendMessage() {
-			var from = document.getElementById('from').value;
 			var postId = document.getElementById('postId').value;
 			var messageContent = document.getElementById('text').value;
-			stompClient.send("/app/chat.sendMessage", {}, JSON.stringify({'senderUsername':from, 'gamePostId':postId, 'messageContent':messageContent}));
+			
+			if (!postId || postId.trim() === '') {
+				alert('Please enter a Game Post ID');
+				return;
+			}
+			
+			if (!messageContent || messageContent.trim() === '') {
+				alert('Please enter a message');
+				return;
+			}
+
+			// Note: senderUsername is ignored - server uses authenticated user
+			// Only gamePostId and messageContent are needed
+			stompClient.send("/app/chat.sendMessage", {}, JSON.stringify({
+				'gamePostId': parseInt(postId),
+				'messageContent': messageContent
+			}));
+			
+			// Clear input after sending
+			document.getElementById('text').value = '';
 		}
 
 		function showMessageOutput(messagesModel) {
@@ -58,22 +103,26 @@
 
 <body onload="disconnect()">
 <div>
+	<h2>GameHub Chat WebSocket Test</h2>
+	<p><strong>Note:</strong> Messages are now sent to specific game post topics. Only users subscribed to the same game post will receive messages.</p>
 	<div>
-		<input type="text" id="from" placeholder="Choose a nickname"/>
-	</div>
-	<div>
-		<input type="text" id="postId" placeholder="Choose a postID"/>
+		<label>Game Post ID:</label>
+		<input type="number" id="postId" placeholder="Enter Game Post ID"/>
+		<button onclick="subscribeToGamePost();" style="margin-left: 10px;">Subscribe to Game Post</button>
 	</div>
 	<br />
 	<div>
-		<button id="connect" onclick="connect();">Connect</button>
+		<button id="connect" onclick="connect();">Connect WebSocket</button>
 		<button id="disconnect" disabled="disabled" onclick="disconnect();">Disconnect</button>
 	</div>
 	<br />
 	<div id="conversationDiv" style="visibility: hidden;">
-		<input type="text" id="text" placeholder="Write a message..."/>
-		<button id="sendMessage" onclick="sendMessage();">Send</button>
-		<p id="response"></p>
+		<div>
+			<input type="text" id="text" placeholder="Write a message..." style="width: 70%;"/>
+			<button id="sendMessage" onclick="sendMessage();">Send</button>
+		</div>
+		<h3>Messages:</h3>
+		<div id="response" style="border: 1px solid #ccc; padding: 10px; max-height: 400px; overflow-y: auto;"></div>
 	</div>
 </div>
 </body>

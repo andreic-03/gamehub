@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -38,5 +40,27 @@ public class MessagesServiceImpl implements MessagesService {
         messages.setSentAt(new Timestamp(System.currentTimeMillis()));
 
         messagesRepository.save(messages);
+    }
+
+    @Override
+    public List<MessagesModel> getMessagesByGamePostId(Long gamePostId) {
+        // Verify game post exists
+        gamePostsRepository.findById(gamePostId)
+                .orElseThrow(() -> new GamehubNotFoundException(ErrorType.GAME_POST_NOT_FOUND));
+
+        List<MessagesEntity> messagesEntities = messagesRepository.findByGamePost_PostIdOrderBySentAtAsc(gamePostId);
+        
+        return messagesEntities.stream()
+                .map(this::convertToModel)
+                .collect(Collectors.toList());
+    }
+
+    private MessagesModel convertToModel(MessagesEntity entity) {
+        MessagesModel model = new MessagesModel();
+        model.setGamePostId(entity.getGamePost().getPostId());
+        model.setSenderUsername(entity.getSenderUser().getUsername());
+        model.setMessageContent(entity.getMessageContent());
+        model.setSentAt(entity.getSentAt());
+        return model;
     }
 }
