@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
 class DateUtil {
@@ -24,7 +25,9 @@ class DateUtil {
       return DateFormat('yyyy-MM-dd HH:mm').format(dateTime);
     } catch (e) {
       // If parsing fails, return the original string
-      print('Error parsing date: $dateString, error: $e');
+      if (kDebugMode) {
+        debugPrint('Error parsing date: $dateString, error: $e');
+      }
       return dateString;
     }
   }

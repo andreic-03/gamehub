@@ -46,7 +46,9 @@ class LocalizationService extends ChangeNotifier {
       );
       _localizedStrings = json.decode(jsonString);
     } catch (e) {
-      print('Error loading localization file: $e');
+      if (kDebugMode) {
+        debugPrint('Error loading localization file: $e');
+      }
       // Fallback to English if current language fails
       if (_currentLanguage != 'en') {
         _currentLanguage = 'en';

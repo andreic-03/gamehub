@@ -15,6 +15,8 @@ class ProfileContent extends StatefulWidget {
 }
 
 class _ProfileContentState extends State<ProfileContent> {
+  static const double _topPadding = 150.0;
+
   late ProfileViewModel _profileViewModel;
   UserResponseModel? _user;
 
@@ -44,7 +46,7 @@ class _ProfileContentState extends State<ProfileContent> {
               : _user != null
                   ? SingleChildScrollView(
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 150.0, left: 50.0, right: 50.0),
+                        padding: const EdgeInsets.only(top: _topPadding, left: 50.0, right: 50.0),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -188,6 +190,18 @@ class _ProfileContentState extends State<ProfileContent> {
                               style: const TextStyle(color: Colors.red),
                             ),
                     ),
+          // Background barrier to hide scrolling content behind back button
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: _topPadding,
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
+            ),
+          ),
           // Custom back button
           CustomBackButton(
             heroTag: "profile_back_button",

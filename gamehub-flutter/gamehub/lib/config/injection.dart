@@ -1,7 +1,7 @@
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 
 import '../core/viewmodels/auth_view_model.dart';
@@ -33,54 +33,20 @@ Future<void> configureDependencies() async {
   getIt.registerLazySingleton<Map<String, String>>(() => NetworkConstants.headers);
   getIt.registerLazySingleton<String>(() => NetworkConstants.baseURL, instanceName: 'baseURL');
 
-  // 2. Create Dio instance without interceptors initially
-  final dio = Dio()
-    ..options.headers = NetworkConstants.headers;
-  
-  // Add global error handling interceptor
-  dio.interceptors.add(
-    InterceptorsWrapper(
-      onError: (DioException error, ErrorInterceptorHandler handler) {
-        // Log the error in detail
-        print('--- API Error Interceptor ---');
-        print('API Error Path: ${error.requestOptions.path}');
-        print('API Error Type: ${error.type}');
-        print('API Error Message: ${error.message}');
-        
-        if (error.response != null) {
-          print('Response Status: ${error.response?.statusCode}');
-          print('Response Data: ${error.response?.data}');
-        }
+  // 2. Create Dio instance with timeouts
+  final dio = Dio(BaseOptions(
+    headers: NetworkConstants.headers,
+    connectTimeout: NetworkConstants.connectTimeout,
+    receiveTimeout: NetworkConstants.receiveTimeout,
+    sendTimeout: NetworkConstants.sendTimeout,
+  ));
 
-        try {
-          // Process all error responses
-          if (error.response != null) {
-            try {
-              final apiError = ApiError.fromDioError(error);
-              print('Parsed ApiError: ${apiError.code} - ${apiError.message}');
-              
-              return handler.reject(
-                DioException(
-                  requestOptions: error.requestOptions,
-                  response: error.response,
-                  type: error.type,
-                  error: apiError,
-                  message: apiError.userFriendlyMessage,
-                ),
-              );
-            } catch (e) {
-              print('Error in error intercept: $e');
-            }
-          }
-        } catch (e) {
-          print('Exception in error interceptor: $e');
-        }
-        
-        return handler.next(error);
-      },
-    ),
-  );
-  
+  // Add retry interceptor for transient failures
+  dio.interceptors.add(_RetryInterceptor(dio));
+
+  // Add global error handling interceptor
+  dio.interceptors.add(_ErrorInterceptor());
+
   getIt.registerLazySingleton<Dio>(() => dio);
 
   // 3. Register Services
@@ -88,12 +54,12 @@ Future<void> configureDependencies() async {
     getIt<Dio>(),
     baseUrl: NetworkConstants.baseURL,
   ));
-  
+
   getIt.registerLazySingleton<GamePostService>(() => GamePostService(
     getIt<Dio>(),
     baseUrl: NetworkConstants.baseURL,
   ));
-  
+
   getIt.registerLazySingleton<UserService>(() => UserService(
     getIt<Dio>(),
     baseUrl: NetworkConstants.baseURL,
@@ -125,10 +91,108 @@ Future<void> configureDependencies() async {
   // 5. Initialize localization service
   await LocalizationService.instance.initialize();
 
-  // 6. Finally, register and setup interceptors (after all dependencies are ready)
+  // 6. Finally, register and setup auth interceptor (after all dependencies are ready)
   final authInterceptor = AuthInterceptor();
   getIt.registerLazySingleton<AuthInterceptor>(() => authInterceptor);
   dio.interceptors.add(authInterceptor);
 
-  print('Dependency injection complete');
+  debugPrint('Dependency injection complete');
+}
+
+/// Retry interceptor for handling transient failures with exponential backoff
+class _RetryInterceptor extends Interceptor {
+  final Dio _dio;
+
+  _RetryInterceptor(this._dio);
+
+  @override
+  Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
+    final retryCount = err.requestOptions.extra['retryCount'] ?? 0;
+
+    // Check if we should retry
+    if (_shouldRetry(err) && retryCount < NetworkConstants.maxRetryAttempts) {
+      // Exponential backoff delay
+      final delay = NetworkConstants.retryDelay * (retryCount + 1);
+      await Future.delayed(delay);
+
+      // Update retry count
+      err.requestOptions.extra['retryCount'] = retryCount + 1;
+
+      debugPrint('Retrying request (${retryCount + 1}/${NetworkConstants.maxRetryAttempts}): ${err.requestOptions.path}');
+
+      try {
+        // Retry the request
+        final response = await _dio.fetch(err.requestOptions);
+        return handler.resolve(response);
+      } catch (e) {
+        // If retry also fails, continue with error handling
+        if (e is DioException) {
+          return handler.next(e);
+        }
+        return handler.next(err);
+      }
+    }
+
+    return handler.next(err);
+  }
+
+  bool _shouldRetry(DioException err) {
+    // Retry on timeout errors
+    if (err.type == DioExceptionType.connectionTimeout ||
+        err.type == DioExceptionType.sendTimeout ||
+        err.type == DioExceptionType.receiveTimeout ||
+        err.type == DioExceptionType.connectionError) {
+      return true;
+    }
+
+    // Retry on specific HTTP status codes
+    final statusCode = err.response?.statusCode;
+    if (statusCode != null && NetworkConstants.retryableStatusCodes.contains(statusCode)) {
+      return true;
+    }
+
+    return false;
+  }
+}
+
+/// Error interceptor for parsing API errors
+class _ErrorInterceptor extends Interceptor {
+  @override
+  void onError(DioException error, ErrorInterceptorHandler handler) {
+    // Only log in debug mode
+    if (kDebugMode) {
+      debugPrint('API Error: ${error.requestOptions.path} - ${error.type}');
+      if (error.response != null) {
+        debugPrint('Status: ${error.response?.statusCode}');
+      }
+    }
+
+    try {
+      if (error.response != null) {
+        try {
+          final apiError = ApiError.fromDioError(error);
+
+          return handler.reject(
+            DioException(
+              requestOptions: error.requestOptions,
+              response: error.response,
+              type: error.type,
+              error: apiError,
+              message: apiError.userFriendlyMessage,
+            ),
+          );
+        } catch (e) {
+          if (kDebugMode) {
+            debugPrint('Error parsing API error: $e');
+          }
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('Exception in error interceptor: $e');
+      }
+    }
+
+    return handler.next(error);
+  }
 }

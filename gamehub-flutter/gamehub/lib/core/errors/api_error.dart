@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 class ApiError {
   final String code;
@@ -83,7 +84,9 @@ class ApiError {
           try {
             return ApiError.fromJson(data.cast<String, dynamic>());
           } catch (e) {
-            print('Error parsing API error: $e');
+            if (kDebugMode) {
+              debugPrint('Error parsing API error: $e');
+            }
             // Create a fallback error with the available information
             return ApiError(
               code: 'PARSE_ERROR',
@@ -94,7 +97,9 @@ class ApiError {
           }
         }
       } catch (e) {
-        print('Error handling API error: $e');
+        if (kDebugMode) {
+          debugPrint('Error handling API error: $e');
+        }
       }
     }
 

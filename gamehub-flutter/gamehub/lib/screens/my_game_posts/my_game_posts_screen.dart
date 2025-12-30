@@ -4,6 +4,7 @@ import '../../core/utils/date_util.dart';
 import '../../localization/localized_text.dart';
 import '../../localization/localization_service.dart';
 import '../game_post/game_post_details_screen.dart';
+import '../game_post/edit_game_post_screen.dart';
 import 'my_game_posts_view_model.dart';
 
 class MyGamePostsContent extends StatefulWidget {
@@ -75,14 +76,59 @@ class MyGamePostsContentState extends State<MyGamePostsContent> {
         ),
       );
     } else if (_viewModel.gamePosts.isEmpty) {
-      return const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            LocalizedText('home.no_games'),
-            SizedBox(height: 16),
-            LocalizedText('home.refresh'),
-          ],
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.sports_esports_outlined,
+                size: 80,
+                color: Colors.grey[400],
+              ),
+              const SizedBox(height: 24),
+              const LocalizedText(
+                'my_game_posts.no_games',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 12),
+              LocalizedText(
+                'my_game_posts.create_first_game',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[600],
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton.icon(
+                onPressed: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const EditGamePostScreen(),
+                    ),
+                  );
+                  if (result == true) {
+                    await refreshData();
+                  }
+                },
+                icon: const Icon(Icons.add),
+                label: LocalizedText('create_game_post.create_button'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       );
     } else {

@@ -22,6 +22,8 @@ class MapPickerWidget extends StatefulWidget {
 }
 
 class _MapPickerWidgetState extends State<MapPickerWidget> {
+  static const double _topPadding = 100.0;
+
   GoogleMapController? _mapController;
   LatLng? _selectedLocation;
   String? _selectedAddress;
@@ -192,7 +194,7 @@ class _MapPickerWidgetState extends State<MapPickerWidget> {
         children: [
           // Search Bar
           Container(
-            padding: const EdgeInsets.fromLTRB(16, 100, 16, 16),
+            padding: EdgeInsets.fromLTRB(16, _topPadding, 16, 16),
             child: Column(
               children: [
                 TextField(
@@ -277,6 +279,18 @@ class _MapPickerWidgetState extends State<MapPickerWidget> {
           ),
           ],
         ),
+          // Background barrier to hide scrolling content behind back button
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: _topPadding,
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
+            ),
+          ),
           CustomBackButton(
             heroTag: "map_picker_back_button",
           ),

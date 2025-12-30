@@ -183,6 +183,10 @@
     "map": "Hartă",
     "profile": "Profil"
   },
+  "my_game_posts": {
+    "no_games": "Nu ai creat încă niciun joc",
+    "create_first_game": "Creează primul tău joc și începe să joci!"
+  },
   "error": {
     "dismiss": "Închide",
     "ok": "OK",
@@ -191,5 +195,13 @@
     "location_services_disabled": "Serviciile de localizare sunt dezactivate",
     "location_permissions_denied": "Permisiunile de localizare sunt refuzate",
     "location_permissions_permanently_denied": "Permisiunile de localizare sunt refuzate permanent, nu putem solicita permisiuni"
+  },
+  "chat": {
+    "reconnecting": "Se reconectează...",
+    "retry_connection": "Reîncearcă conexiunea",
+    "no_messages": "Niciun mesaj încă. Începe conversația!",
+    "type_message": "Scrie un mesaj...",
+    "yesterday": "Ieri",
+    "failed_to_send": "Trimiterea mesajului a eșuat"
   }
 }

@@ -1,31 +1,37 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gamehub/localization/localized_text.dart';
 import '../errors/api_error.dart';
 import '../../localization/localization_service.dart';
 
 class ErrorUtil {
-  /// Displays an error dialog with the formatted error message
-  static void showErrorDialog(BuildContext context, Object error) {
-    // Log the error for debugging
-    print('ErrorUtil received error: ${error.runtimeType}');
+  /// Logs error details only in debug mode
+  static void _logError(Object error) {
+    if (!kDebugMode) return;
+
+    debugPrint('ErrorUtil received error: ${error.runtimeType}');
     if (error is Map) {
-      print('Error data: ${jsonEncode(error)}');
+      debugPrint('Error data: ${jsonEncode(error)}');
     } else if (error is DioException) {
-      print('DioError type: ${error.type}');
-      print('DioError message: ${error.message}');
+      debugPrint('DioError type: ${error.type}');
+      debugPrint('DioError message: ${error.message}');
       if (error.response != null) {
-        print('Response status: ${error.response?.statusCode}');
-        print('Response data: ${error.response?.data}');
+        debugPrint('Response status: ${error.response?.statusCode}');
       }
     } else {
-      print('Error details: $error');
+      debugPrint('Error details: $error');
     }
+  }
+
+  /// Displays an error dialog with the formatted error message
+  static void showErrorDialog(BuildContext context, Object error) {
+    _logError(error);
 
     ApiError apiError = _parseError(error);
-    
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -38,15 +44,16 @@ class ErrorUtil {
               if (apiError.details.isNotEmpty) ...[
                 const SizedBox(height: 8),
                 ...apiError.details.map((detail) => Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('• ', style: TextStyle(fontWeight: FontWeight.bold)),
-                      Expanded(child: Text(detail)),
-                    ],
-                  ),
-                )),
+                      padding: const EdgeInsets.only(bottom: 4),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('• ',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          Expanded(child: Text(detail)),
+                        ],
+                      ),
+                    )),
               ],
             ],
           ),
@@ -68,23 +75,10 @@ class ErrorUtil {
 
   /// Displays a snackbar with the formatted error message
   static void showErrorSnackBar(BuildContext context, Object error) {
-    // Log the error for debugging
-    print('ErrorUtil received error: ${error.runtimeType}');
-    if (error is Map) {
-      print('Error data: ${jsonEncode(error)}');
-    } else if (error is DioException) {
-      print('DioError type: ${error.type}');
-      print('DioError message: ${error.message}');
-      if (error.response != null) {
-        print('Response status: ${error.response?.statusCode}');
-        print('Response data: ${error.response?.data}');
-      }
-    } else {
-      print('Error details: $error');
-    }
+    _logError(error);
 
     ApiError apiError = _parseError(error);
-    
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(apiError.userFriendlyMessage),
@@ -108,14 +102,15 @@ class ErrorUtil {
         return ApiError.fromDioError(error);
       } else if (error is Map) {
         try {
-          // Try to convert to Map<String, dynamic> safely
           Map<String, dynamic> errorMap = {};
           error.forEach((key, value) {
             errorMap[key.toString()] = value;
           });
           return ApiError.fromJson(errorMap);
         } catch (e) {
-          print('Error parsing Map error: $e');
+          if (kDebugMode) {
+            debugPrint('Error parsing Map error: $e');
+          }
           return ApiError(
             code: 'PARSE_ERROR',
             message: 'Error Format',
@@ -132,7 +127,9 @@ class ErrorUtil {
         );
       }
     } catch (e) {
-      print('Exception in _parseError: $e');
+      if (kDebugMode) {
+        debugPrint('Exception in _parseError: $e');
+      }
       return ApiError(
         code: 'ERROR_PARSER_FAILED',
         message: 'Error Processing',
@@ -141,4 +138,4 @@ class ErrorUtil {
       );
     }
   }
-} 
+}

@@ -15,6 +15,8 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
+  static const double _topPadding = 100.0;
+
   late UserService _userService;
   late AuthViewModel _authViewModel;
   
@@ -101,14 +103,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         children: [
           SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.fromLTRB(16.0, _topPadding, 16.0, 16.0),
               child: Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const SizedBox(height: 80),
-                    
                     // Password Fields Card
                     Card(
                       child: Padding(
@@ -211,7 +211,19 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               ),
             ),
           ),
-          
+
+          // Background barrier to hide scrolling content behind back button
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: _topPadding,
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
+            ),
+          ),
           // Custom back button
           CustomBackButton(
             heroTag: "change_password_back_button",

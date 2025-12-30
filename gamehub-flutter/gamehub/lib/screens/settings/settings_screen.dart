@@ -17,6 +17,8 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  static const double _topPadding = 120.0;
+
   late final SettingsViewModel _viewModel;
   late final LocalizationService _localizationService;
   double _rangeInKm = 15.0;
@@ -42,7 +44,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             listenable: _viewModel,
             builder: (context, child) {
               return ListView(
-                  padding: const EdgeInsets.fromLTRB(16.0, 120.0, 16.0, 16.0),
+                  padding: const EdgeInsets.fromLTRB(16.0, _topPadding, 16.0, 16.0),
                   children: [
                 // Language Section
                 Card(
@@ -237,6 +239,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ],
                 );
             },
+          ),
+          // Background barrier to hide scrolling content behind back button
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: _topPadding,
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
+            ),
           ),
           // Custom back button
           CustomBackButton(

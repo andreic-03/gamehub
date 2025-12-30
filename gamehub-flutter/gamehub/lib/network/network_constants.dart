@@ -46,4 +46,14 @@ class NetworkConstants {
   static const int maxReconnectAttempts = 5;
   static const int initialReconnectDelayMs = 1000;
   static const int maxReconnectDelayMs = 30000;
+
+  // HTTP Timeout Configuration
+  static const Duration connectTimeout = Duration(seconds: 15);
+  static const Duration receiveTimeout = Duration(seconds: 15);
+  static const Duration sendTimeout = Duration(seconds: 15);
+
+  // Retry Configuration
+  static const int maxRetryAttempts = 3;
+  static const Duration retryDelay = Duration(seconds: 1);
+  static const List<int> retryableStatusCodes = [408, 500, 502, 503, 504];
 }

@@ -183,6 +183,10 @@
     "map": "Carte",
     "profile": "Profil"
   },
+  "my_game_posts": {
+    "no_games": "Vous n'avez pas encore créé de jeux",
+    "create_first_game": "Créez votre premier jeu et commencez à jouer !"
+  },
   "error": {
     "dismiss": "Fermer",
     "ok": "OK",
@@ -191,5 +195,13 @@
     "location_services_disabled": "Les services de localisation sont désactivés",
     "location_permissions_denied": "Les permissions de localisation sont refusées",
     "location_permissions_permanently_denied": "Les permissions de localisation sont refusées de façon permanente, nous ne pouvons pas demander d'autorisations"
+  },
+  "chat": {
+    "reconnecting": "Reconnexion...",
+    "retry_connection": "Réessayer la connexion",
+    "no_messages": "Pas encore de messages. Commencez la conversation !",
+    "type_message": "Tapez un message...",
+    "yesterday": "Hier",
+    "failed_to_send": "Échec de l'envoi du message"
   }
 }

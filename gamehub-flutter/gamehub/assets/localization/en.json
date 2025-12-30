@@ -183,6 +183,10 @@
     "map": "Map",
     "profile": "Profile"
   },
+  "my_game_posts": {
+    "no_games": "You haven't created any games yet",
+    "create_first_game": "Create your first game post and start playing!"
+  },
   "error": {
     "dismiss": "Dismiss",
     "ok": "OK",
@@ -191,5 +195,13 @@
     "location_services_disabled": "Location services are disabled",
     "location_permissions_denied": "Location permissions are denied",
     "location_permissions_permanently_denied": "Location permissions are permanently denied, we cannot request permissions"
+  },
+  "chat": {
+    "reconnecting": "Reconnecting...",
+    "retry_connection": "Retry Connection",
+    "no_messages": "No messages yet. Start the conversation!",
+    "type_message": "Type a message...",
+    "yesterday": "Yesterday",
+    "failed_to_send": "Failed to send message"
   }
 }

@@ -18,6 +18,8 @@ class EditGamePostScreen extends StatefulWidget {
 }
 
 class _EditGamePostScreenState extends State<EditGamePostScreen> {
+  static const double _topPadding = 120.0;
+
   final _formKey = GlobalKey<FormState>();
   late final EditGamePostViewModel _vm;
   bool _isSearchingGames = false;
@@ -84,7 +86,7 @@ class _EditGamePostScreenState extends State<EditGamePostScreen> {
             GestureDetector(
               onTap: _closeGameSuggestions,
               child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(16.0, 120.0, 16.0, 16.0),
+                padding: const EdgeInsets.fromLTRB(16.0, _topPadding, 16.0, 16.0),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -449,6 +451,18 @@ class _EditGamePostScreenState extends State<EditGamePostScreen> {
               ),
             ),
 
+          // Background barrier to hide scrolling content behind back button
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: _topPadding,
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
+            ),
+          ),
           CustomBackButton(heroTag: 'edit_game_post_back_button'),
         ],
       ),

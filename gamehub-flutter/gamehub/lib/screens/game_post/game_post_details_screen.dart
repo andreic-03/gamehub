@@ -27,6 +27,8 @@ class GamePostDetailsScreen extends StatefulWidget {
 }
 
 class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
+  static const double _topPadding = 120.0;
+
   late GamePostDetailsViewModel _viewModel;
   late GamePostResponseModel _currentGamePost;
 
@@ -157,7 +159,7 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
         children: [
           SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 120.0, 16.0, 16.0),
+              padding: const EdgeInsets.fromLTRB(16.0, _topPadding, 16.0, 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -519,6 +521,18 @@ class _GamePostDetailsScreenState extends State<GamePostDetailsScreen> {
                     ),
                   ],
                 ],
+              ),
+            ),
+          ),
+          // Background barrier to hide scrolling content behind back button
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: _topPadding,
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
               ),
             ),
           ),

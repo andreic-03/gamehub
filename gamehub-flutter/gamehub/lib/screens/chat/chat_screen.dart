@@ -60,7 +60,7 @@ class _ChatScreenState extends State<ChatScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Failed to send message: ${e.toString()}'),
+          content: Text('${LocalizationService.instance.getString('chat.failed_to_send')}: ${e.toString()}'),
           backgroundColor: Colors.red,
         ),
       );
@@ -99,7 +99,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               if (_viewModel.isReconnecting) ...[
                                 const SizedBox(height: 16),
                                 Text(
-                                  'Reconnecting...',
+                                  LocalizationService.instance.getString('chat.reconnecting'),
                                   style: TextStyle(
                                     color: Colors.grey.shade600,
                                     fontSize: 14,
@@ -139,7 +139,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               const SizedBox(height: 16),
                               ElevatedButton(
                                 onPressed: _connect,
-                                child: const Text('Retry Connection'),
+                                child: Text(LocalizationService.instance.getString('chat.retry_connection')),
                               ),
                             ],
                           ),
@@ -173,7 +173,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 listenable: LocalizationService.instance,
                                 builder: (context, child) {
                                   return Text(
-                                    'No messages yet. Start the conversation!',
+                                    LocalizationService.instance.getString('chat.no_messages'),
                                     style: TextStyle(
                                       color: Colors.grey.shade600,
                                       fontSize: 16,
@@ -230,7 +230,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             child: TextField(
                               controller: _messageController,
                               decoration: InputDecoration(
-                                hintText: 'Type a message...',
+                                hintText: LocalizationService.instance.getString('chat.type_message'),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(24),
                                 ),
@@ -398,7 +398,7 @@ class _ChatScreenState extends State<ChatScreen> {
       // Yesterday
       final hour = dateTime.hour.toString().padLeft(2, '0');
       final minute = dateTime.minute.toString().padLeft(2, '0');
-      return 'Yesterday $hour:$minute';
+      return '${LocalizationService.instance.getString('chat.yesterday')} $hour:$minute';
     } else {
       // Older - show date and time
       final day = dateTime.day.toString().padLeft(2, '0');

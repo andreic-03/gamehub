@@ -12,6 +12,8 @@ class SearchRangeScreen extends StatefulWidget {
 }
 
 class _SearchRangeScreenState extends State<SearchRangeScreen> {
+  static const double _topPadding = 100.0;
+
   late final TextEditingController _controller;
   double _rangeKm = 15.0;
 
@@ -46,12 +48,10 @@ class _SearchRangeScreenState extends State<SearchRangeScreen> {
         children: [
           SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.fromLTRB(16.0, _topPadding, 16.0, 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const SizedBox(height: 80),
-
                   // Search Range Card
                   Card(
                     child: Padding(
@@ -107,6 +107,18 @@ class _SearchRangeScreenState extends State<SearchRangeScreen> {
             ),
           ),
 
+          // Background barrier to hide scrolling content behind back button
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: _topPadding,
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
+            ),
+          ),
           // Custom back button
           CustomBackButton(
             heroTag: "search_range_back_button",
