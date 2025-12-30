@@ -147,7 +147,8 @@
     "delete": "Șterge",
     "deleted_successfully": "Jocul a fost șters cu succes",
     "leave_game": "Părăsește jocul",
-    "left_successfully": "Ai părăsit jocul"
+    "left_successfully": "Ai părăsit jocul",
+    "join_chat": "Alătură-te chat-ului"
   },
   "base_screen": {
     "home_title": "GameHub - Acasă",

@@ -31,4 +31,19 @@ class NetworkConstants {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
   };
+
+  // WebSocket Configuration
+  static const String wsEndpointWithApi = '/api/chat.sendMessage';
+  static const String wsEndpointWithoutApi = '/chat.sendMessage';
+
+  // STOMP Configuration
+  static const String stompTopicPrefix = '/topic/gamePost/';
+  static const String stompSendDestination = '/app/chat.sendMessage';
+  static const String stompAcceptVersion = '1.1,1.0';
+  static const String stompHeartBeat = '10000,10000';
+
+  // Reconnection Configuration
+  static const int maxReconnectAttempts = 5;
+  static const int initialReconnectDelayMs = 1000;
+  static const int maxReconnectDelayMs = 30000;
 }

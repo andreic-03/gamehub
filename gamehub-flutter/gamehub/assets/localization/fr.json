@@ -147,7 +147,8 @@
     "delete": "Supprimer",
     "deleted_successfully": "Jeu supprimé avec succès",
     "leave_game": "Quitter le jeu",
-    "left_successfully": "Vous avez quitté le jeu"
+    "left_successfully": "Vous avez quitté le jeu",
+    "join_chat": "Rejoindre le chat"
   },
   "base_screen": {
     "home_title": "GameHub - Accueil",

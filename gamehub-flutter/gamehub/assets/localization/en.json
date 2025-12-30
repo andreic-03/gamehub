@@ -147,7 +147,8 @@
     "delete": "Delete",
     "deleted_successfully": "Game post deleted successfully",
     "leave_game": "Leave Game",
-    "left_successfully": "You have left the game"
+    "left_successfully": "You have left the game",
+    "join_chat": "Join Chat"
   },
   "base_screen": {
     "home_title": "GameHub - Home",
