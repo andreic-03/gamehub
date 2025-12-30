@@ -40,6 +40,7 @@ class ChatViewModel extends ChangeNotifier {
   final Set<String> _pendingMessageIds = {};
   bool _messagesLoaded = false;
   bool _hasTriedWithoutApi = false;
+  String? _authToken; // Stored for STOMP authentication
 
   // Reconnection state
   int _reconnectAttempts = 0;
@@ -80,12 +81,13 @@ class ChatViewModel extends ChangeNotifier {
         await _loadExistingMessages();
       }
 
-      final token = _getAuthToken();
-      if (token == null) {
+      _authToken = _getAuthToken();
+      if (_authToken == null) {
         throw Exception('No authentication token available');
       }
 
-      final wsUrl = _buildWebSocketUrl(token, withApiPrefix: true);
+      // Build URL without token - authentication happens via STOMP headers
+      final wsUrl = _buildWebSocketUrl(withApiPrefix: true);
       _connectFrameSent = false;
       _hasTriedWithoutApi = false;
 
@@ -103,7 +105,9 @@ class ChatViewModel extends ChangeNotifier {
     return (token != null && token.isNotEmpty) ? token : null;
   }
 
-  Uri _buildWebSocketUrl(String token, {required bool withApiPrefix}) {
+  /// Builds WebSocket URL without token in query params.
+  /// Token is sent securely via STOMP Authorization header instead.
+  Uri _buildWebSocketUrl({required bool withApiPrefix}) {
     final uri = Uri.parse(NetworkConstants.baseURL);
     final wsScheme = uri.scheme == 'https' ? 'wss' : 'ws';
     final path = withApiPrefix
@@ -115,7 +119,6 @@ class ChatViewModel extends ChangeNotifier {
       host: uri.host,
       port: uri.port,
       path: path,
-      queryParameters: {'token': token},
     );
   }
 
@@ -148,9 +151,16 @@ class ChatViewModel extends ChangeNotifier {
   }
 
   void _sendStompConnect() {
+    if (_authToken == null) {
+      _handleConnectionError('No authentication token available');
+      return;
+    }
+
+    // Send token securely via STOMP Authorization header (not URL query params)
     final connectFrame = _buildStompFrame('CONNECT', {
       'accept-version': NetworkConstants.stompAcceptVersion,
       'heart-beat': NetworkConstants.stompHeartBeat,
+      'Authorization': 'Bearer $_authToken',
     });
 
     if (!_sendFrame(connectFrame)) return;
@@ -407,13 +417,13 @@ class ChatViewModel extends ChangeNotifier {
     try {
       await _closeChannel();
 
-      final token = _getAuthToken();
-      if (token == null) {
+      _authToken = _getAuthToken();
+      if (_authToken == null) {
         _handleConnectionError('No authentication token available');
         return;
       }
 
-      final wsUrl = _buildWebSocketUrl(token, withApiPrefix: false);
+      final wsUrl = _buildWebSocketUrl(withApiPrefix: false);
       _channel = WebSocketChannel.connect(wsUrl);
       _setupStreamListener();
 
@@ -575,6 +585,7 @@ class ChatViewModel extends ChangeNotifier {
     _pendingMessageIds.clear();
     _messagesLoaded = false;
     _reconnectAttempts = 0;
+    _authToken = null; // Clear token for security
   }
 
   @override
