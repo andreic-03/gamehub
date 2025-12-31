@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import '../../models/user/user_response_model.dart';
 import '../../widgets/custom_back_button.dart';
 import '../../localization/localized_text.dart';
+import 'edit_profile_screen.dart';
 
 class ProfileContent extends StatefulWidget {
   const ProfileContent({super.key});
@@ -73,104 +74,115 @@ class _ProfileContentState extends State<ProfileContent> {
                               Row(
                                 children: [
                                   // Column 1
-                                  Expanded(
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          width: double.infinity,
-                                          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                                          child: Text(
-                                            'Test-Level',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Theme.of(context).colorScheme.onSurface,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 1),
-                                        ReactiveLocalizedText(
-                                          'profile.level',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
+                                  // TODO To enable this if wanted to add more stuff
+                                  // Expanded(
+                                  //   child: Column(
+                                  //     children: [
+                                  //       Container(
+                                  //         width: double.infinity,
+                                  //         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                  //         child: Text(
+                                  //           'Test-Level',
+                                  //           textAlign: TextAlign.center,
+                                  //           style: TextStyle(
+                                  //             color: Theme.of(context).colorScheme.onSurface,
+                                  //             fontSize: 14,
+                                  //             fontWeight: FontWeight.bold,
+                                  //           ),
+                                  //         ),
+                                  //       ),
+                                  //       const SizedBox(height: 1),
+                                  //       ReactiveLocalizedText(
+                                  //         'profile.level',
+                                  //         style: TextStyle(
+                                  //           fontSize: 12,
+                                  //           color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                                  //           fontWeight: FontWeight.normal,
+                                  //         ),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
+                                  // const SizedBox(width: 8),
                                   
                                   // Column 2
-                                  Expanded(
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          width: double.infinity,
-                                          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                                          child: Text(
-                                            '200',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Theme.of(context).colorScheme.onSurface,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 1),
-                                        ReactiveLocalizedText(
-                                          'profile.games_played',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
+                                  // Expanded(
+                                  //   child: Column(
+                                  //     children: [
+                                  //       Container(
+                                  //         width: double.infinity,
+                                  //         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                  //         child: Text(
+                                  //           '200',
+                                  //           textAlign: TextAlign.center,
+                                  //           style: TextStyle(
+                                  //             color: Theme.of(context).colorScheme.onSurface,
+                                  //             fontSize: 14,
+                                  //             fontWeight: FontWeight.bold,
+                                  //           ),
+                                  //         ),
+                                  //       ),
+                                  //       const SizedBox(height: 1),
+                                  //       ReactiveLocalizedText(
+                                  //         'profile.games_played',
+                                  //         style: TextStyle(
+                                  //           fontSize: 12,
+                                  //           color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                                  //           fontWeight: FontWeight.normal,
+                                  //         ),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
+                                  // const SizedBox(width: 8),
                                   
                                   // Column 3
-                                  Expanded(
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          width: double.infinity,
-                                          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                                          child: Text(
-                                            'TBD',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Theme.of(context).colorScheme.onSurface,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 1),
-                                        Text(
-                                          'TBD',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  // Expanded(
+                                  //   child: Column(
+                                  //     children: [
+                                  //       Container(
+                                  //         width: double.infinity,
+                                  //         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                  //         child: Text(
+                                  //           'TBD',
+                                  //           textAlign: TextAlign.center,
+                                  //           style: TextStyle(
+                                  //             color: Theme.of(context).colorScheme.onSurface,
+                                  //             fontSize: 14,
+                                  //             fontWeight: FontWeight.bold,
+                                  //           ),
+                                  //         ),
+                                  //       ),
+                                  //       const SizedBox(height: 1),
+                                  //       Text(
+                                  //         'TBD',
+                                  //         style: TextStyle(
+                                  //           fontSize: 12,
+                                  //           color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                                  //           fontWeight: FontWeight.normal,
+                                  //         ),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                               const SizedBox(height: 35),
                               
                               // Edit Profile Button
                               ElevatedButton(
-                                onPressed: () {
-                                  // Add functionality for profile screen
+                                onPressed: () async {
+                                  final result = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EditProfileScreen(user: _user!),
+                                    ),
+                                  );
+                                  if (result is UserResponseModel && mounted) {
+                                    setState(() {
+                                      _user = result;
+                                    });
+                                  }
                                 },
                                 child: ReactiveLocalizedText('profile.edit_profile'),
                               ),

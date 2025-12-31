@@ -42,6 +42,21 @@
     "games_played": "Games Played",
     "error_loading": "Error loading profile"
   },
+  "edit_profile": {
+    "title": "Edit Profile",
+    "full_name": "Full Name",
+    "email": "Email",
+    "bio": "Bio",
+    "bio_hint": "Tell us about yourself...",
+    "save_button": "Save Changes",
+    "full_name_required": "Full name is required",
+    "full_name_min_length": "Full name must be at least 5 characters",
+    "full_name_max_length": "Full name must be less than 60 characters",
+    "email_required": "Email is required",
+    "email_invalid": "Please enter a valid email",
+    "profile_updated_success": "Profile updated successfully",
+    "profile_update_error": "Error updating profile"
+  },
   "settings": {
     "title": "Settings",
     "language": "Language",

@@ -42,6 +42,21 @@
     "games_played": "Jeux Joués",
     "error_loading": "Erreur lors du chargement du profil"
   },
+  "edit_profile": {
+    "title": "Modifier le profil",
+    "full_name": "Nom complet",
+    "email": "E-mail",
+    "bio": "Bio",
+    "bio_hint": "Parlez-nous de vous...",
+    "save_button": "Enregistrer les modifications",
+    "full_name_required": "Le nom complet est requis",
+    "full_name_min_length": "Le nom complet doit contenir au moins 5 caractères",
+    "full_name_max_length": "Le nom complet doit contenir moins de 60 caractères",
+    "email_required": "L'e-mail est requis",
+    "email_invalid": "Veuillez entrer un e-mail valide",
+    "profile_updated_success": "Profil mis à jour avec succès",
+    "profile_update_error": "Erreur lors de la mise à jour du profil"
+  },
   "settings": {
     "title": "Paramètres",
     "language": "Langue",

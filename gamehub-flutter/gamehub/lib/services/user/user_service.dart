@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:gamehub/models/user/user_password_change_model.dart';
 import 'package:gamehub/models/user/user_registration_request_model.dart';
+import 'package:gamehub/models/user/user_update_request_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
@@ -13,13 +14,16 @@ part 'user_service.g.dart';
 abstract class UserService {
   @factoryMethod
   factory UserService(Dio dio, {@Named("baseURL") String baseUrl}) = _UserService;
-  
+
   @POST("/user/registration")
   Future<UserResponseModel> register(@Body() UserRegistrationRequestModel requestModel);
-  
+
   @GET("/user/info")
   Future<UserResponseModel> getCurrentUser();
-  
+
   @PUT("/user/password-reset")
   Future<void> changePassword(@Body() UserPasswordChangeModel requestModel);
+
+  @PUT("/user")
+  Future<UserResponseModel> updateUser(@Body() UserUpdateRequestModel requestModel);
 }

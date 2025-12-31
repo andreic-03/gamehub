@@ -42,6 +42,21 @@
     "games_played": "Jocuri Jucate",
     "error_loading": "Eroare la încărcarea profilului"
   },
+  "edit_profile": {
+    "title": "Editează profilul",
+    "full_name": "Nume complet",
+    "email": "E-mail",
+    "bio": "Bio",
+    "bio_hint": "Spune-ne despre tine...",
+    "save_button": "Salvează modificările",
+    "full_name_required": "Numele complet este necesar",
+    "full_name_min_length": "Numele complet trebuie să aibă cel puțin 5 caractere",
+    "full_name_max_length": "Numele complet trebuie să aibă mai puțin de 60 de caractere",
+    "email_required": "E-mailul este necesar",
+    "email_invalid": "Te rugăm să introduci un e-mail valid",
+    "profile_updated_success": "Profilul a fost actualizat cu succes",
+    "profile_update_error": "Eroare la actualizarea profilului"
+  },
   "settings": {
     "title": "Setări",
     "language": "Limbă",
