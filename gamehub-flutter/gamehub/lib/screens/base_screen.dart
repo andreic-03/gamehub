@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:gamehub/core/viewmodels/auth_view_model.dart';
-import 'package:gamehub/screens/map_screen/map_content.dart';
+import 'package:gamehub/screens/map_screen/map_screen.dart';
 import '../navigation/app_bottom_navigation_bar.dart';
 import '../navigation/app_drawer.dart';
 import '../config/injection.dart';
@@ -38,7 +38,7 @@ class BaseScreenState extends State<BaseScreen> {
     _screens = [
       HomeContent(key: _homeContentKey),
       MyGamePostsContent(key: _myGamePostsContentKey),
-      MapContent(),
+      MapScreen(),
     ];
   }
 
