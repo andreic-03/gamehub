@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -35,6 +37,8 @@ class _MapPickerWidgetState extends State<MapPickerWidget> {
   final String _apiKey = "AIzaSyA2qlgjLn2BTCez31R15rFdCTzw86UPI_M";
   List<Map<String, dynamic>> _searchResults = [];
   bool _isSearching = false;
+  bool _hasSearched = false; // Track if a search was performed
+  Timer? _debounceTimer;
 
   @override
   void initState() {
@@ -78,45 +82,85 @@ class _MapPickerWidgetState extends State<MapPickerWidget> {
     }
   }
 
-  Future<void> _searchPlaces(String query) async {
-    if (query.isEmpty) {
+  void _onSearchChanged(String query) {
+    _debounceTimer?.cancel();
+
+    final trimmedQuery = query.trim();
+
+    if (trimmedQuery.length < 3) {
       setState(() {
         _searchResults = [];
         _isSearching = false;
+        _hasSearched = false;
       });
       return;
     }
 
-    setState(() {
-      _isSearching = true;
+    // Show loading only after debounce to avoid flickering
+    _debounceTimer = Timer(const Duration(milliseconds: 400), () {
+      if (mounted) {
+        setState(() {
+          _isSearching = true;
+        });
+        _searchPlaces(trimmedQuery);
+      }
     });
+  }
+
+  Future<void> _searchPlaces(String query) async {
+    if (!mounted || query.length < 3) {
+      return;
+    }
 
     try {
-      final response = await _dio.get(
-        'https://maps.googleapis.com/maps/api/place/autocomplete/json',
-        queryParameters: {
+      // Using the new Places API (New)
+      final response = await _dio.post(
+        'https://places.googleapis.com/v1/places:autocomplete',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Goog-Api-Key': _apiKey,
+          },
+        ),
+        data: {
           'input': query,
-          'key': _apiKey,
-          'types': 'establishment|geocode',
         },
       );
 
-      if (response.statusCode == 200 && response.data['predictions'] != null) {
+      if (!mounted) return;
+
+      final data = response.data;
+      if (response.statusCode == 200 && data != null && data['suggestions'] != null) {
+        final suggestions = List<Map<String, dynamic>>.from(data['suggestions']);
+        // Transform to match our expected format
+        final predictions = suggestions.map((s) {
+          final placePrediction = s['placePrediction'];
+          return {
+            'place_id': placePrediction?['placeId'],
+            'description': placePrediction?['text']?['text'] ?? '',
+          };
+        }).toList();
+
         setState(() {
-          _searchResults = List<Map<String, dynamic>>.from(response.data['predictions']);
+          _searchResults = predictions;
           _isSearching = false;
+          _hasSearched = true;
         });
       } else {
         setState(() {
           _searchResults = [];
           _isSearching = false;
+          _hasSearched = true;
         });
       }
     } catch (e) {
-      setState(() {
-        _searchResults = [];
-        _isSearching = false;
-      });
+      if (mounted) {
+        setState(() {
+          _searchResults = [];
+          _isSearching = false;
+          _hasSearched = true;
+        });
+      }
     }
   }
 
@@ -125,30 +169,36 @@ class _MapPickerWidgetState extends State<MapPickerWidget> {
       final placeId = prediction['place_id'];
       if (placeId == null) return;
 
+      // Using the new Places API (New)
       final response = await _dio.get(
-        'https://maps.googleapis.com/maps/api/place/details/json',
-        queryParameters: {
-          'place_id': placeId,
-          'key': _apiKey,
-          'fields': 'geometry,formatted_address',
-        },
+        'https://places.googleapis.com/v1/places/$placeId',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Goog-Api-Key': _apiKey,
+            'X-Goog-FieldMask': 'location,formattedAddress',
+          },
+        ),
       );
 
-      if (response.statusCode == 200 && response.data['result'] != null) {
-        final result = response.data['result'];
-        final geometry = result['geometry'];
-        final location = geometry?['location'];
-        
+      if (response.statusCode == 200 && response.data != null) {
+        final data = response.data;
+        final location = data['location'];
+
         if (location != null) {
-          final latLng = LatLng(location['lat'], location['lng']);
-          
+          final latLng = LatLng(
+            location['latitude']?.toDouble() ?? 0.0,
+            location['longitude']?.toDouble() ?? 0.0,
+          );
+
           setState(() {
             _selectedLocation = latLng;
-            _selectedAddress = result['formatted_address'] ?? prediction['description'];
+            _selectedAddress = data['formattedAddress'] ?? prediction['description'];
             _searchResults = [];
+            _hasSearched = false;
             _searchController.clear();
           });
-          
+
           _mapController?.animateCamera(
             CameraUpdate.newLatLng(latLng),
           );
@@ -181,6 +231,7 @@ class _MapPickerWidgetState extends State<MapPickerWidget> {
 
   @override
   void dispose() {
+    _debounceTimer?.cancel();
     _searchController.dispose();
     super.dispose();
   }
@@ -190,95 +241,120 @@ class _MapPickerWidgetState extends State<MapPickerWidget> {
     return Scaffold(
       body: Stack(
         children: [
+          // Map and Search Bar Column
           Column(
-        children: [
-          // Search Bar
-          Container(
-            padding: EdgeInsets.fromLTRB(16, _topPadding, 16, 16),
-            child: Column(
-              children: [
-                TextField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    hintText: 'Search for a location...',
-                    prefixIcon: const Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    suffixIcon: _searchController.text.isNotEmpty
-                        ? IconButton(
-                            icon: const Icon(Icons.clear),
-                            onPressed: () {
-                              _searchController.clear();
-                              _searchPlaces('');
-                            },
-                          )
-                        : null,
-                  ),
-                  onChanged: _searchPlaces,
-                ),
-                
-                // Search Results
-                if (_isSearching)
-                  const Padding(
-                    padding: EdgeInsets.all(16),
-                    child: CircularProgressIndicator(),
-                  )
-                else if (_searchResults.isNotEmpty)
-                  Container(
-                    height: 200,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade300),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: ListView.builder(
-                      itemCount: _searchResults.length,
-                      itemBuilder: (context, index) {
-                        final result = _searchResults[index];
-                        return ListTile(
-                          leading: const Icon(Icons.location_on),
-                          title: Text(result['description'] ?? ''),
-                          onTap: () => _selectSearchResult(result),
-                        );
-                      },
-                    ),
-                  ),
-              ],
-            ),
+            children: [
+              // TODO Uncomment for use of the search if needed in the future
+              // Search Bar Container (fixed height)
+              // Container(
+              //   padding: EdgeInsets.fromLTRB(16, _topPadding, 16, 16),
+              //   child: TextField(
+              //     controller: _searchController,
+              //     decoration: InputDecoration(
+              //       hintText: 'Search for a location...',
+              //       prefixIcon: const Icon(Icons.search),
+              //       border: OutlineInputBorder(
+              //         borderRadius: BorderRadius.circular(12),
+              //       ),
+              //       suffixIcon: _searchController.text.isNotEmpty
+              //           ? IconButton(
+              //               icon: const Icon(Icons.clear),
+              //               onPressed: () {
+              //                 _debounceTimer?.cancel();
+              //                 _searchController.clear();
+              //                 setState(() {
+              //                   _searchResults = [];
+              //                   _isSearching = false;
+              //                   _hasSearched = false;
+              //                 });
+              //               },
+              //             )
+              //           : null,
+              //     ),
+              //     onChanged: _onSearchChanged,
+              //   ),
+              // ),
+
+              // Map
+              Expanded(
+                child: _selectedLocation == null
+                    ? const Center(child: CircularProgressIndicator())
+                    : GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                          target: _selectedLocation!,
+                          zoom: 15,
+                        ),
+                        onMapCreated: (GoogleMapController controller) {
+                          _mapController = controller;
+                        },
+                        onTap: _onMapTapped,
+                        markers: _selectedLocation != null
+                            ? {
+                                Marker(
+                                  markerId: const MarkerId('selected_location'),
+                                  position: _selectedLocation!,
+                                  draggable: true,
+                                  onDragEnd: (LatLng newPosition) {
+                                    setState(() {
+                                      _selectedLocation = newPosition;
+                                      _selectedAddress = null;
+                                    });
+                                  },
+                                ),
+                              }
+                            : {},
+                      ),
+              ),
+            ],
           ),
-          
-          // Map
-          Expanded(
-            child: _selectedLocation == null
-                ? const Center(child: CircularProgressIndicator())
-                : GoogleMap(
-                    initialCameraPosition: CameraPosition(
-                      target: _selectedLocation!,
-                      zoom: 15,
-                    ),
-                    onMapCreated: (GoogleMapController controller) {
-                      _mapController = controller;
-                    },
-                    onTap: _onMapTapped,
-                    markers: _selectedLocation != null
-                        ? {
-                            Marker(
-                              markerId: const MarkerId('selected_location'),
-                              position: _selectedLocation!,
-                              draggable: true,
-                              onDragEnd: (LatLng newPosition) {
-                                setState(() {
-                                  _selectedLocation = newPosition;
-                                  _selectedAddress = null;
-                                });
-                              },
-                            ),
-                          }
-                        : {},
-                  ),
-          ),
-          ],
-        ),
+
+          // // Search Results Overlay
+          // if (_isSearching || _searchResults.isNotEmpty || (_hasSearched && _searchResults.isEmpty))
+          //   Positioned(
+          //     top: _topPadding + 56 + 8, // below search bar
+          //     left: 16,
+          //     right: 16,
+          //     child: Material(
+          //       elevation: 4,
+          //       borderRadius: BorderRadius.circular(8),
+          //       child: Container(
+          //         constraints: const BoxConstraints(maxHeight: 200),
+          //         decoration: BoxDecoration(
+          //           color: Theme.of(context).cardColor,
+          //           borderRadius: BorderRadius.circular(8),
+          //         ),
+          //         child: _isSearching
+          //             ? const Padding(
+          //                 padding: EdgeInsets.all(16),
+          //                 child: Center(child: CircularProgressIndicator()),
+          //               )
+          //             : _searchResults.isEmpty
+          //                 ? const Padding(
+          //                     padding: EdgeInsets.all(16),
+          //                     child: Center(
+          //                       child: Text(
+          //                         'No results found',
+          //                         style: TextStyle(color: Colors.grey),
+          //                       ),
+          //                     ),
+          //                   )
+          //                 : ListView.builder(
+          //                     shrinkWrap: true,
+          //                     padding: EdgeInsets.zero,
+          //                     itemCount: _searchResults.length,
+          //                     itemBuilder: (context, index) {
+          //                       final result = _searchResults[index];
+          //                       return ListTile(
+          //                         leading: const Icon(Icons.location_on),
+          //                         title: Text(result['description'] ?? ''),
+          //                         onTap: () => _selectSearchResult(result),
+          //                       );
+          //                     },
+          //                   ),
+          //       ),
+          //     ),
+          //   ),
+
           // Background barrier to hide scrolling content behind back button
           Positioned(
             top: 0,
