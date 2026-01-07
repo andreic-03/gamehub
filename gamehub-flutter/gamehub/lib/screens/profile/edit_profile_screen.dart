@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../core/utils/user_cache.dart';
 import '../../localization/localized_text.dart';
 import '../../models/user/user_response_model.dart';
 import '../../models/user/user_update_request_model.dart';
@@ -91,6 +92,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       );
 
       final updatedUser = await _userService.updateUser(requestModel);
+
+      // Update the cached user so profile screen reflects changes
+      UserCache.setUser(updatedUser);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

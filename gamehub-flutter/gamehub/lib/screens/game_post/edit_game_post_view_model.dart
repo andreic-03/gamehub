@@ -233,9 +233,9 @@ class EditGamePostViewModel extends ChangeNotifier {
         description: descriptionController.text.trim().isEmpty ? null : descriptionController.text.trim(),
       );
 
-      GamePostResponseModel? result;
+      GamePostResponseModel result;
       if (originalGamePost == null) {
-        await _gamePostService.createGamePost(request);
+        result = await _gamePostService.createGamePost(request);
       } else {
         result = await _gamePostService.updateGamePost(originalGamePost!.postId, request);
       }

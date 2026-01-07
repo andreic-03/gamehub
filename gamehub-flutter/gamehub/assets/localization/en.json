@@ -142,7 +142,7 @@
     "updated_successfully": "Game post updated successfully!"
   },
   "game_post_details": {
-    "title": "Game Post",
+    "title": "Game Details",
     "location": "Location",
     "date_time": "Date & Time",
     "participants": "Participants",

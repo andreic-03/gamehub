@@ -71,7 +71,13 @@ class _EditGamePostScreenState extends State<EditGamePostScreen> {
 
     final result = await _vm.submit(context: context);
     if (result != null && mounted) {
-      Navigator.pop(context, result);
+      if (isCreate) {
+        // For create mode, pop until we reach the base screen (home)
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      } else {
+        // For edit mode, just pop back to game_post_details_screen
+        Navigator.pop(context, result);
+      }
     }
   }
 

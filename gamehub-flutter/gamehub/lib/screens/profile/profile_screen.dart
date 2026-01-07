@@ -57,13 +57,24 @@ class _ProfileContentState extends State<ProfileContent> {
                                 imageUrl: _user!.profilePictureUrl,
                                 radius: 50,
                               ),
-                              const SizedBox(height: 24),
+                              const SizedBox(height: 20),
                               
                               // User Name
                               Text(
-                                _user!.username,
+                                '@${_user!.username}',
                                 style: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 16,
+                                  // fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+
+                              // Email
+                              Text(
+                                _user!.email,
+                                style: TextStyle(
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: Theme.of(context).colorScheme.onSurface,
                                 ),
